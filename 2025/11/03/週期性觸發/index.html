@@ -1,0 +1,565 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Modulo — 記憶の螺旋 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="取餘數modulo operationspiral learningSQL - 有界的計數器（Bounded Counter）批次的節奏 — 分段處理的智慧summary我們的人生，其實一直在「取餘數」。  情緒、記憶、學習、努力都不會線性遞增，而是像 % 一樣，在週期中反覆歸零、再度啟程。 有時你覺得自己白學了、白走了，那不代表歸零，而是走到了週期的端點。  正如程式中的 (value % ma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modulo — 記憶の螺旋">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2025/11/03/%E9%80%B1%E6%9C%9F%E6%80%A7%E8%A7%B8%E7%99%BC/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="取餘數modulo operationspiral learningSQL - 有界的計數器（Bounded Counter）批次的節奏 — 分段處理的智慧summary我們的人生，其實一直在「取餘數」。  情緒、記憶、學習、努力都不會線性遞增，而是像 % 一樣，在週期中反覆歸零、再度啟程。 有時你覺得自己白學了、白走了，那不代表歸零，而是走到了週期的端點。  正如程式中的 (value % ma">
+<meta property="og:locale">
+<meta property="og:image" content="https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true">
+<meta property="article:published_time" content="2025-11-03T00:32:03.000Z">
+<meta property="article:modified_time" content="2026-04-26T01:15:38.666Z">
+<meta property="article:author" content="Yo-Lin">
+<meta property="article:tag" content="思索日和">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Modulo — 記憶の螺旋",
+  "url": "https://chi-keke.github.io/Mind/2025/11/03/%E9%80%B1%E6%9C%9F%E6%80%A7%E8%A7%B8%E7%99%BC/",
+  "image": "https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true",
+  "datePublished": "2025-11-03T00:32:03.000Z",
+  "dateModified": "2026-04-26T01:15:38.666Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2025/11/03/%E9%80%B1%E6%9C%9F%E6%80%A7%E8%A7%B8%E7%99%BC/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Modulo — 記憶の螺旋',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">Modulo — 記憶の螺旋</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Modulo — 記憶の螺旋</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-11-03T00:32:03.000Z" title="Created 2025-11-03 08:32:03">2025-11-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-04-26T01:15:38.666Z" title="Updated 2026-04-26 09:15:38">2026-04-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/Mod/">Mod</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">取餘數</button><button type="button" class="tab">modulo operation</button><button type="button" class="tab">spiral learning</button><button type="button" class="tab">SQL - 有界的計數器（Bounded Counter）</button><button type="button" class="tab">批次的節奏 — 分段處理的智慧</button><button type="button" class="tab">summary</button></div><div class="tab-contents"><div class="tab-item-content active"><p>我們的人生，其實一直在「取餘數」。  情緒、記憶、學習、努力都不會線性遞增，而是像 <code>%</code> 一樣，在週期中反覆歸零、再度啟程。</p>
+<p>有時你覺得自己白學了、白走了，那不代表歸零，而是走到了週期的端點。  正如程式中的 <code>(value % max) + 1</code>，每一次「重來」，其實都讓下一次更穩、更深、更有方向</p>
+<p>時間並非直線，而是一個緩慢旋轉的螺旋。我們以為在重複，其實在上升。我們以為忘記，其實在沉澱</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/1__spiral.png" alt="2"></p></div><div class="tab-item-content"><p>modulo operation，代表著一個循環的時間軸</p>
+<table>
+<thead>
+<tr>
+<th>場景</th>
+<th>用法</th>
+<th>解釋</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>日誌</td>
+<td><code>if (i % 100 == 0)</code></td>
+<td>每 100 筆印一次進度</td>
+</tr>
+<tr>
+<td>遊戲</td>
+<td><code>if (frameCount % 60 == 0)</code></td>
+<td>每秒（60 幀）更新一次畫面</td>
+</tr>
+<tr>
+<td>備份</td>
+<td><code>if (dayCount % 7 == 0)</code></td>
+<td>每 7 天備份一次資料</td>
+</tr>
+<tr>
+<td>批次任務</td>
+<td><code>if (index % batchSize == 0)</code></td>
+<td>每批結束時觸發事件</td>
+</tr>
+</tbody></table>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/2__modulo_operation.png" alt="3"></p></div><div class="tab-item-content"><p>9 天內學會 3 個日文詞彙，每天會複習一次，每三天會加強記憶深度</p>
+<p>我們需要把 <code>週期 (%) 的節奏</code>，結合 <code>遞進的權重</code></p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/5_learning.png" alt="4"></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">var</span> allen = <span class="keyword">new</span> Learner();</span><br><span class="line">	<span class="keyword">var</span> knowledge = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;()&#123;<span class="string">&quot;齒磨きした&quot;</span>, <span class="string">&quot;宿題やった&quot;</span>, <span class="string">&quot;お片付けした&quot;</span>&#125;;</span><br><span class="line">	allen.Learn(<span class="number">9</span>,knowledge);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Learner</span></span><br><span class="line">&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> Dictionary&lt;<span class="built_in">string</span>,(<span class="built_in">int</span> phase, <span class="built_in">double</span> depth)&gt; memory = <span class="keyword">new</span>();</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Learn</span>(<span class="params"><span class="built_in">int</span> days, IEnumerable&lt;<span class="built_in">string</span>&gt; knowledge</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;🌊 記憶的潮汐開始流動...\n&quot;</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">1</span>; i &lt;= days; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">foreach</span>(<span class="keyword">var</span> word <span class="keyword">in</span> knowledge)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(memory.ContainsKey(word) == <span class="literal">false</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					memory[word] = (<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				<span class="comment"><span class="doctag">///</span>/ 記憶深度在達到一個週期才會提高,時間的週期性、節奏</span></span><br><span class="line">				<span class="keyword">var</span> (phase,depth) = memory[word];</span><br><span class="line">				<span class="keyword">var</span> newPhase = phase % <span class="number">3</span> + <span class="number">1</span>;</span><br><span class="line">				<span class="keyword">if</span>(newPhase == <span class="number">1</span>)</span><br><span class="line">				&#123;</span><br><span class="line">                    <span class="comment"><span class="doctag">///</span>/ 記憶的逐漸累積</span></span><br><span class="line">					depth += <span class="number">0.5</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				</span><br><span class="line">				memory[word] = (newPhase,depth);</span><br><span class="line">				Console.WriteLine(<span class="string">$&quot;  🧩 <span class="subst">&#123;word,<span class="number">-6</span>&#125;</span>：階段 <span class="subst">&#123;phase+<span class="number">1</span>&#125;</span>、記憶強度 <span class="subst">&#123;depth:F1&#125;</span>&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			Console.WriteLine(<span class="string">$&quot;🌙 第 <span class="subst">&#123;i&#125;</span> 天結束，知識在腦中慢慢沈澱...\n&quot;</span>);</span><br><span class="line">			Thread.Sleep(<span class="number">300</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;✨ 潮水退去，但痕跡留在心裡。&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/5_2_learn_core.png" alt="f"></p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/5_3_learn_result.png" alt="4"></p></div><div class="tab-item-content"><p>為了讓計數器永遠不超過一個上限，並循環歸零再起, 當 UpdateTimes 遞增到 255 之後，再加 1 會回到 1，而不是 256</p>
+<p>TINYINT 最大值 (0~255)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> <span class="keyword">Table</span> <span class="keyword">SET</span> UpdateTimes <span class="operator">=</span> (UpdateTimes <span class="operator">%</span> <span class="number">255</span>) <span class="operator">+</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+<table>
+<thead>
+<tr>
+<th align="center">舊的 UpdateTimes</th>
+<th align="center"><code>% 255</code> 結果</th>
+<th align="center">新的 UpdateTimes &#x3D; <code>%255 + 1</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">254</td>
+<td align="center">254</td>
+<td align="center">255</td>
+</tr>
+<tr>
+<td align="center">255</td>
+<td align="center">0</td>
+<td align="center">1 ✅ ← 循環回來！</td>
+</tr>
+</tbody></table>
+<p>這樣可以保持數值在 1～255 的範圍內循環遞增, 也就是說，它在實現一種bounded counter（有界計數器）</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/3__updatetimes.png" alt="4"></p></div><div class="tab-item-content"><p>將資料拆批處理</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 模擬處理大量資料，每次處理固定數量</span></span><br><span class="line">    <span class="keyword">var</span> dataList = Enumerable.Range(<span class="number">1</span>, <span class="number">100</span>).ToList();</span><br><span class="line">    ProcessDataWithCounter(dataList);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ProcessDataWithCounter</span>(<span class="params">List&lt;<span class="built_in">int</span>&gt; dataList</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">int</span> processedCount = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">int</span> batchSize = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">int</span> index = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (index &lt; dataList.Count)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 處理當前項目</span></span><br><span class="line">        <span class="keyword">var</span> currentItem = dataList[index];</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;處理項目: <span class="subst">&#123;currentItem&#125;</span>&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        processedCount++;</span><br><span class="line">        index++;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 每處理 10 個項目就暫停一下</span></span><br><span class="line">        <span class="keyword">if</span> (processedCount % batchSize == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;已處理 <span class="subst">&#123;processedCount&#125;</span> 個項目，暫停 100ms...&quot;</span>);</span><br><span class="line">            Thread.Sleep(<span class="number">100</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    Console.WriteLine(<span class="string">$&quot;總共處理了 <span class="subst">&#123;processedCount&#125;</span> 個項目&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或是簡單的 batch 拆分處理</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dataList= Enumerable.Range(<span class="number">1</span>,<span class="number">100</span>);</span><br><span class="line"><span class="keyword">var</span> newoutput = <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt;();</span><br><span class="line"><span class="keyword">foreach</span>(<span class="keyword">var</span> a <span class="keyword">in</span> dataList)</span><br><span class="line">&#123;</span><br><span class="line">  newoutput.Add(a);</span><br><span class="line"><span class="keyword">if</span> (a % <span class="number">10</span> == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">  Console.WriteLine(<span class="string">$&quot;開幹 <span class="subst">&#123;<span class="built_in">string</span>.Join(<span class="string">&quot; ,&quot;</span>, newoutput)&#125;</span>&quot;</span>);</span><br><span class="line">  newoutput.Clear();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/4_batch_processing.png" alt="3"></p></div><div class="tab-item-content"><p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/6_final.png" alt="a"></p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/modulo.png" alt="a"></p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2025/11/03/%E9%80%B1%E6%9C%9F%E6%80%A7%E8%A7%B8%E7%99%BC/">https://chi-keke.github.io/Mind/2025/11/03/%E9%80%B1%E6%9C%9F%E6%80%A7%E8%A7%B8%E7%99%BC/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Mind/tags/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/">思索日和</a></div><div class="post-share"><div class="social-share" data-image="https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2025/10/25/XOR/" title="XOR"><img class="cover" src="https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">XOR</div></div><div class="info-2"><div class="info-item-1">XORXOR 用在加密?變數交換（Swap Without Temp）則找出「唯一」的元素資料校驗（Checksum / Parity Bit）Bit Mask 運算 / 條件切換記錄配對比對（找出未成對的紀錄）summary人生就像一場不斷的 XOR。有時我們與他人相同，結果歸零；有時我們與他人不同，才激起新的火花 相異，並非衝突，而是彼此成就的起點。就像 XOR 的規則，唯有「不同」，才產生能量。在日常的重複中，我們不斷被抵銷；而在那些「不同」的瞬間，我們被記錄、被看見，也因此變得獨一無二    A B A XOR B    0 0 0   0 1 1   1 0 1   1 1 0   當兩邊不一樣時，結果為 1；一樣時，結果為 0 這裡有個非常巧妙的特性：XOR 運算是可逆的！ (原文 XOR 金鑰) XOR 金鑰 &#x3D; 原文 1234原文：0101金鑰：1100加密：1001   (0101 XOR 1100)解密：0101   (1001 XOR 1100)   XOR 本身不是安全的加密演算法，而是一個「運算工具」  可逆性 (Reversibility)：...</div></div></div></a><a class="pagination-related" href="/Mind/2025/11/29/P95/" title="P50, P95, P99"><img class="cover" src="https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">P50, P95, P99</div></div><div class="info-2"><div class="info-item-1">P 的數學 —— 電梯裡的等待之譜P50 —— 大多數人的日常體驗P95 —— 那些偶爾但令人印象深刻的等待P99 —— 幾乎要走人的等待為什麼我們要在意 P95？Request 上升，哪些情境會導致「少數 request 很慢」？統計學的 P95統計學的 P95你每天早上都去買咖啡。熟悉的味道、熟悉的隊伍，但每次等待的時間都不一樣。有時三分鐘就拿到，有時十幾分鐘也等不到。你開始記錄這些等待時間 [90, 100, 110, 150, 180, 300, 1200] 這些數字，其實就像是「系統 latency 的樣本」：每一個等待時間，都是一個 request 等待被服務的過程 P50（第 50 百分位），代表「一半的人等得比它短，一半的人比它長」。 計算：0.5 × 7 &#x3D; 3.5 → 向上取整 &#x3D; 第 4 筆 → 150 秒 這就是 中位數。你大多數的等待經驗，大約就是這個水準。它代表**「使用者的日常體感」**，是你最熟悉的節奏。本質上 P50 沒有被極端值影響（不像平均值會被拖走）P50 是一種「對群體最公平的代表值」 計算：0.95 × 7 &#x3...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/Mind/2025/10/25/XOR/" title="XOR"><img class="cover" src="https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-10-25</div><div class="info-item-2">XOR</div></div><div class="info-2"><div class="info-item-1">XORXOR 用在加密?變數交換（Swap Without Temp）則找出「唯一」的元素資料校驗（Checksum / Parity Bit）Bit Mask 運算 / 條件切換記錄配對比對（找出未成對的紀錄）summary人生就像一場不斷的 XOR。有時我們與他人相同，結果歸零；有時我們與他人不同，才激起新的火花 相異，並非衝突，而是彼此成就的起點。就像 XOR 的規則，唯有「不同」，才產生能量。在日常的重複中，我們不斷被抵銷；而在那些「不同」的瞬間，我們被記錄、被看見，也因此變得獨一無二    A B A XOR B    0 0 0   0 1 1   1 0 1   1 1 0   當兩邊不一樣時，結果為 1；一樣時，結果為 0 這裡有個非常巧妙的特性：XOR 運算是可逆的！ (原文 XOR 金鑰) XOR 金鑰 &#x3D; 原文 1234原文：0101金鑰：1100加密：1001   (0101 XOR 1100)解密：0101   (1001 XOR 1100)   XOR 本身不是安全的加密演算法，而是一個「運算工具」  可逆性 (Reversibility)：...</div></div></div></a><a class="pagination-related" href="/Mind/2026/04/26/mod-2/" title="Modulo - 2"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/modulo-2/1_landing.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-26</div><div class="info-item-2">Modulo - 2</div></div><div class="info-2"><div class="info-item-1">從「餘數」的角度看世界n ^ 2 ÷ 5 的餘數為什麼題目要問 n 平方,為甚麼不是問 n資料分桶：使用者分到哪台伺服器身分證、信用卡、條碼檢查碼餘數是在處理「週期性」問題，平常我們習慣用「直線」看數字，但餘數是在用「圓圈」看這些數字。例如一串數字 :　1,2,3,4,5,6…，mod 會說：跑到 5 之後回到 0，再重新開始，它的世界比較像時鐘：12,1,2,3,…,11,12，13 點其實就是 1 點，25 點也是 1 點，這就是餘數視角。若在擴展的話，資源、時間、位置或狀態，經過一段固定循環後，最後落在哪一格就是　餘數角度，餘數思維的現實用途，是把「一直增加的東西」轉成「循環中的位置」，讓你不用追整條歷史，只要知道現在落在哪一格  以 mod 5 為例： 原本你看到的是直線： 11,2,3,4,5,6,7,8,9...  餘數視角會把它變成循環： 10,1,2,3,4,0,1,2,3,4...  所以數字變大不是重點，重點是它目前停在哪一格，像 1,6,11,16，都停在「餘 1」這格，所以在 mod 5 世界裡它們是同一類  星期幾一個隨意的問題 : 今天是星期一，100...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/05/22/Bulls-and-Cows/" title="Untitled"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Untitled"/></a><div class="content"><a class="title" href="/Mind/2026/05/22/Bulls-and-Cows/" title="Untitled">Untitled</a><time datetime="2026-05-22T02:08:10.039Z" title="Created 2026-05-22 10:08:10">2026-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/05/22/hello-world/" title="Hello World"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/Mind/2026/05/22/hello-world/" title="Hello World">Hello World</a><time datetime="2026-05-22T01:37:39.940Z" title="Created 2026-05-22 09:37:39">2026-05-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/05/15/Bijection/" title="Bijection"><img src="https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bijection"/></a><div class="content"><a class="title" href="/Mind/2026/05/15/Bijection/" title="Bijection">Bijection</a><time datetime="2026-05-15T08:30:05.000Z" title="Created 2026-05-15 16:30:05">2026-05-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/05/01/Tree/" title="Tree"><img src="https://github.com/CHI-KEKE/pics/blob/main/Probability/tree/landing.png?raw=true" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Tree"/></a><div class="content"><a class="title" href="/Mind/2026/05/01/Tree/" title="Tree">Tree</a><time datetime="2026-05-01T12:54:03.000Z" title="Created 2026-05-01 20:54:03">2026-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/04/26/mod-2/" title="Modulo - 2"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Logi/Modulo/modulo-2/1_landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Modulo - 2"/></a><div class="content"><a class="title" href="/Mind/2026/04/26/mod-2/" title="Modulo - 2">Modulo - 2</a><time datetime="2026-04-26T01:16:03.000Z" title="Created 2026-04-26 09:16:03">2026-04-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://github.com/CHI-KEKE/pics/blob/main/%E6%80%9D%E7%B4%A2%E6%97%A5%E5%92%8C/Stamp.png?raw=true);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
