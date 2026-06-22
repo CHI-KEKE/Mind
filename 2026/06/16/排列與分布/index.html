@@ -1,0 +1,749 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>排列與分布 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="問題路線一 : 先做出一個合法雛形排除法先排男生整理5男3女排成一列，若依照下列情形，各有幾種方法？  5男生全相鄰。 男生全相鄰，女生也全相鄰。 3個女生中任兩人不得相鄰。 &#x3D;&gt; 這個問題是本集的重點討論!  我想著重在不同思考可能性的討論問題說女生不能相鄰，所以想到了一種基礎模板：  男女男女男女男  這樣女生一定不相鄰。然後發現還剩 1 個男生，所以接著想：「這個排列已經合法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排列與分布">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="問題路線一 : 先做出一個合法雛形排除法先排男生整理5男3女排成一列，若依照下列情形，各有幾種方法？  5男生全相鄰。 男生全相鄰，女生也全相鄰。 3個女生中任兩人不得相鄰。 &#x3D;&gt; 這個問題是本集的重點討論!  我想著重在不同思考可能性的討論問題說女生不能相鄰，所以想到了一種基礎模板：  男女男女男女男  這樣女生一定不相鄰。然後發現還剩 1 個男生，所以接著想：「這個排列已經合法">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.imgur.com/f2eWUWv.png">
+<meta property="article:published_time" content="2026-06-16T00:02:05.000Z">
+<meta property="article:modified_time" content="2026-06-19T02:48:50.318Z">
+<meta property="article:author" content="Yo-Lin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/f2eWUWv.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "排列與分布",
+  "url": "https://chi-keke.github.io/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/",
+  "image": "https://i.imgur.com/f2eWUWv.png",
+  "datePublished": "2026-06-16T00:02:05.000Z",
+  "dateModified": "2026-06-19T02:48:50.318Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '排列與分布',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">19</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">排列與分布</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">排列與分布</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-06-16T00:02:05.000Z" title="Created 2026-06-16 08:02:05">2026-06-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-06-19T02:48:50.318Z" title="Updated 2026-06-19 10:48:50">2026-06-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">問題</button><button type="button" class="tab">路線一 : 先做出一個合法雛形</button><button type="button" class="tab">排除法</button><button type="button" class="tab">先排男生</button><button type="button" class="tab">整理</button></div><div class="tab-contents"><div class="tab-item-content active"><p>5男3女排成一列，若依照下列情形，各有幾種方法？</p>
+<ol>
+<li>5男生全相鄰。</li>
+<li>男生全相鄰，女生也全相鄰。</li>
+<li>3個女生中任兩人不得相鄰。 &#x3D;&gt; 這個問題是本集的重點討論!</li>
+</ol>
+<p>我想著重在不同思考可能性的討論</p></div><div class="tab-item-content"><p>問題說女生不能相鄰，所以想到了一種基礎模板：</p>
+<blockquote>
+<p><strong>男女男女男女男</strong></p>
+</blockquote>
+<p>這樣女生一定不相鄰。然後發現還剩 1 個男生，所以接著想：「這個排列已經合法了，最後一個男生不管插哪裡，都不會讓女生相鄰吧！」因此有 8 個插入位置：</p>
+<blockquote>
+<p><strong>＿男＿女＿男＿女＿男＿女＿男＿</strong></p>
+</blockquote>
+<p>所以寫出答案：<code>3! × 5! × 8</code></p>
+<hr>
+<h2 id="⚠️-盲點"><a href="#⚠️-盲點" class="headerlink" title="⚠️ 盲點"></a>⚠️ 盲點</h2><p>這個解法的問題在於，把「<strong>一種合法雛形</strong>」誤以為是「<strong>所有合法排列的共同雛形</strong>」。</p>
+<p><strong>男女男女男女男</strong> 確實是一種合法形狀，但它<strong>不是所有合法排列都能由它變出來的</strong>。</p>
+<p>以下這些排列都是合法的，卻無法從 <strong>男女男女男女男</strong> 插入一個男生得到：</p>
+<table>
+<thead>
+<tr>
+<th>排列</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>男男男女男女男女</strong></td>
+<td>男生集中在前端</td>
+</tr>
+<tr>
+<td><strong>女男男女男女男男</strong></td>
+<td>開頭沒有男生作為緩衝</td>
+</tr>
+</tbody></table>
+<p>真正的「不相鄰」條件只是：<strong>女生和女生中間至少有一個男生</strong>，它沒有要求男生平均分散。</p>
+<blockquote>
+<p>看到「不相鄰」→ 想到「交錯排列」→ 寫出 <strong>男女男女男女男</strong></p>
+</blockquote>
+<p>這個交錯排列是「其中一種」，還是「所有合法排列的共同起點」？這不是共同起點，所以 <code>3! × 5! × 8</code> 會漏算</p></div><div class="tab-item-content"><p><strong>思路：</strong> 從所有排列出發，扣掉「不合法」的排列。</p>
+<p>$$\text{合法} &#x3D; \text{全部排列} - \text{有女生相鄰的排列}$$</p>
+<h2 id="三個女生全相鄰"><a href="#三個女生全相鄰" class="headerlink" title="三個女生全相鄰"></a>三個女生全相鄰</h2><p>把三個女生綁成一塊 <code>[ABC]</code>：</p>
+<blockquote>
+<p><strong>[女女女]  男  男  男  男  男</strong></p>
+</blockquote>
+<p>共 6 個單位，排列有 <code>6!</code>，女生內部有 <code>3!</code> 種排法：</p>
+<p>$$6! \times 3! &#x3D; 720 \times 6 &#x3D; 4320$$</p>
+<h2 id="某一對女生相鄰"><a href="#某一對女生相鄰" class="headerlink" title="某一對女生相鄰"></a>某一對女生相鄰</h2><p>女生 A、B、C 可以組成 3 對：AB、AC、BC。</p>
+<p>以 AB 為例，把 AB 綁成一塊 <code>[AB]</code>：</p>
+<blockquote>
+<p><strong>[AB]  C  男  男  男  男  男</strong></p>
+</blockquote>
+<p>共 7 個單位，排列有 <code>7!</code>，AB 內部有 <code>2!</code> 種排法。</p>
+<p>三對合計：</p>
+<p>$$3 \times 7! \times 2! &#x3D; 3 \times 5040 \times 2 &#x3D; 30240$$</p>
+<h2 id="⚠️-盲點：重複扣除問題"><a href="#⚠️-盲點：重複扣除問題" class="headerlink" title="⚠️ 盲點：重複扣除問題"></a>⚠️ 盲點：重複扣除問題</h2><p><strong>直接相減是錯的！</strong></p>
+<p>$$8! - 3 \times 7! \times 2! \quad ❌$$</p>
+<p>原因是「三女生全相鄰 ABC」這種排列，<strong>同時屬於</strong> AB 相鄰、也屬於 BC 相鄰，所以在 <code>3×7!×2!</code> 中被扣了<strong>兩次</strong>，多扣了一次。</p>
+<table>
+<thead>
+<tr>
+<th>排列類型</th>
+<th>被計入哪些情況</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ABC 全相鄰</td>
+<td>AB 相鄰 ✓、BC 相鄰 ✓ → 被扣 <strong>2 次</strong></td>
+</tr>
+<tr>
+<td>只有 AB 相鄰（C 不相鄰）</td>
+<td>僅 AB 相鄰 ✓ → 被扣 <strong>1 次</strong> ✅</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>排除法不是「看到不合法就全部扣掉」，還要注意不同條件之間是否有重疊。</strong></p>
+</blockquote>
+<hr>
+<h2 id="正確的排除邏輯"><a href="#正確的排除邏輯" class="headerlink" title="正確的排除邏輯"></a>正確的排除邏輯</h2><p>用「容斥原理」修正重複扣除：</p>
+<p>$$\text{合法} &#x3D; 8! - \underbrace{3 \times 7! \times 2!}<em>{\text{扣掉「至少一對相鄰」}} + \underbrace{6! \times 3!}</em>{\text{補回「三女全相鄰」被多扣的}}$$</p>
+<p><strong>步驟說明：</strong></p>
+<ol>
+<li>從 <code>8!</code> 出發（全部排列）</li>
+<li>扣掉 <code>3×7!×2!</code>：把 AB、AC、BC 三種相鄰情況各扣一次</li>
+<li>補回 <code>6!×3!</code>：三女全相鄰被扣了兩次，需補回一次</li>
+</ol>
+<p>$$8! - 3 \times 7! \times 2! + 6! \times 3! &#x3D; 40320 - 30240 + 4320 &#x3D; 14400$$</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>意義</th>
+<th>數值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>8!</code></td>
+<td>全部排列</td>
+<td>40320</td>
+</tr>
+<tr>
+<td><code>−3×7!×2!</code></td>
+<td>扣掉至少一對女生相鄰</td>
+<td>−30240</td>
+</tr>
+<tr>
+<td><code>+6!×3!</code></td>
+<td>補回三女全相鄰多扣的</td>
+<td>+4320</td>
+</tr>
+<tr>
+<td><strong>結果</strong></td>
+<td></td>
+<td><strong>14400</strong></td>
+</tr>
+</tbody></table></div><div class="tab-item-content"><p>題目限制的是「女生不能相鄰」，而<strong>男生天然就能把女生隔開</strong>。</p>
+<p>所以換個方向想 <strong>先把男生排好，空位自然就出現了，女生只要選不同的空位，就一定不相鄰。</strong></p>
+<hr>
+<h2 id="Step-1｜先排-5-個男生"><a href="#Step-1｜先排-5-個男生" class="headerlink" title="Step 1｜先排 5 個男生"></a>Step 1｜先排 5 個男生</h2><blockquote>
+<p><strong>男 男 男 男 男</strong></p>
+</blockquote>
+<p>5 個男生本身有 <code>5!</code> 種排列。</p>
+<h2 id="Step-2｜男生排好後，自然產生空位"><a href="#Step-2｜男生排好後，自然產生空位" class="headerlink" title="Step 2｜男生排好後，自然產生空位"></a>Step 2｜男生排好後，自然產生空位</h2><p>男生排好之後，左右兩端和中間的間隙，形成了 <strong>6 個空位</strong>：</p>
+<blockquote>
+<p><strong>＿男＿男＿男＿男＿男＿</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>空位</th>
+<th>位置說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第 1 格</td>
+<td>最左端</td>
+</tr>
+<tr>
+<td>第 2 格</td>
+<td>第 1、2 個男生之間</td>
+</tr>
+<tr>
+<td>第 3 格</td>
+<td>第 2、3 個男生之間</td>
+</tr>
+<tr>
+<td>第 4 格</td>
+<td>第 3、4 個男生之間</td>
+</tr>
+<tr>
+<td>第 5 格</td>
+<td>第 4、5 個男生之間</td>
+</tr>
+<tr>
+<td>第 6 格</td>
+<td>最右端</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>5 個男生 → 6 個空位</strong></p>
+</blockquote>
+<h2 id="Step-3｜為什麼女生選不同空位就不相鄰？"><a href="#Step-3｜為什麼女生選不同空位就不相鄰？" class="headerlink" title="Step 3｜為什麼女生選不同空位就不相鄰？"></a>Step 3｜為什麼女生選不同空位就不相鄰？</h2><p>因為<strong>每個空位之間都隔著男生</strong>，只要每個空位最多放一個女生，女生之間就一定有男生相隔。</p>
+<p>例如女生選第 1、3、6 格：</p>
+<blockquote>
+<p><strong>女 男 ＿ 男 女 男 ＿ 男 ＿ 男 女</strong></p>
+</blockquote>
+<p>女生中間一定有男生隔開，不可能出現「女女」緊鄰的情況。</p>
+<blockquote>
+<p>「女生不能相鄰」這個條件，<strong>自動被滿足</strong>。✅</p>
+</blockquote>
+<h2 id="Step-4｜女生選空位有幾種？"><a href="#Step-4｜女生選空位有幾種？" class="headerlink" title="Step 4｜女生選空位有幾種？"></a>Step 4｜女生選空位有幾種？</h2><p>6 個空位中，選 3 個放女生，這是「選位置」問題（不管誰站哪格），所以用組合：</p>
+<p>$$C_6^3 &#x3D; \frac{6 \times 5 \times 4}{3 \times 2 \times 1} &#x3D; 20$$</p>
+<h2 id="Step-5｜女生本身還可以排列"><a href="#Step-5｜女生本身還可以排列" class="headerlink" title="Step 5｜女生本身還可以排列"></a>Step 5｜女生本身還可以排列</h2><p>選好 3 個空位後，3 個不同的女生 A、B、C 可以任意排列：</p>
+<blockquote>
+<p><code>3! = 6</code> 種</p>
+</blockquote>
+<h2 id="最終答案"><a href="#最終答案" class="headerlink" title="最終答案"></a>最終答案</h2><p>$$5! \times C_6^3 \times 3! &#x3D; 120 \times 20 \times 6 &#x3D; 14400$$</p>
+<table>
+<thead>
+<tr>
+<th>步驟</th>
+<th>意義</th>
+<th>數值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>5!</code></td>
+<td>男生的排列方式</td>
+<td>120</td>
+</tr>
+<tr>
+<td><code>C(6,3)</code></td>
+<td>女生選空位的方式（位置）</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code>3!</code></td>
+<td>女生本身的排列方式（身份）</td>
+<td>6</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>可行 ✅</p>
+</blockquote></div><div class="tab-item-content"><p>這題表面上是在問「女生不能相鄰」，但真正要學的是排列組合裡幾個底層思考方式</p>
+<h2 id="合法雛形不一定是完整分類"><a href="#合法雛形不一定是完整分類" class="headerlink" title="合法雛形不一定是完整分類"></a>合法雛形不一定是完整分類</h2><p><code>男女男女男女男</code> 是一種合法雛形，但不是所有合法排列的共同起點，所以用「先做出一個合法排列，再把剩下的人插入」這種方法時，要問自己 <strong>所有合法情況都能從這個雛形產生嗎？</strong></p>
+<p>不能只考慮到男生接近平均分布的情況，沒有完整考慮男生在女生周圍的所有分布。</p>
+<h2 id="「分布」和「排列」"><a href="#「分布」和「排列」" class="headerlink" title="「分布」和「排列」"></a>「分布」和「排列」</h2><p>如果先排女生 <strong>＿女＿女＿女＿</strong>，會形成 4 個區域 <strong>a 女 b 女 c 女 d</strong></p>
+<p>這時候要先處理的是 <strong>每個區域各有幾個男生？</strong></p>
+<p>這是「分布問題」</p>
+<p>等每個區域的男生數量確定後，再處理 <strong>5 個男生誰站在哪個位置？</strong> 這才是「排列問題」。所以</p>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>問的問題</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>C(6,3)</code></td>
+<td>男生數量怎麼分布到 4 個區域</td>
+</tr>
+<tr>
+<td><code>5!</code></td>
+<td>5 個男生身份怎麼排列</td>
+</tr>
+<tr>
+<td><code>3!</code></td>
+<td>3 個女生身份怎麼排列</td>
+</tr>
+</tbody></table>
+<p>這題很重要的觀念是</p>
+<blockquote>
+<p><strong>分布和排列要分開想，不要混在一起。</strong></p>
+</blockquote>
+<h2 id="隔板法是在處理「數量分布」"><a href="#隔板法是在處理「數量分布」" class="headerlink" title="隔板法是在處理「數量分布」"></a>隔板法是在處理「數量分布」</h2><p>先排女生後 <strong>a 女 b 女 c 女 d</strong></p>
+<p>因為女生不能相鄰，所以中間兩區至少要有男生 <strong>b ≥ 1，c ≥ 1</strong></p>
+<p>先處理最低需求後，剩下 3 個男生要自由分布到 4 個區域 <strong>a + b’ + c’ + d &#x3D; 3</strong></p>
+<p>這句話的意思是 <strong>3 個男生要分到 4 個區域，每個區域可以放 0 個、1 個或多個</strong></p>
+<p>用隔板法來看，3 個男生是 3 顆星星，4 個區域需要 3 個隔板 <strong>⋆ ⋆ ⋆ ∣ ∣ ∣</strong></p>
+<p>總共有 6 個符號，選 3 個位置放星星</p>
+<p>$$<br>C_6^3 &#x3D; 20<br>$$</p>
+<p>所以 3 個男生分到 4 個區域，共有 20 種數量分布</p>
+<h2 id="排除法要注意重複扣除"><a href="#排除法要注意重複扣除" class="headerlink" title="排除法要注意重複扣除"></a>排除法要注意重複扣除</h2><p>排除法的方向是 <strong>全部排列 − 不合法排列</strong></p>
+<p>但不合法條件之間可能重疊，例如三個女生全相鄰 <strong>ABC</strong></p>
+<p>它同時包含</p>
+<ul>
+<li>AB 相鄰</li>
+<li>BC 相鄰</li>
+</ul>
+<p>所以在扣掉「某一對女生相鄰」時，三女生全相鄰的情況會被重複扣到，因此正確排除法是</p>
+<p>$$<br>8! - 3 \times 7! \times 2! + 6! \times 3!<br>$$</p>
+<p>最後的加回來，是為了補回被多扣的三女生全相鄰情況。</p>
+<h2 id="最乾淨的做法：先排拿來隔開的人"><a href="#最乾淨的做法：先排拿來隔開的人" class="headerlink" title="最乾淨的做法：先排拿來隔開的人"></a>最乾淨的做法：先排拿來隔開的人</h2><p>因為題目限制的是女生不能相鄰，所以最自然的想法是 <strong>先排男生，讓男生產生安全空位。</strong></p>
+<p>先排 5 個男生 <strong>男 男 男 男 男</strong></p>
+<p>會產生 6 個空位 <strong>＿男＿男＿男＿男＿男＿</strong></p>
+<p>女生只要選不同空位，就一定不會相鄰ㄋ</p>
+<p>所以</p>
+<p>$$<br>5! \times C_6^3 \times 3! &#x3D; 14400<br>$$</p>
+<p>這個方法最乾淨，因為它直接把「女生不能相鄰」轉化成「女生選安全空位」。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>這題的底層關鍵是理解</p>
+<blockquote>
+<p><strong>不相鄰問題，要先找誰可以當隔板。</strong></p>
+</blockquote>
+<p>如果先排「拿來隔開的人」，問題會變成選空位，比較簡單。</p>
+<p>如果先排「被限制的人」，就會變成分布問題，需要處理每個區域放幾個人。</p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/">https://chi-keke.github.io/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://i.imgur.com/f2eWUWv.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/06/12/Multiplication-Principle/" title="Multiplication Principle"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Probability/Multiplicity/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Multiplication Principle</div></div><div class="info-2"><div class="info-item-1">使用乘法原理360 正因數之和排列巢狀迴圈summary最重要的判斷方法：  這件事是不是由好幾個步驟完成，而且每一步都必須做？如果是，就很可能用乘法原理。  flowchart LR     Q[&quot;題目情境&quot;] --&gt; D&#123;&quot;每一步都必須做？&quot;&#125;     D --&gt;|&quot;是（步驟 AND 步驟）&quot;| M[&quot;乘法原理\n各步驟選擇數相乘&quot;]     D --&gt;|&quot;否（情況 OR 情況）&quot;| A[&quot;加法原理\n各情況數相加&quot;]      style Q fill:#F5A623,color:#fff     style D fill:#7B68EE,color:#fff     style M fill:#5BA85B,color:#fff     style A fill:#4A90D9,color:#fff     乘法 vs 加法 對照    情境 結構 原理 算法    先選衣服，再選褲子，再選鞋 A 且 B 且 C 乘...</div></div></div></a><a class="pagination-related" href="/Mind/2026/06/17/Statistics-divide-by-n-1/" title="Why Dividing by N Underestimates Variance"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Why Dividing by N Underestimates Variance</div></div><div class="info-2"><div class="info-item-1">變異數「樣本平均數」會讓距離看起來最短為什麼這樣會造成「低估」為甚麼是 n-1summary變異數在算什麼？它在算「資料點與平均值之間的距離平方的平均」。資料點離平均值越遠，變異數越大；離得越近，變異數越小 我們真正想知道的是全部資料圍繞在「母體平均數」周圍的變異程度。但現實中幾乎沒有足夠的時間與金錢去測量母體中的每一個個體，所以必須用抽樣資料來估計母體的變異數。 公式的兩個版本理想上，真正的母體變異數是用母體平均數 $\mu$ 計算的：  母體變異數 $\sigma^2 &#x3D; \dfrac{\sum (x - \mu)^2}{N}$  但現實中我們只有樣本，只能算出樣本平均數 $\bar{x}$，並用它代替 $\mu$： 12345678910111213141516樣本資料0        10        20        30        40|---------|---------|---------|---------|   ●          ●    ●     ●      ●   4         14   18    24     30  ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">19</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E7%9B%B2%E9%BB%9E"><span class="toc-number">1.</span> <span class="toc-text">⚠️ 盲點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E5%80%8B%E5%A5%B3%E7%94%9F%E5%85%A8%E7%9B%B8%E9%84%B0"><span class="toc-number">2.</span> <span class="toc-text">三個女生全相鄰</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%90%E4%B8%80%E5%B0%8D%E5%A5%B3%E7%94%9F%E7%9B%B8%E9%84%B0"><span class="toc-number">3.</span> <span class="toc-text">某一對女生相鄰</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%A0%EF%B8%8F-%E7%9B%B2%E9%BB%9E%EF%BC%9A%E9%87%8D%E8%A4%87%E6%89%A3%E9%99%A4%E5%95%8F%E9%A1%8C"><span class="toc-number">4.</span> <span class="toc-text">⚠️ 盲點：重複扣除問題</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E7%A2%BA%E7%9A%84%E6%8E%92%E9%99%A4%E9%82%8F%E8%BC%AF"><span class="toc-number">5.</span> <span class="toc-text">正確的排除邏輯</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-1%EF%BD%9C%E5%85%88%E6%8E%92-5-%E5%80%8B%E7%94%B7%E7%94%9F"><span class="toc-number">6.</span> <span class="toc-text">Step 1｜先排 5 個男生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-2%EF%BD%9C%E7%94%B7%E7%94%9F%E6%8E%92%E5%A5%BD%E5%BE%8C%EF%BC%8C%E8%87%AA%E7%84%B6%E7%94%A2%E7%94%9F%E7%A9%BA%E4%BD%8D"><span class="toc-number">7.</span> <span class="toc-text">Step 2｜男生排好後，自然產生空位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-3%EF%BD%9C%E7%82%BA%E4%BB%80%E9%BA%BC%E5%A5%B3%E7%94%9F%E9%81%B8%E4%B8%8D%E5%90%8C%E7%A9%BA%E4%BD%8D%E5%B0%B1%E4%B8%8D%E7%9B%B8%E9%84%B0%EF%BC%9F"><span class="toc-number">8.</span> <span class="toc-text">Step 3｜為什麼女生選不同空位就不相鄰？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-4%EF%BD%9C%E5%A5%B3%E7%94%9F%E9%81%B8%E7%A9%BA%E4%BD%8D%E6%9C%89%E5%B9%BE%E7%A8%AE%EF%BC%9F"><span class="toc-number">9.</span> <span class="toc-text">Step 4｜女生選空位有幾種？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-5%EF%BD%9C%E5%A5%B3%E7%94%9F%E6%9C%AC%E8%BA%AB%E9%82%84%E5%8F%AF%E4%BB%A5%E6%8E%92%E5%88%97"><span class="toc-number">10.</span> <span class="toc-text">Step 5｜女生本身還可以排列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%B5%82%E7%AD%94%E6%A1%88"><span class="toc-number">11.</span> <span class="toc-text">最終答案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E6%B3%95%E9%9B%9B%E5%BD%A2%E4%B8%8D%E4%B8%80%E5%AE%9A%E6%98%AF%E5%AE%8C%E6%95%B4%E5%88%86%E9%A1%9E"><span class="toc-number">12.</span> <span class="toc-text">合法雛形不一定是完整分類</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%80%8C%E5%88%86%E5%B8%83%E3%80%8D%E5%92%8C%E3%80%8C%E6%8E%92%E5%88%97%E3%80%8D"><span class="toc-number">13.</span> <span class="toc-text">「分布」和「排列」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%94%E6%9D%BF%E6%B3%95%E6%98%AF%E5%9C%A8%E8%99%95%E7%90%86%E3%80%8C%E6%95%B8%E9%87%8F%E5%88%86%E5%B8%83%E3%80%8D"><span class="toc-number">14.</span> <span class="toc-text">隔板法是在處理「數量分布」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E9%99%A4%E6%B3%95%E8%A6%81%E6%B3%A8%E6%84%8F%E9%87%8D%E8%A4%87%E6%89%A3%E9%99%A4"><span class="toc-number">15.</span> <span class="toc-text">排除法要注意重複扣除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E4%B9%BE%E6%B7%A8%E7%9A%84%E5%81%9A%E6%B3%95%EF%BC%9A%E5%85%88%E6%8E%92%E6%8B%BF%E4%BE%86%E9%9A%94%E9%96%8B%E7%9A%84%E4%BA%BA"><span class="toc-number">16.</span> <span class="toc-text">最乾淨的做法：先排拿來隔開的人</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B8%BD%E7%B5%90"><span class="toc-number">17.</span> <span class="toc-text">總結</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/17/Statistics-divide-by-n-1/" title="Why Dividing by N Underestimates Variance"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Why Dividing by N Underestimates Variance"/></a><div class="content"><a class="title" href="/Mind/2026/06/17/Statistics-divide-by-n-1/" title="Why Dividing by N Underestimates Variance">Why Dividing by N Underestimates Variance</a><time datetime="2026-06-17T08:45:05.000Z" title="Created 2026-06-17 16:45:05">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/" title="排列與分布"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="排列與分布"/></a><div class="content"><a class="title" href="/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/" title="排列與分布">排列與分布</a><time datetime="2026-06-16T00:02:05.000Z" title="Created 2026-06-16 08:02:05">2026-06-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/12/Multiplication-Principle/" title="Multiplication Principle"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Probability/Multiplicity/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Multiplication Principle"/></a><div class="content"><a class="title" href="/Mind/2026/06/12/Multiplication-Principle/" title="Multiplication Principle">Multiplication Principle</a><time datetime="2026-06-12T08:49:03.000Z" title="Created 2026-06-12 16:49:03">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/12/Statistics-histogram/" title="Histogram"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/histogram/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Histogram"/></a><div class="content"><a class="title" href="/Mind/2026/06/12/Statistics-histogram/" title="Histogram">Histogram</a><time datetime="2026-06-12T08:45:05.000Z" title="Created 2026-06-12 16:45:05">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/05/30/Inclusion-Exclusion/" title="Inclusion-Exclusion"><img src="https://github.com/CHI-KEKE/pics/blob/main/Logi/思索日和/Stamp.png?raw=true" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Inclusion-Exclusion"/></a><div class="content"><a class="title" href="/Mind/2026/05/30/Inclusion-Exclusion/" title="Inclusion-Exclusion">Inclusion-Exclusion</a><time datetime="2026-05-30T00:35:05.000Z" title="Created 2026-05-30 08:35:05">2026-05-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

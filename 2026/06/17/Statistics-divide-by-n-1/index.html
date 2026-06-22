@@ -1,0 +1,627 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Why Dividing by N Underestimates Variance | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="變異數「樣本平均數」會讓距離看起來最短為什麼這樣會造成「低估」為甚麼是 n-1summary變異數在算什麼？它在算「資料點與平均值之間的距離平方的平均」。資料點離平均值越遠，變異數越大；離得越近，變異數越小 我們真正想知道的是全部資料圍繞在「母體平均數」周圍的變異程度。但現實中幾乎沒有足夠的時間與金錢去測量母體中的每一個個體，所以必須用抽樣資料來估計母體的變異數。 公式的兩個版本理想上，真正的母體">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why Dividing by N Underestimates Variance">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2026/06/17/Statistics-divide-by-n-1/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="變異數「樣本平均數」會讓距離看起來最短為什麼這樣會造成「低估」為甚麼是 n-1summary變異數在算什麼？它在算「資料點與平均值之間的距離平方的平均」。資料點離平均值越遠，變異數越大；離得越近，變異數越小 我們真正想知道的是全部資料圍繞在「母體平均數」周圍的變異程度。但現實中幾乎沒有足夠的時間與金錢去測量母體中的每一個個體，所以必須用抽樣資料來估計母體的變異數。 公式的兩個版本理想上，真正的母體">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png">
+<meta property="article:published_time" content="2026-06-17T08:45:05.000Z">
+<meta property="article:modified_time" content="2026-06-22T00:24:29.625Z">
+<meta property="article:author" content="Yo-Lin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Why Dividing by N Underestimates Variance",
+  "url": "https://chi-keke.github.io/Mind/2026/06/17/Statistics-divide-by-n-1/",
+  "image": "https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png",
+  "datePublished": "2026-06-17T08:45:05.000Z",
+  "dateModified": "2026-06-22T00:24:29.625Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2026/06/17/Statistics-divide-by-n-1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Why Dividing by N Underestimates Variance',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">19</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">Why Dividing by N Underestimates Variance</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Why Dividing by N Underestimates Variance</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-06-17T08:45:05.000Z" title="Created 2026-06-17 16:45:05">2026-06-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-06-22T00:24:29.625Z" title="Updated 2026-06-22 08:24:29">2026-06-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/Statistics/">Statistics</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">變異數</button><button type="button" class="tab">「樣本平均數」會讓距離看起來最短</button><button type="button" class="tab">為什麼這樣會造成「低估」</button><button type="button" class="tab">為甚麼是 n-1</button><button type="button" class="tab">summary</button></div><div class="tab-contents"><div class="tab-item-content active"><p><strong>變異數</strong>在算什麼？它在算「<strong>資料點與平均值之間的距離平方的平均</strong>」。資料點離平均值越遠，變異數越大；離得越近，變異數越小</p>
+<p>我們真正想知道的是全部資料圍繞在「母體平均數」周圍的變異程度。但現實中幾乎沒有足夠的時間與金錢去測量母體中的每一個個體，所以必須用抽樣資料來<strong>估計</strong>母體的變異數。</p>
+<h2 id="公式的兩個版本"><a href="#公式的兩個版本" class="headerlink" title="公式的兩個版本"></a>公式的兩個版本</h2><p>理想上，真正的母體變異數是用<strong>母體平均數 $\mu$</strong> 計算的：</p>
+<blockquote>
+<p>母體變異數 $\sigma^2 &#x3D; \dfrac{\sum (x - \mu)^2}{N}$</p>
+</blockquote>
+<p>但現實中我們只有樣本，只能算出<strong>樣本平均數 $\bar{x}$</strong>，並用它代替 $\mu$：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">樣本資料</span><br><span class="line"></span><br><span class="line">0        10        20        30        40</span><br><span class="line">|---------|---------|---------|---------|</span><br><span class="line">   ●          ●    ●     ●      ●</span><br><span class="line">   4         14   18    24     30</span><br><span class="line"></span><br><span class="line">                 ↑</span><br><span class="line">          樣本平均數 x̄ = 17.6</span><br><span class="line"></span><br><span class="line">每個樣本點到 x̄ 的距離：</span><br><span class="line">  4  ──────────→ 17.6</span><br><span class="line"> 14  ────→        17.6</span><br><span class="line"> 18       ←──     17.6</span><br><span class="line"> 24       ←────   17.6</span><br><span class="line"> 30       ←──────────  17.6</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="為什麼分母要用-n−1？"><a href="#為什麼分母要用-n−1？" class="headerlink" title="為什麼分母要用 n−1？"></a>為什麼分母要用 n−1？</h2><p>課堂上會發現，母體變異數與樣本變異數在分母有所差異：</p>
+<blockquote>
+<p>$\dfrac{\sum (x - \bar{x})^2}{n}$ <strong>＜</strong> $\dfrac{\sum (x - \bar{x})^2}{n-1}$</p>
+</blockquote>
+<p>除以 $n-1$ 是在<strong>補償</strong>一個系統性偏差：我們計算的是「樣本點到 $\bar{x}$ 的距離」，而不是「樣本點到真正母體平均數 $\mu$ 的距離」。由於 $\bar{x}$ 是這批樣本自己算出來的，它天生會偏向這批樣本，導致平方距離總和偏小。用 $n-1$ 可以把估計值拉回來</p>
+<p>但「<strong>一定會偏小</strong>」嗎？偏小的原因是什麼？為什麼剛好是 $n-1$？</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/1-variances.png" alt="2"></p></div><div class="tab-item-content"><p>這是最重要的一點！數學上可以證明：對於任何一組抽樣資料，「樣本平均數」剛好會讓所有資料點的距離平方和「<strong>最小</strong>」。換句話說，不管你拿什麼數字當中心點，用樣本平均數算出來的結果，永遠是所有選擇裡最小的</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/2-only-do-withxbar.png" alt="2"></p>
+<h2 id="Step-1｜設定一個「未知的中心點-V」"><a href="#Step-1｜設定一個「未知的中心點-V」" class="headerlink" title="Step 1｜設定一個「未知的中心點 V」"></a>Step 1｜設定一個「未知的中心點 V」</h2><p>先假裝不知道用誰當中心點算出來的距離最小，設定一個未知數值 $V$。</p>
+<p>我們的問題是：</p>
+<blockquote>
+<p>$V$ 要是多少，才能讓 $\dfrac{\sum(X - V)^2}{n}$ 的值最小？</p>
+</blockquote>
+<h2 id="Step-2｜畫出-U-型曲線，尋找「谷底」"><a href="#Step-2｜畫出-U-型曲線，尋找「谷底」" class="headerlink" title="Step 2｜畫出 U 型曲線，尋找「谷底」"></a>Step 2｜畫出 U 型曲線，尋找「谷底」</h2><p>把各種不同的 $V$ 值代入，把對應的變異數畫在圖表上，會形成一條 U 型曲線</p>
+<p>例如</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">0        10        20        30        40</span><br><span class="line">|---------|---------|---------|---------|</span><br><span class="line">  ●          ●    ●     ●   ●</span><br><span class="line">  4         14   18    24  29</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Variance</span><br><span class="line">400 | ●</span><br><span class="line">300 |</span><br><span class="line">250 |     ●</span><br><span class="line">200 |</span><br><span class="line">136 |          ●</span><br><span class="line">100 |              ●  ● ● ●      ●</span><br><span class="line">  0 +--------------------------------</span><br><span class="line">     0     5    10    15 20   25   40</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li><strong>U 型曲線的最底端</strong>＝ 變異數最小的地方</li>
+<li>在數學裡，谷底的特徵是<strong>斜率為零</strong>（因為谷底是平的）</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/3-lowest-point.png" alt="2"></p>
+<h2 id="Step-3｜用微積分找「斜率為零」的點"><a href="#Step-3｜用微積分找「斜率為零」的點" class="headerlink" title="Step 3｜用微積分找「斜率為零」的點"></a>Step 3｜用微積分找「斜率為零」的點</h2><p>現在我們的問題是當 $V$ 改變時，這整個值會怎麼變？這就是「對 $V$ 求導」</p>
+<h4 id="3-1｜把-frac-1-n-提到外面"><a href="#3-1｜把-frac-1-n-提到外面" class="headerlink" title="3-1｜把 $\frac{1}{n}$ 提到外面"></a>3-1｜把 $\frac{1}{n}$ 提到外面</h4><p>$\frac{1}{n}$ 只是固定倍數，微分時可以先放外面： $\frac{d}{dV}\left[\frac{1}{n}\sum(X-V)^2\right] &#x3D; \frac{1}{n} \cdot \frac{d}{dV}\left[\sum(X-V)^2\right]$</p>
+<blockquote>
+<p>整包東西都除以 $n$，微分結果也會除以 $n$。</p>
+</blockquote>
+<h4 id="3-2｜對總和微分-→-拆成每項各自微分"><a href="#3-2｜對總和微分-→-拆成每項各自微分" class="headerlink" title="3-2｜對總和微分 → 拆成每項各自微分"></a>3-2｜對總和微分 → 拆成每項各自微分</h4><p>$\sum(X-V)^2$ 展開是： $（x_1-V)^2 + (x_2-V)^2 + \cdots + (x_n-V)^2$</p>
+<p>微分有個規則：<strong>一堆東西相加的微分 &#x3D; 每一項各自微分後再相加</strong></p>
+<p>$$\frac{d}{dV}\left[\sum(X-V)^2\right] &#x3D; \sum \frac{d}{dV}(X-V)^2$$</p>
+<h4 id="3-3｜用-Chain-Rule-微分-X-V-2"><a href="#3-3｜用-Chain-Rule-微分-X-V-2" class="headerlink" title="3-3｜用 Chain Rule 微分 $(X-V)^2$"></a>3-3｜用 Chain Rule 微分 $(X-V)^2$</h4><p>$(X-V)^2$ 有兩層結構：</p>
+<table>
+<thead>
+<tr>
+<th>層</th>
+<th>內容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>外層</td>
+<td>$(\cdot)^2$，某個東西的平方</td>
+</tr>
+<tr>
+<td>內層</td>
+<td>$u &#x3D; X - V$</td>
+</tr>
+</tbody></table>
+<p>令 $u &#x3D; X - V$，則原式為 $u^2$。Chain Rule 說 : $\frac{d}{dV}, u^2 &#x3D; \underbrace{\frac{d}{du}, u^2}<em>{\text{外層對 }u\text{ 微分}} \cdot \underbrace{\frac{du}{dV}}</em>{\text{內層對 }V\text{ 微分}}$</p>
+<p><strong>外層微分：</strong> $\frac{d}{du}, u^2 &#x3D; 2u &#x3D; 2(X-V)$</p>
+<p><strong>內層微分：</strong> $X$ 是固定的資料點，對 $V$ 來說是常數，所以 $\frac{d}{dV}(X - V) &#x3D; -1$</p>
+<blockquote>
+<p>$V$ 增加 1，$X - V$ 就減少 1。</p>
+</blockquote>
+<p><strong>合併（Chain Rule 結果）：</strong> :  $\frac{d}{dV}(X-V)^2 &#x3D; 2(X-V) \cdot (-1) &#x3D; -2(X-V)$</p>
+<blockquote>
+<p>這就是 Chain Rule 產生負號的地方。</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/4-chain-rule.png" alt="2"></p>
+<h4 id="3-4｜代回整個式子，整理斜率"><a href="#3-4｜代回整個式子，整理斜率" class="headerlink" title="3-4｜代回整個式子，整理斜率"></a>3-4｜代回整個式子，整理斜率</h4><p>$$\frac{d}{dV}\left[\frac{1}{n}\sum(X-V)^2\right]<br>&#x3D; \frac{1}{n} \cdot \sum\frac{d}{dV}(X-V)^2<br>&#x3D; \frac{1}{n} \cdot \sum\left[-2(X-V)\right]<br>&#x3D; \frac{-2}{n}\sum(X-V)$$</p>
+<h4 id="3-5｜令斜率為零，找谷底"><a href="#3-5｜令斜率為零，找谷底" class="headerlink" title="3-5｜令斜率為零，找谷底"></a>3-5｜令斜率為零，找谷底</h4><blockquote>
+<p>斜率公式：$\dfrac{d}{dV}\left[\frac{1}{n}\sum(X-V)^2\right] &#x3D; \dfrac{-2}{n}\sum(X-V)$</p>
+</blockquote>
+<p>令斜率等於零：$\dfrac{-2}{n}\sum(X-V) &#x3D; 0$</p>
+<p>兩邊乘以 $\dfrac{n}{-2}$ 消去係數：$\quad \sum(X-V) &#x3D; 0$</p>
+<blockquote>
+<p>白話：把每個資料點 $X$ 減去 $V$ 之後全部加起來，等於 0。</p>
+</blockquote>
+<h2 id="Step-4｜解出-V"><a href="#Step-4｜解出-V" class="headerlink" title="Step 4｜解出 V"></a>Step 4｜解出 V</h2><p>展開 $\sum(X - V) &#x3D; 0$  :  $\sum X - nV &#x3D; 0$</p>
+<p>移項解出 $V$：$\quad V &#x3D; \dfrac{\sum X}{n}$</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/4-2-chain-rule.png" alt="2"></p>
+<h2 id="🎯-結論"><a href="#🎯-結論" class="headerlink" title="🎯 結論"></a>🎯 結論</h2><p>「所有資料點的總和除以資料總數 $n$」——這完全就是<strong>樣本平均數 $\bar{X}$</strong> 的計算公式！</p>
+<p>數學直接證明了：不管你有多少筆資料，只要你想找讓「距離平方和最小」的中心點，答案永遠都是樣本平均數 $\bar{X}$。</p></div><div class="tab-item-content"><h2 id="關鍵前提"><a href="#關鍵前提" class="headerlink" title="關鍵前提"></a>關鍵前提</h2><p>從上一個 tab 我們知道：<strong>用 $\bar{x}$ 算出的變異數，是所有可能的中心點中最小的。</strong></p>
+<p>而抽樣出來的 $\bar{x}$，幾乎不可能剛好等於真正的母體平均數 $\mu$。</p>
+<h2 id="推論"><a href="#推論" class="headerlink" title="推論"></a>推論</h2><table>
+<thead>
+<tr>
+<th>情境</th>
+<th>使用的中心點</th>
+<th>算出的變異數</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>理想（不可得）</td>
+<td>母體平均數 $\mu$</td>
+<td><strong>較大</strong>（真實值）</td>
+</tr>
+<tr>
+<td>現實（我們只有這個）</td>
+<td>樣本平均數 $\bar{x}$</td>
+<td><strong>較小</strong>（最小值）</td>
+</tr>
+</tbody></table>
+<p>由於 $\bar{x}$ 算出的距離平方和天生偏小，直接除以 $n$ 得到的變異數，會比真正的母體變異數還要<strong>低估</strong>。</p>
+<blockquote>
+<p>用樣本平均數 $\bar{x}$ 取代母體平均數 $\mu$ 計算變異數，會造成<strong>系統性低估</strong></p>
+</blockquote>
+<p>因此，直接把總和除以 $n$，算出來的數字會比實際的母體變異數小——這就是所謂的「<strong>低估（underestimation）</strong>」</p></div><div class="tab-item-content"><h2 id="Step-1｜拆解每筆資料的偏差"><a href="#Step-1｜拆解每筆資料的偏差" class="headerlink" title="Step 1｜拆解每筆資料的偏差"></a>Step 1｜拆解每筆資料的偏差</h2><p>對每一筆資料 $x_i$，它和真正母體平均 $\mu$ 的距離可以拆成兩段： $x_i - \mu &#x3D; \underbrace{(x_i - \bar{x})}<em>{\text{資料到樣本平均}} + \underbrace{(\bar{x} - \mu)}</em>{\text{樣本平均到母體平均}}$</p>
+<h2 id="Step-2｜兩邊平方，展開"><a href="#Step-2｜兩邊平方，展開" class="headerlink" title="Step 2｜兩邊平方，展開"></a>Step 2｜兩邊平方，展開</h2><p>用 $(a+b)^2 &#x3D; a^2 + 2ab + b^2$：$(x_i - \mu)^2 &#x3D; (x_i-\bar{x})^2 + 2(x_i-\bar{x})(\bar{x}-\mu) + (\bar{x}-\mu)^2$</p>
+<h2 id="Step-3｜對所有資料加總"><a href="#Step-3｜對所有資料加總" class="headerlink" title="Step 3｜對所有資料加總"></a>Step 3｜對所有資料加總</h2><p>$\sum(x_i-\mu)^2 &#x3D; \sum(x_i-\bar{x})^2 + 2(\bar{x}-\mu)\sum(x_i-\bar{x}) + n(\bar{x}-\mu)^2$</p>
+<p><strong>中間那項消失：</strong> $\sum(x_i-\bar{x}) &#x3D; 0$</p>
+<blockquote>
+<p>所有資料減去自己的平均數，偏差總和恆等於 0。</p>
+</blockquote>
+<p>所以化簡為： $\sum(x_i-\mu)^2 &#x3D; \sum(x_i-\bar{x})^2 + n(\bar{x}-\mu)^2$</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/5-1-xbar-mu-extend-add.png" alt="2"></p>
+<h2 id="Step-4｜移項，看少掉多少"><a href="#Step-4｜移項，看少掉多少" class="headerlink" title="Step 4｜移項，看少掉多少"></a>Step 4｜移項，看少掉多少</h2><p>$$\sum(x_i-\bar{x})^2 &#x3D; \sum(x_i-\mu)^2 - n(\bar{x}-\mu)^2$$</p>
+<blockquote>
+<p>用 $\bar{x}$ 算出來的平方距離總和，比用 $\mu$ 算少掉了 $n(\bar{x}-\mu)^2$。</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/5-2-xbar-loss-miu-one-item.png" alt="2"></p>
+<h2 id="Step-5｜取期望值，計算「平均少多少」"><a href="#Step-5｜取期望值，計算「平均少多少」" class="headerlink" title="Step 5｜取期望值，計算「平均少多少」"></a>Step 5｜取期望值，計算「平均少多少」</h2><p><strong>左側（用 $\mu$ 計算的完整平方距離）：</strong></p>
+<p>每一筆資料平均貢獻一份 $\sigma^2$，$n$ 筆合計： $E\left[\sum(x_i-\mu)^2\right] &#x3D; n\sigma^2$</p>
+<p><strong>少掉的那塊（$\bar{x}$ 偏離 $\mu$ 的誤差）：</strong></p>
+<p>樣本平均 $\bar{x}$ 本身的變異數是 $\dfrac{\sigma^2}{n}$，所以： $E\left[n(\bar{x}-\mu)^2\right] &#x3D; n \cdot \frac{\sigma^2}{n} &#x3D; \sigma^2$</p>
+<h2 id="Step-6｜得出結論"><a href="#Step-6｜得出結論" class="headerlink" title="Step 6｜得出結論"></a>Step 6｜得出結論</h2><p>$$E\left[\sum(x_i-\bar{x})^2\right] &#x3D; n\sigma^2 - \sigma^2 &#x3D; (n-1)\sigma^2$$</p>
+<table>
+<thead>
+<tr>
+<th>情境</th>
+<th>平方距離總和的期望值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用真正 $\mu$ 計算</td>
+<td>$n\sigma^2$</td>
+</tr>
+<tr>
+<td>用樣本 $\bar{x}$ 計算</td>
+<td>$(n-1)\sigma^2$（少掉一份）</td>
+</tr>
+</tbody></table>
+<p>因此，要從 $\sum(x_i-\bar{x})^2$ 還原回 $\sigma^2$，必須除以 $(n-1)$：</p>
+<p>$$\boxed{s^2 &#x3D; \frac{\sum(x_i-\bar{x})^2}{n-1}}$$</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/5-3-sigma.png" alt="2"></p></div><div class="tab-item-content"><p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/6-correction.png" alt="2"></p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/table.png" alt="2"></p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/06/17/Statistics-divide-by-n-1/">https://chi-keke.github.io/Mind/2026/06/17/Statistics-divide-by-n-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/" title="排列與分布"><img class="cover" src="https://i.imgur.com/f2eWUWv.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">排列與分布</div></div><div class="info-2"><div class="info-item-1">問題路線一 : 先做出一個合法雛形排除法先排男生整理5男3女排成一列，若依照下列情形，各有幾種方法？  5男生全相鄰。 男生全相鄰，女生也全相鄰。 3個女生中任兩人不得相鄰。 &#x3D;&gt; 這個問題是本集的重點討論!  我想著重在不同思考可能性的討論問題說女生不能相鄰，所以想到了一種基礎模板：  男女男女男女男  這樣女生一定不相鄰。然後發現還剩 1 個男生，所以接著想：「這個排列已經合法了，最後一個男生不管插哪裡，都不會讓女生相鄰吧！」因此有 8 個插入位置：  ＿男＿女＿男＿女＿男＿女＿男＿  所以寫出答案：3! × 5! × 8  ⚠️ 盲點這個解法的問題在於，把「一種合法雛形」誤以為是「所有合法排列的共同雛形」。 男女男女男女男 確實是一種合法形狀，但它不是所有合法排列都能由它變出來的。 以下這些排列都是合法的，卻無法從 男女男女男女男 插入一個男生得到：    排列 說明    男男男女男女男女 男生集中在前端   女男男女男女男男 開頭沒有男生作為緩衝   真正的「不相鄰」條件只是：女生和女生中間至少有一個男生，它沒有要求男生平均分散。  看到「不相鄰」→ 想...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">19</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E5%BC%8F%E7%9A%84%E5%85%A9%E5%80%8B%E7%89%88%E6%9C%AC"><span class="toc-number">1.</span> <span class="toc-text">公式的兩個版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E5%88%86%E6%AF%8D%E8%A6%81%E7%94%A8-n%E2%88%921%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">為什麼分母要用 n−1？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-1%EF%BD%9C%E8%A8%AD%E5%AE%9A%E4%B8%80%E5%80%8B%E3%80%8C%E6%9C%AA%E7%9F%A5%E7%9A%84%E4%B8%AD%E5%BF%83%E9%BB%9E-V%E3%80%8D"><span class="toc-number">3.</span> <span class="toc-text">Step 1｜設定一個「未知的中心點 V」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-2%EF%BD%9C%E7%95%AB%E5%87%BA-U-%E5%9E%8B%E6%9B%B2%E7%B7%9A%EF%BC%8C%E5%B0%8B%E6%89%BE%E3%80%8C%E8%B0%B7%E5%BA%95%E3%80%8D"><span class="toc-number">4.</span> <span class="toc-text">Step 2｜畫出 U 型曲線，尋找「谷底」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-3%EF%BD%9C%E7%94%A8%E5%BE%AE%E7%A9%8D%E5%88%86%E6%89%BE%E3%80%8C%E6%96%9C%E7%8E%87%E7%82%BA%E9%9B%B6%E3%80%8D%E7%9A%84%E9%BB%9E"><span class="toc-number">5.</span> <span class="toc-text">Step 3｜用微積分找「斜率為零」的點</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1%EF%BD%9C%E6%8A%8A-frac-1-n-%E6%8F%90%E5%88%B0%E5%A4%96%E9%9D%A2"><span class="toc-number">5.1.</span> <span class="toc-text">3-1｜把 $\frac{1}{n}$ 提到外面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2%EF%BD%9C%E5%B0%8D%E7%B8%BD%E5%92%8C%E5%BE%AE%E5%88%86-%E2%86%92-%E6%8B%86%E6%88%90%E6%AF%8F%E9%A0%85%E5%90%84%E8%87%AA%E5%BE%AE%E5%88%86"><span class="toc-number">5.2.</span> <span class="toc-text">3-2｜對總和微分 → 拆成每項各自微分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3%EF%BD%9C%E7%94%A8-Chain-Rule-%E5%BE%AE%E5%88%86-X-V-2"><span class="toc-number">5.3.</span> <span class="toc-text">3-3｜用 Chain Rule 微分 $(X-V)^2$</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4%EF%BD%9C%E4%BB%A3%E5%9B%9E%E6%95%B4%E5%80%8B%E5%BC%8F%E5%AD%90%EF%BC%8C%E6%95%B4%E7%90%86%E6%96%9C%E7%8E%87"><span class="toc-number">5.4.</span> <span class="toc-text">3-4｜代回整個式子，整理斜率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5%EF%BD%9C%E4%BB%A4%E6%96%9C%E7%8E%87%E7%82%BA%E9%9B%B6%EF%BC%8C%E6%89%BE%E8%B0%B7%E5%BA%95"><span class="toc-number">5.5.</span> <span class="toc-text">3-5｜令斜率為零，找谷底</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-4%EF%BD%9C%E8%A7%A3%E5%87%BA-V"><span class="toc-number">6.</span> <span class="toc-text">Step 4｜解出 V</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8E%AF-%E7%B5%90%E8%AB%96"><span class="toc-number">7.</span> <span class="toc-text">🎯 結論</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%9C%E9%8D%B5%E5%89%8D%E6%8F%90"><span class="toc-number">8.</span> <span class="toc-text">關鍵前提</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%AB%96"><span class="toc-number">9.</span> <span class="toc-text">推論</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-1%EF%BD%9C%E6%8B%86%E8%A7%A3%E6%AF%8F%E7%AD%86%E8%B3%87%E6%96%99%E7%9A%84%E5%81%8F%E5%B7%AE"><span class="toc-number">10.</span> <span class="toc-text">Step 1｜拆解每筆資料的偏差</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-2%EF%BD%9C%E5%85%A9%E9%82%8A%E5%B9%B3%E6%96%B9%EF%BC%8C%E5%B1%95%E9%96%8B"><span class="toc-number">11.</span> <span class="toc-text">Step 2｜兩邊平方，展開</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-3%EF%BD%9C%E5%B0%8D%E6%89%80%E6%9C%89%E8%B3%87%E6%96%99%E5%8A%A0%E7%B8%BD"><span class="toc-number">12.</span> <span class="toc-text">Step 3｜對所有資料加總</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-4%EF%BD%9C%E7%A7%BB%E9%A0%85%EF%BC%8C%E7%9C%8B%E5%B0%91%E6%8E%89%E5%A4%9A%E5%B0%91"><span class="toc-number">13.</span> <span class="toc-text">Step 4｜移項，看少掉多少</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-5%EF%BD%9C%E5%8F%96%E6%9C%9F%E6%9C%9B%E5%80%BC%EF%BC%8C%E8%A8%88%E7%AE%97%E3%80%8C%E5%B9%B3%E5%9D%87%E5%B0%91%E5%A4%9A%E5%B0%91%E3%80%8D"><span class="toc-number">14.</span> <span class="toc-text">Step 5｜取期望值，計算「平均少多少」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Step-6%EF%BD%9C%E5%BE%97%E5%87%BA%E7%B5%90%E8%AB%96"><span class="toc-number">15.</span> <span class="toc-text">Step 6｜得出結論</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/17/Statistics-divide-by-n-1/" title="Why Dividing by N Underestimates Variance"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Why Dividing by N Underestimates Variance"/></a><div class="content"><a class="title" href="/Mind/2026/06/17/Statistics-divide-by-n-1/" title="Why Dividing by N Underestimates Variance">Why Dividing by N Underestimates Variance</a><time datetime="2026-06-17T08:45:05.000Z" title="Created 2026-06-17 16:45:05">2026-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/" title="排列與分布"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="排列與分布"/></a><div class="content"><a class="title" href="/Mind/2026/06/16/%E6%8E%92%E5%88%97%E8%88%87%E5%88%86%E5%B8%83/" title="排列與分布">排列與分布</a><time datetime="2026-06-16T00:02:05.000Z" title="Created 2026-06-16 08:02:05">2026-06-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/12/Multiplication-Principle/" title="Multiplication Principle"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Probability/Multiplicity/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Multiplication Principle"/></a><div class="content"><a class="title" href="/Mind/2026/06/12/Multiplication-Principle/" title="Multiplication Principle">Multiplication Principle</a><time datetime="2026-06-12T08:49:03.000Z" title="Created 2026-06-12 16:49:03">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/06/12/Statistics-histogram/" title="Histogram"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/histogram/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Histogram"/></a><div class="content"><a class="title" href="/Mind/2026/06/12/Statistics-histogram/" title="Histogram">Histogram</a><time datetime="2026-06-12T08:45:05.000Z" title="Created 2026-06-12 16:45:05">2026-06-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/05/30/Inclusion-Exclusion/" title="Inclusion-Exclusion"><img src="https://github.com/CHI-KEKE/pics/blob/main/Logi/思索日和/Stamp.png?raw=true" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Inclusion-Exclusion"/></a><div class="content"><a class="title" href="/Mind/2026/05/30/Inclusion-Exclusion/" title="Inclusion-Exclusion">Inclusion-Exclusion</a><time datetime="2026-05-30T00:35:05.000Z" title="Created 2026-05-30 08:35:05">2026-05-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
