@@ -1,0 +1,732 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Capacitor | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Capacitor">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2026/08/11/Capacity/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 1">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.imgur.com/f2eWUWv.png">
+<meta property="article:published_time" content="2026-08-11T00:29:03.000Z">
+<meta property="article:modified_time" content="2026-08-15T02:13:17.094Z">
+<meta property="article:author" content="Yo-Lin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/f2eWUWv.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Capacitor",
+  "url": "https://chi-keke.github.io/Mind/2026/08/11/Capacity/",
+  "image": "https://i.imgur.com/f2eWUWv.png",
+  "datePublished": "2026-08-11T00:29:03.000Z",
+  "dateModified": "2026-08-15T02:13:17.094Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2026/08/11/Capacity/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Capacitor',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">Capacitor</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Capacitor</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-11T00:29:03.000Z" title="Created 2026-08-11 08:29:03">2026-08-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-15T02:13:17.094Z" title="Updated 2026-08-15 10:13:17">2026-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/CS/">CS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">導體</button><button type="button" class="tab">絕緣體</button><button type="button" class="tab">電子為什麼會移動</button><button type="button" class="tab">電容做什麼</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
+.organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 100%); color:#f5f1e6; }
+.organic-hero .oh-leaf { position:absolute; font-size:2.6rem; opacity:0.32; filter:drop-shadow(0 2px 3px rgba(0,0,0,.25)); pointer-events:none; }
+.organic-hero .oh-leaf.l1 { top:-10px; right:60px; transform:rotate(15deg); }
+.organic-hero .oh-leaf.l2 { top:40px; right:6px; font-size:2rem; transform:rotate(-20deg); }
+.organic-hero .oh-leaf.l3 { bottom:-14px; right:120px; font-size:2.2rem; opacity:0.22; transform:rotate(35deg); }
+.organic-hero .oh-tag { display:inline-block; font-size:.72rem; letter-spacing:2px; text-transform:uppercase; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3); padding:3px 12px; border-radius:20px; margin-bottom:14px; }
+.organic-hero .oh-title { margin:0 0 10px; font-size:1.4rem; font-weight:700; color:#f5f1e6; position:relative; z-index:1; }
+.organic-hero .oh-desc { max-width:80%; font-size:.92rem; line-height:1.85; color:#e4e6dc; position:relative; z-index:1; }
+.organic-hero .oh-desc code { background:rgba(255,255,255,.18); padding:1px 6px; border-radius:3px; color:#fdf6e3; }
+
+.glass-feature-row { display:flex; flex-wrap:wrap; gap:18px; background:linear-gradient(135deg, rgba(47,74,62,.92), rgba(63,92,71,.9)); border-radius:14px; padding:24px 26px; margin:18px 0 28px; }
+.glass-feature-row .gf-item { flex:1 1 150px; text-align:center; color:#eef0e6; }
+.glass-feature-row .gf-icon { width:46px; height:46px; margin:0 auto 10px; border-radius:50%; border:1.5px solid rgba(255,255,255,.55); display:flex; align-items:center; justify-content:center; font-size:1.25rem; }
+.glass-feature-row .gf-title { font-weight:700; font-size:.9rem; margin-bottom:6px; }
+.glass-feature-row .gf-desc { font-size:.78rem; line-height:1.65; color:#cfd6c6; }
+.glass-feature-row .gf-desc code { background:rgba(255,255,255,.2); padding:1px 5px; border-radius:3px; color:#fdf6e3; }
+.glass-feature-row .gf-arrow { flex:0 0 auto; align-self:center; font-size:1.35rem; color:#e8dcb8; opacity:.85; }
+
+.earth-line-steps { position:relative; margin:22px 0 30px; padding-left:56px; }
+.earth-line-steps::before { content:''; position:absolute; left:19px; top:4px; bottom:4px; width:2px; background:linear-gradient(180deg, #5f8a56, #a2854f); opacity:.55; }
+.earth-line-steps .ls-step { position:relative; margin-bottom:26px; }
+.earth-line-steps .ls-step:last-child { margin-bottom:0; }
+.earth-line-steps .ls-num { position:absolute; left:-56px; top:0; width:38px; height:38px; border-radius:50%; background:#fbfaf6; display:flex; align-items:center; justify-content:center; font-family:'Courier New', Consolas, monospace; font-weight:700; font-size:.82rem; z-index:2; box-shadow:0 2px 6px rgba(0,0,0,.15); }
+.earth-line-steps .ls-step.leaf .ls-num { border:2px solid #3f6146; color:#3f6146; }
+.earth-line-steps .ls-step.clay .ls-num { border:2px solid #5c4433; color:#5c4433; }
+.earth-line-steps .ls-step.sand .ls-num { border:2px solid #a2854f; color:#8a6a3f; }
+.earth-line-steps .ls-body { display:flex; align-items:center; flex-wrap:wrap; gap:10px; min-height:38px; }
+.earth-line-steps .ls-title { font-weight:700; font-size:.95rem; color:#2f4f4f; padding:1px 3px; background-repeat:no-repeat; background-position:0 68%; background-size:100% 42%; }
+.earth-line-steps .ls-step.leaf .ls-title { background-image:linear-gradient(rgba(95,138,86,.38), rgba(95,138,86,.38)); }
+.earth-line-steps .ls-step.clay .ls-title { background-image:linear-gradient(rgba(138,106,82,.4), rgba(138,106,82,.4)); }
+.earth-line-steps .ls-step.sand .ls-title { background-image:linear-gradient(rgba(199,168,105,.5), rgba(199,168,105,.5)); }
+.earth-line-steps .ls-connector { flex:1 1 30px; height:0; border-bottom:1.5px dashed #c9c3ae; min-width:24px; }
+.earth-line-steps .ls-desc { font-size:.82rem; color:#5a5648; line-height:1.6; }
+.earth-line-steps .ls-desc code { background:#eef0eb; padding:1px 6px; border-radius:3px; color:#8a6a3f; font-size:.85em; }
+</style>
+<div class="organic-hero">
+<span class="oh-leaf l1">🍃</span><span
+class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
+<div class="oh-tag">
+材料世界
+</div>
+<div class="oh-title">
+導體
+</div>
+<div class="oh-desc">
+有些材料裡面的電子很容易到處跑，這種材料就叫導體，例如銅、鋁、銀、金。
+</div>
+</div>
+<p>金屬裡本來就有很多可以移動的電子，這些電子平常也不是完全不動，只是沒有一個共同的移動方向。導體之所以導電，是因為其中有一部分電子沒有被某一顆原子牢牢綁死，而是處在可以延伸遍布整個材料的電子狀態中，所以一旦整體電荷分布出現不平衡，這些電子就能重新分布。</p>
+<p>在金屬裡，有一些電子的量子狀態是<code>離域（delocalized）</code>的。可以先把「離域」理解成這個電子的可存在狀態延伸到很多原子甚至整塊晶體，不適合再把它想成只屬於左邊某一顆原子。不過「自由」容易讓人誤會成電子完全不受任何東西影響，它們仍然處在晶格的量子環境中，只是沒有被某一顆特定原子局限住而已。</p></div><div class="tab-item-content"><div class="organic-hero">
+<span class="oh-leaf l1">🍂</span><span
+class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
+<div class="oh-tag">
+材料世界
+</div>
+<div class="oh-title">
+絕緣體
+</div>
+<div class="oh-desc">
+反過來，有些材料裡面的電荷很難長距離自由移動，這種材料就叫絕緣體，例如塑膠、玻璃、陶瓷、橡膠。
+</div>
+</div>
+<p>在一般條件下，能參與導電的電子狀態，跟下一批「可以拿來導電」的可用狀態之間，隔著一段較大的能量差：</p>
+<div class="glass-feature-row">
+<div class="gf-item">
+<div class="gf-icon">
+●
+</div>
+<div class="gf-title">
+電子目前待的狀態
+</div>
+<div class="gf-desc">
+大部分電子都乖乖待在原本的狀態裡
+</div>
+</div>
+<div class="gf-arrow">
+⇡
+</div>
+<div class="gf-item">
+<div class="gf-icon">
+⚡
+</div>
+<div class="gf-title">
+很大的能量門檻
+</div>
+<div class="gf-desc">
+一般的小電壓提供的條件不足以讓大量電子跨過去
+</div>
+</div>
+<div class="gf-arrow">
+⇡
+</div>
+<div class="gf-item">
+<div class="gf-icon">
+○
+</div>
+<div class="gf-title">
+可讓電子繼續導電的狀態
+</div>
+<div class="gf-desc">
+電子跨過門檻後才能參與導電
+</div>
+</div>
+</div>
+<p>正因為這道門檻很大，電荷幾乎過不去，這也是為什麼<code>電容</code>會刻意在中間放一層絕緣層，就是要利用這個特性，故意不讓兩邊的電子直接穿過去。</p></div><div class="tab-item-content"><div class="organic-hero">
+<span class="oh-leaf l1">🍃</span><span
+class="oh-leaf l2">🍃</span><span class="oh-leaf l3">🍂</span>
+<div class="oh-tag">
+驅動原理
+</div>
+<div class="oh-title">
+電子為什麼會移動
+</div>
+<div class="oh-desc">
+當一個地方電子很多、另一個地方電子很少時，只要中間出現可移動的路徑，電子就會重新分布，往更接近平衡的狀態發展。
+</div>
+</div>
+<p>原本被強行做出來的電荷不均勻，會產生讓電荷重新排列的作用；導線只是提供它重新排列的通道，因為電荷系統本來就有往較低能量配置重新分布的傾向。用一條金屬線的例子來看整個過程：</p>
+<div class="earth-line-steps">
+<div class="ls-step leaf">
+<div class="ls-num">
+01
+</div>
+<div class="ls-body">
+<span class="ls-title">兩端原本沒有明顯差異</span><span
+class="ls-connector"></span><span
+class="ls-desc">金屬線兩端（A、B）電子分布大致正常，彼此沒有誰多誰少的差別</span>
+</div>
+</div>
+<div class="ls-step clay">
+<div class="ls-num">
+02
+</div>
+<div class="ls-body">
+<span class="ls-title">電池介入，兩端被「弄不平均」</span><span
+class="ls-connector"></span><span class="ls-desc">電池利用化學能，讓 A
+端電子變多、B 端電子變少</span>
+</div>
+</div>
+<div class="ls-step sand">
+<div class="ls-num">
+03
+</div>
+<div class="ls-body">
+<span class="ls-title">接上導體，電子重新排列</span><span
+class="ls-connector"></span><span
+class="ls-desc">電子沿著導體重新分布，往平衡的方向移動</span>
+</div>
+</div>
+</div>
+<p>所以可以把「加電壓」很自然地理解成在電路的兩個位置製造出一個電荷／能量上的不均勻條件，這個不均勻會驅動導體裡能移動的電子重新分布，然後我們才把這個「兩個位置之間的能量差異」叫做電位差。</p>
+<p>回到電容，電池會幫電容做同樣的事，只是中間換成絕緣層擋著：</p>
+<div class="earth-line-steps">
+<div class="ls-step leaf">
+<div class="ls-num">
+01
+</div>
+<div class="ls-body">
+<span class="ls-title">電池把電荷分別堆到兩片極板</span><span
+class="ls-connector"></span><span
+class="ls-desc">左板電子變多、右板電子變少，中間隔著絕緣層</span>
+</div>
+</div>
+<div class="ls-step clay">
+<div class="ls-num">
+02
+</div>
+<div class="ls-body">
+<span class="ls-title">電荷過不去，電場越來越強</span><span
+class="ls-connector"></span><span
+class="ls-desc">電容自己建立的電場越來越強，這種不平衡被絕緣層擋著保存下來</span>
+</div>
+</div>
+<div class="ls-step sand">
+<div class="ls-num">
+03
+</div>
+<div class="ls-body">
+<span class="ls-title">外部接上燈泡，出現路徑</span><span
+class="ls-connector"></span><span
+class="ls-desc">電子較多的一側經過燈泡，補到缺電子的一側</span>
+</div>
+</div>
+<div class="ls-step leaf">
+<div class="ls-num">
+04
+</div>
+<div class="ls-body">
+<span class="ls-title">差異逐漸縮小，趨於平衡</span><span
+class="ls-connector"></span><span
+class="ls-desc">這就是電容放電的過程</span>
+</div>
+</div>
+</div></div><div class="tab-item-content"><div class="organic-hero">
+<span class="oh-leaf l1">🍃</span><span
+class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
+<div class="oh-tag">
+實際應用
+</div>
+<div class="oh-title">
+電容做什麼
+</div>
+<div class="oh-desc">
+電容有一個非常重要的特性，它可以很快吸收電荷，也可以很快釋放電荷，所以很適合處理「短時間變化」。
+</div>
+</div>
+<p>以 <code>CPU</code> 旁邊的電源電容為例：</p>
+<div class="earth-line-steps">
+<div class="ls-step leaf">
+<div class="ls-num">
+01
+</div>
+<div class="ls-body">
+<span class="ls-title">電源穩定供電</span><span
+class="ls-connector"></span><span class="ls-desc">CPU
+平常吃電很穩，電源一直送電過去</span>
+</div>
+</div>
+<div class="ls-step clay">
+<div class="ls-num">
+02
+</div>
+<div class="ls-body">
+<span class="ls-title">CPU 瞬間想多拿一大口電</span><span
+class="ls-connector"></span><span
+class="ls-desc">大量電晶體同時切換，CPU 突然想拿更多電流</span>
+</div>
+</div>
+<div class="ls-step sand">
+<div class="ls-num">
+03
+</div>
+<div class="ls-body">
+<span class="ls-title">電源來不及補上，電壓開始掉</span><span
+class="ls-connector"></span><span
+class="ls-desc">導線本身有電阻、電感，來不及在瞬間補上</span>
+</div>
+</div>
+<div class="ls-step leaf">
+<div class="ls-num">
+04
+</div>
+<div class="ls-body">
+<span class="ls-title">電容就近放電，補住壓降</span><span
+class="ls-connector"></span><span
+class="ls-desc">最近的電容先放電，減少電壓掉下去的幅度</span>
+</div>
+</div>
+</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/11/Capacity/">https://chi-keke.github.io/Mind/2026/08/11/Capacity/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://i.imgur.com/f2eWUWv.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/Mind/2026/08/09/16%E9%80%B2%E4%BD%8D/" title="Hexadecimal"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Hexadecimal</div></div><div class="info-2"><div class="info-item-1">進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;} .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed r...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/11/Capacity/" title="Capacitor"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Capacitor"/></a><div class="content"><a class="title" href="/Mind/2026/08/11/Capacity/" title="Capacitor">Capacitor</a><time datetime="2026-08-11T00:29:03.000Z" title="Created 2026-08-11 08:29:03">2026-08-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/09/16%E9%80%B2%E4%BD%8D/" title="Hexadecimal"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Hexadecimal"/></a><div class="content"><a class="title" href="/Mind/2026/08/09/16%E9%80%B2%E4%BD%8D/" title="Hexadecimal">Hexadecimal</a><time datetime="2026-08-09T01:08:03.000Z" title="Created 2026-08-09 09:08:03">2026-08-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/08/Flip-Flop/" title="Flip-Flop - 讓電路記住一件事情"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Flip-Flop - 讓電路記住一件事情"/></a><div class="content"><a class="title" href="/Mind/2026/08/08/Flip-Flop/" title="Flip-Flop - 讓電路記住一件事情">Flip-Flop - 讓電路記住一件事情</a><time datetime="2026-08-08T01:47:03.000Z" title="Created 2026-08-08 09:47:03">2026-08-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/06/Probability-%E4%B8%89%E9%87%8D%E6%8E%92%E7%90%83%E5%88%86%E9%9A%8A/" title="三重排球分隊"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="三重排球分隊"/></a><div class="content"><a class="title" href="/Mind/2026/08/06/Probability-%E4%B8%89%E9%87%8D%E6%8E%92%E7%90%83%E5%88%86%E9%9A%8A/" title="三重排球分隊">三重排球分隊</a><time datetime="2026-08-06T02:44:05.000Z" title="Created 2026-08-06 10:44:05">2026-08-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/05/2%E9%80%B2%E4%BD%8D/" title="binary"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/binary-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="binary"/></a><div class="content"><a class="title" href="/Mind/2026/08/05/2%E9%80%B2%E4%BD%8D/" title="binary">binary</a><time datetime="2026-08-05T00:28:03.000Z" title="Created 2026-08-05 08:28:03">2026-08-05</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
