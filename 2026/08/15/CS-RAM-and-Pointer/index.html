@@ -7,7 +7,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png">
 <meta property="article:published_time" content="2026-08-15T02:39:03.000Z">
-<meta property="article:modified_time" content="2026-08-16T02:58:45.000Z">
+<meta property="article:modified_time" content="2026-08-16T03:13:29.807Z">
 <meta property="article:author" content="Yo-Lin">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "https://chi-keke.github.io/Mind/2026/08/15/CS-RAM-and-Pointer/",
   "image": "https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png",
   "datePublished": "2026-08-15T02:39:03.000Z",
-  "dateModified": "2026-08-16T02:58:45.000Z",
+  "dateModified": "2026-08-16T03:13:29.807Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: false,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">34</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">RAM and Pointer</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RAM and Pointer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-15T02:39:03.000Z" title="Created 2026-08-15 10:39:03">2026-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-16T02:58:45.000Z" title="Updated 2026-08-16 10:58:45">2026-08-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/CS/">CS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">打開一個遊戲</button><button type="button" class="tab">RAM</button><button type="button" class="tab">Pointer</button><button type="button" class="tab">C# ref vs C Pointer</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">34</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">RAM and Pointer</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">RAM and Pointer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-15T02:39:03.000Z" title="Created 2026-08-15 10:39:03">2026-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-16T03:13:29.807Z" title="Updated 2026-08-16 11:13:29">2026-08-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/CS/">CS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">打開一個遊戲</button><button type="button" class="tab">RAM</button><button type="button" class="tab">Pointer</button><button type="button" class="tab">C# ref vs C Pointer</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
 .cozy-hero { position:relative; overflow:hidden; border-radius:20px; padding:34px 38px; margin:24px 0 30px; background:radial-gradient(circle at 15% 20%, rgba(255,255,255,.10) 0, transparent 45%), linear-gradient(150deg, #6f9250 0%, #547a3d 55%, #3f5f2e 100%); color:#fbf8ef; }
 .cozy-hero .ch-dot { position:absolute; font-size:1.4rem; opacity:.55; pointer-events:none; }
 .cozy-hero .ch-dot.d1 { top:16px; right:70px; }
@@ -276,27 +276,17 @@ class="cl-connector"></span><span class="cl-desc">RAM
 </div>
 </div>
 <p>第一步，遊戲的所有素材都還躺在 SSD 裡：</p>
-<div class="cozy-diagram">
-SSD └── Game ├── 程式 ├── 圖片 ├── 音效 └── 地圖資料
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">└── Game</span><br><span class="line">    ├── 程式</span><br><span class="line">    ├── 圖片</span><br><span class="line">    ├── 音效</span><br><span class="line">    └── 地圖資料</span><br></pre></td></tr></table></figure>
 <p>第二、三步，啟動遊戲後，資料先載入 RAM，再由 CPU 讀取出來執行：</p>
-<div class="cozy-diagram">
-SSD │ │ 載入資料 ▼ RAM │ │ CPU 讀取 ▼ CPU │ ▼ 執行遊戲
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">SSD</span><br><span class="line"> │</span><br><span class="line"> │ 載入資料</span><br><span class="line"> ▼</span><br><span class="line">RAM</span><br><span class="line"> │</span><br><span class="line"> │ CPU 讀取</span><br><span class="line"> ▼</span><br><span class="line">CPU</span><br><span class="line"> │</span><br><span class="line"> ▼</span><br><span class="line">執行遊戲</span><br></pre></td></tr></table></figure>
 <p>第四步，<code>16 GB</code> 的 RAM
 被拆給不同程式使用，這也是為什麼工作管理員裡的用量常常逼近上限：</p>
-<div class="cozy-diagram">
-<p>16 GB RAM</p>
-Chrome 3 GB VS Code 2 GB 遊戲 6 GB Discord 1 GB 系統與其他 3 GB —————-
-剩餘 1 GB
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">16 GB RAM</span><br><span class="line"></span><br><span class="line">Chrome      3 GB</span><br><span class="line">VS Code     2 GB</span><br><span class="line">遊戲        6 GB</span><br><span class="line">Discord     1 GB</span><br><span class="line">系統與其他  3 GB</span><br><span class="line">----------------</span><br><span class="line">剩餘        1 GB</span><br></pre></td></tr></table></figure>
 <p>所以會在工作管理員看到 <code>Memory 13.8 / 16
 GB</code>，代表目前有大量 RAM 正被系統與程式使用。</p>
 <p>第五步，也是最容易被忽略的一點：因為 RAM
 是揮發性記憶體，一旦斷電，內容通常就會不見。假設正在編輯一份還沒儲存的文件，流程是這樣的：</p>
-<div class="cozy-diagram">
-正在編輯的內容 ↓ RAM ↓ 突然斷電 ↓ 資料可能消失
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">正在編輯的內容</span><br><span class="line">      ↓</span><br><span class="line">     RAM</span><br><span class="line">      ↓</span><br><span class="line">突然斷電</span><br><span class="line">      ↓</span><br><span class="line">資料可能消失</span><br></pre></td></tr></table></figure>
 <p>按下「儲存」之後，資料才會真正寫入 SSD
 等持久儲存裝置，這也是為什麼「存檔」這個動作這麼重要。</p></div><div class="tab-item-content"><p>RAM
 的本質可以想成幾十億個極小的電子狀態儲存格，硬體把這些儲存格組織起來，再讓
@@ -336,22 +326,12 @@ RAM 的兩種樣貌：抽象模型與物理實體
 </div>
 </div>
 <p>作為程式設計師的抽象模型，RAM 看起來像這樣：</p>
-<div class="cozy-diagram">
-RAM ┌────┬────┬────┬────┬────┐ │0x00│0x01│0x02│0x03│0x04│
-└────┴────┴────┴────┴────┘
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RAM</span><br><span class="line">┌────┬────┬────┬────┬────┐</span><br><span class="line">│0x00│0x01│0x02│0x03│0x04│</span><br><span class="line">└────┴────┴────┴────┴────┘</span><br></pre></td></tr></table></figure>
 <p>但物理世界會更接近這個層級結構：</p>
-<div class="cozy-diagram">
-RAM 模組 │ ├── PCB 電路板 │ ├── DRAM 晶片 │ │ │ ├── 大量記憶體 Cell │
-├── 大量記憶體 Cell │ ├── 大量記憶體 Cell │ └── … │ └──
-控制、訊號與供電線路
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">RAM 模組</span><br><span class="line">│</span><br><span class="line">├── PCB 電路板</span><br><span class="line">│</span><br><span class="line">├── DRAM 晶片</span><br><span class="line">│    │</span><br><span class="line">│    ├── 大量記憶體 Cell</span><br><span class="line">│    ├── 大量記憶體 Cell</span><br><span class="line">│    ├── 大量記憶體 Cell</span><br><span class="line">│    └── ...</span><br><span class="line">│</span><br><span class="line">└── 控制、訊號與供電線路</span><br></pre></td></tr></table></figure>
 <p>假設程式執行 <code>char x = 65;</code>，CPU
 最後需要操作某個記憶體位置。從軟體角度可以想成：</p>
-<div class="cozy-diagram">
-<p>Address Data</p>
-0x1000 → 01000001 0x1001 → 00110101 0x1002 → 10101010 0x1003 → 00000000
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Address       Data</span><br><span class="line"></span><br><span class="line">0x1000   →    01000001</span><br><span class="line">0x1001   →    00110101</span><br><span class="line">0x1002   →    10101010</span><br><span class="line">0x1003   →    00000000</span><br></pre></td></tr></table></figure>
 <p>其中 <code>0x1000</code> 就是地址，它比較像門牌號碼。例如「台北市 XX
 路 100 號」這串地址本身不是房子，它只是標示出要找的地方。</p>
 <p>CPU 給出地址之後，硬體才會去找對應的資料，用高度簡化的流程來看：</p>
@@ -406,9 +386,7 @@ x 存的是實際的值，p 存的是 x 住在哪個地址。
 </div>
 </div>
 <p>先把它想成 RAM 裡的一張對照表：</p>
-<div class="cozy-diagram">
-Address Data ──────────────────────── 0x1000 10 ← x … 0x5000 0x1000 ← p
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Address       Data</span><br><span class="line">────────────────────────</span><br><span class="line">0x1000        10        ← x</span><br><span class="line">...</span><br><span class="line">0x5000        0x1000    ← p</span><br></pre></td></tr></table></figure>
 <p><code>x</code> 裡面放的是 <code>10</code>。<code>p</code>
 自己也是一個變數，只是它存的資料是 <code>x</code> 的位址
 <code>0x1000</code>。</p>
@@ -439,11 +417,7 @@ p
 </div>
 <p>接著 <code>int *p = &amp;x;</code>，<code>&amp;x</code>
 的意思就是「給我 x 的記憶體位址」。因此兩者的關係是：</p>
-<div class="cozy-diagram">
-<pre><code>    p                       x</code></pre>
-┌──────────────┐ ┌──────────┐ │ 0x1000 │ ───────→ │ 10 │
-└──────────────┘ └──────────┘ Address Address 0x5000 0x1000
-</div>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">        p                       x</span><br><span class="line">┌──────────────┐          ┌──────────┐</span><br><span class="line">│    0x1000    │ ───────→ │    10    │</span><br><span class="line">└──────────────┘          └──────────┘</span><br><span class="line">   Address                  Address</span><br><span class="line">   0x5000                   0x1000</span><br></pre></td></tr></table></figure>
 <p>所以我們常常畫成
 <code>p → x</code>，但這個箭頭實際表達的意思是，<code>p</code> 裡面存著
 <code>x</code> 的位址，並不是 <code>p</code> 跟 <code>x</code>
