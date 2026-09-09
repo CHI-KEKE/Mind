@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Flip-Flop - 讓電路記住一件事情 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="保存狀態Feedback兩顆 NOR 交叉 Feedback為什麼這東西可以「記住」如果我改 R，狀態不就變了Clock to Flip-Flop .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;paddi">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Flip-Flop - 讓電路記住一件事情 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="保存狀態Feedback兩顆 NOR 交叉 Feedback為什麼這東西可以「記住」如果我改 R，狀態不就變了Clock to Flip-Flop .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;paddin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flip-Flop - 讓電路記住一件事情">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/08/08/CS-Flip-Flop/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="保存狀態Feedback兩顆 NOR 交叉 Feedback為什麼這東西可以「記住」如果我改 R，狀態不就變了Clock to Flip-Flop .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;paddi">
+<meta property="og:description" content="保存狀態Feedback兩顆 NOR 交叉 Feedback為什麼這東西可以「記住」如果我改 R，狀態不就變了Clock to Flip-Flop .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;paddin">
 <meta property="og:locale">
 <meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png">
 <meta property="article:published_time" content="2026-08-08T01:47:03.000Z">
@@ -195,52 +195,28 @@
 .cyber-chip.hold{color:#ffbd2e;border-color:rgba(255,189,46,.5);}
 .cyber-chip.stable{color:#39ff88;border-color:rgba(57,255,136,.5);text-shadow:0 0 6px rgba(57,255,136,.35);}
 </style>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>Logic Gate 只認得「現在」
-</div>
-<p>
-在網路上搜尋邏輯閘，可以找到
-<code>AND</code>、<code>OR</code>、<code>NOT</code>、<code>NOR</code>、<code>XOR</code>
-這些能「計算」的元件，舉例來說：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>Logic Gate 只認得「現在」</div>
+<p>在網路上搜尋邏輯閘，可以找到 <code>AND</code>、<code>OR</code>、<code>NOT</code>、<code>NOR</code>、<code>XOR</code> 這些能「計算」的元件，舉例來說：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">combinational-logic.sim</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">combinational-logic.sim</span></div>
 <pre class="cyber-terminal-pre"><span class="siglabel">A</span> = <span class="sig1">1</span>
 <span class="siglabel">B</span> = <span class="sig0">0</span>
 
-<span class="siglabel">A AND B</span> = <span class="sig0">0</span></pre>
+<p><span class="siglabel">A AND B</span> &#x3D; <span class="sig0">0</span></pre></p>
 </div>
-<p>
-它們的共同特性是：現在<strong>輸入是多少，輸出就由它決定</strong>，把輸入改掉，輸出就跟著改掉，完全沒有「之前發生過什麼」的概念。
-</p>
+<p>它們的共同特性是：現在**輸入是多少，輸出就由它決定**，把輸入改掉，輸出就跟著改掉，完全沒有「之前發生過什麼」的概念。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>問題：算完的結果要留在哪裡
-</div>
-<p>
-若要做計算機，就會遇到 <code>3 + 5 = 8</code> 這種情況，算出
-<code>8</code> 之後，下一步可能還要 <code>8 +
-7</code>，因此我們需要某種東西，能讓算出的 <code>8</code> 被留著。
-</p>
-<div class="cyber-note warn">
-<b>💡</b> 問題就變成：怎麼讓電路具有記憶？
-</div>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>問題：算完的結果要留在哪裡</div>
+<p>若要做計算機，就會遇到 <code>3 + 5 = 8</code> 這種情況，算出 <code>8</code> 之後，下一步可能還要 <code>8 + 7</code>，因此我們需要某種東西，能讓算出的 <code>8</code> 被留著。</p>
+<div class="cyber-note warn"><b>💡</b> 問題就變成：怎麼讓電路具有記憶？</div>
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>普通電路：一路往前
-</div>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>普通電路：一路往前</div>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">straight-through.circuit</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">straight-through.circuit</span></div>
 <pre class="cyber-terminal-pre"><span class="siglabel">輸入</span>
  ↓
 Gate
@@ -248,375 +224,168 @@ Gate
 <span class="siglabel">輸出</span></pre>
 </div>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>把輸出接回輸入
-</div>
-<p>
-如果我們把輸出接回自己的輸入呢？就變成：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>把輸出接回輸入</div>
+<p>如果我們把輸出接回自己的輸入呢？就變成：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">feedback.circuit</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">feedback.circuit</span></div>
 <pre class="cyber-terminal-pre">        ┌──────────┐
         ↓          │
 <span class="siglabel">輸入</span> → Gate → <span class="siglabel">輸出</span> ┘</pre>
 </div>
-<p>
-這叫
-<code>Feedback</code>（回授），這個想法很重要，因為現在上一刻的輸出變成下一刻的輸入，也就是過去的狀態開始有能力影響現在，而這便是記憶出現的基礎。
-</p>
+<p>這叫 <code>Feedback</code>（回授），這個想法很重要，因為現在上一刻的輸出變成下一刻的輸入，也就是過去的狀態開始有能力影響現在，而這便是記憶出現的基礎。</p>
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>兩顆 NOR 的接法
-</div>
-<p>
-我們先拿兩顆 <code>NOR</code>。每顆 <code>NOR</code>
-都有兩個輸入、一個輸出，我們這樣定義：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip neutral">NOR 1 輸入：S、Q̅</span><span
-class="cyber-chip neutral">NOR 1 輸出：Q</span>
-</div>
-<div class="cyber-chip-row">
-<span class="cyber-chip neutral">NOR 2 輸入：R、Q</span><span
-class="cyber-chip neutral">NOR 2 輸出：Q̅</span>
-</div>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>兩顆 NOR 的接法</div>
+<p>我們先拿兩顆 <code>NOR</code>。每顆 <code>NOR</code> 都有兩個輸入、一個輸出，我們這樣定義：</p>
+<div class="cyber-chip-row"><span class="cyber-chip neutral">NOR 1 輸入：S、Q̅</span><span class="cyber-chip neutral">NOR 1 輸出：Q</span></div>
+<div class="cyber-chip-row"><span class="cyber-chip neutral">NOR 2 輸入：R、Q</span><span class="cyber-chip neutral">NOR 2 輸出：Q̅</span></div>
+
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">         ┌─────────────┐</span><br><span class="line">S ──────→│             │</span><br><span class="line">Q̅ ─────→│    NOR 1    ├────→ Q</span><br><span class="line">         └─────────────┘</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">         ┌─────────────┐</span><br><span class="line">R ──────→│             │</span><br><span class="line">Q ──────→│    NOR 2    ├────→ Q̅</span><br><span class="line">         └─────────────┘</span><br></pre></td></tr></table></figure>
+
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>互相餵對方：Cross-coupled
-</div>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>互相餵對方：Cross-coupled</div>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">cross-coupled.circuit</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">cross-coupled.circuit</span></div>
 <pre class="cyber-terminal-pre">        ┌────────────────┐
         ↓                │
 <span class="siglabel">S</span> → NOR 1 → <span class="siglabel">Q</span> → NOR 2 ← <span class="siglabel">R</span>
     ↑              │
     └──── <span class="siglabel">Q̅</span> ←─────┘</pre>
 </div>
-<p>
-這就是 <code>Cross-coupled NOR gates</code>，兩顆 <code>NOR</code>
-互相交叉回授。這組電路有個正式名字，叫 <code>SR
-Latch</code>（<code>S</code> = Set、<code>R</code> = Reset）。
-</p>
+<p>這就是 <code>Cross-coupled NOR gates</code>，兩顆 <code>NOR</code> 互相交叉回授。這組電路有個正式名字，叫 <code>SR Latch</code>（<code>S</code> = Set、<code>R</code> = Reset）。</p>
 </div>
+
+
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">                  ┌────────────────────────┐</span><br><span class="line">                  │                        │</span><br><span class="line">                  │                        ▼</span><br><span class="line">              ┌─────────┐             ┌─────────┐</span><br><span class="line">S ───────────→│  NOR 1  │─── Q ─────→│  NOR 2  │←──────── R</span><br><span class="line">              └─────────┘             └─────────┘</span><br><span class="line">                  ▲                        │</span><br><span class="line">                  │                        │</span><br><span class="line">                  └──────── Q̅ ────────────┘</span><br></pre></td></tr></table></figure>
+
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>穩定狀態下的循環
-</div>
-<p>
-假設目前：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip stable">Q = 0</span><span
-class="cyber-chip stable">Q̅ = 1</span>
-</div>
-<p>
-然後我們讓：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip hold">S = 0</span><span
-class="cyber-chip hold">R = 0</span>
-</div>
-<p>
-看看會發生什麼。
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>穩定狀態下的循環</div>
+<p>假設目前：</p>
+<div class="cyber-chip-row"><span class="cyber-chip stable">Q = 0</span><span class="cyber-chip stable">Q̅ = 1</span></div>
+<p>然後我們讓：</p>
+<div class="cyber-chip-row"><span class="cyber-chip hold">S = 0</span><span class="cyber-chip hold">R = 0</span></div>
+<p>看看會發生什麼。</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">nor-1.eval</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">nor-1.eval</span></div>
 <pre class="cyber-terminal-pre"><span class="siglabel">S</span>  = <span class="sig0">0</span>
 <span class="siglabel">Q̅</span> = <span class="sig1">1</span>
 
-NOR(0,1) = <span class="sig0">0</span>  →  <span class="siglabel">Q</span> = <span class="sig0">0</span></pre>
+<p>NOR(0,1) &#x3D; <span class="sig0">0</span>  →  <span class="siglabel">Q</span> &#x3D; <span class="sig0">0</span></pre></p>
 </div>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">nor-2.eval</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">nor-2.eval</span></div>
 <pre class="cyber-terminal-pre"><span class="siglabel">R</span> = <span class="sig0">0</span>
 <span class="siglabel">Q</span> = <span class="sig0">0</span>
 
-NOR(0,0) = <span class="sig1">1</span>  →  <span class="siglabel">Q̅</span> = <span class="sig1">1</span></pre>
+<p>NOR(0,0) &#x3D; <span class="sig1">1</span>  →  <span class="siglabel">Q̅</span> &#x3D; <span class="sig1">1</span></pre></p>
 </div>
-<p>
-結果 <code>Q = 0</code>、<code>Q̅ =
-1</code>，完全沒有變。而且它會一直這樣循環下去：
-</p>
+<p>結果 <code>Q = 0</code>、<code>Q̅ = 1</code>，完全沒有變。而且它會一直這樣循環下去：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">steady-state.loop</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">steady-state.loop</span></div>
 <pre class="cyber-terminal-pre"><span class="sig0">Q=0</span> → 讓 <span class="sig1">Q̅=1</span> → 又讓 <span class="sig0">Q=0</span> → ...（穩定狀態）</pre>
 </div>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>寫入一次，看它是否記住
-</div>
-<p>
-接著我們實際做一次「寫入」，假設：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip write">S = 1</span><span
-class="cyber-chip hold">R = 0</span>
-</div>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>寫入一次，看它是否記住</div>
+<p>接著我們實際做一次「寫入」，假設：</p>
+<div class="cyber-chip-row"><span class="cyber-chip write">S = 1</span><span class="cyber-chip hold">R = 0</span></div>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">write.eval</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">write.eval</span></div>
 <pre class="cyber-terminal-pre">NOR 1：NOR(1, ?) = <span class="sig0">0</span>  →  <span class="siglabel">Q</span> = <span class="sig0">0</span>
 NOR 2：NOR(0, 0) = <span class="sig1">1</span>  →  <span class="siglabel">Q̅</span> = <span class="sig1">1</span></pre>
 </div>
-<p>
-我們可以把這一步理解成：把 <code>Q</code> 設成 <code>0</code>。
-</p>
-<p>
-<b>真正的「記住」發生在下一步。</b> 現在把剛才的 <code>S = 1</code>
-撤掉，變成：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip hold">S = 0</span><span
-class="cyber-chip hold">R = 0</span>
-</div>
-<p>
-注意，現在已經沒有外部輸入在說「<code>Q</code> 給我等於
-<code>0</code>！」，可是 <code>Q</code> 依然是
-<code>0</code>。為什麼？因為：
-</p>
+<p>我們可以把這一步理解成：把 <code>Q</code> 設成 <code>0</code>。</p>
+<p><b>真正的「記住」發生在下一步。</b> 現在把剛才的 <code>S = 1</code> 撤掉，變成：</p>
+<div class="cyber-chip-row"><span class="cyber-chip hold">S = 0</span><span class="cyber-chip hold">R = 0</span></div>
+<p>注意，現在已經沒有外部輸入在說「<code>Q</code> 給我等於 <code>0</code>！」，可是 <code>Q</code> 依然是 <code>0</code>。為什麼？因為：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">retain.loop</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">retain.loop</span></div>
 <pre class="cyber-terminal-pre"><span class="sig0">Q=0</span> → 使 <span class="sig1">Q̅=1</span> → <span class="sig1">Q̅=1</span> → 又使 <span class="sig0">Q=0</span> → 循環
 
-寫入時： S=1 R=0  →  Q=0
-放開後： S=0 R=0  →  Q=0
-過一段時間後： S=0 R=0  →  Q=0</pre>
+<p>寫入時： S&#x3D;1 R&#x3D;0  →  Q&#x3D;0<br>放開後： S&#x3D;0 R&#x3D;0  →  Q&#x3D;0<br>過一段時間後： S&#x3D;0 R&#x3D;0  →  Q&#x3D;0</pre></p>
 </div>
-<p>
-這個「外面的寫入訊號消失了，<code>Q</code>
-卻還維持著」，就是記憶。假設我只告訴你 <code>S = 0</code>、<code>R =
-0</code>，然後問「<code>Q</code> 是多少？」這其實答不出來，它可能是
-<code>0</code>，也可能是
-<code>1</code>，因為要知道的是它之前被設定成什麼。
-</p>
+<p>這個「外面的寫入訊號消失了，<code>Q</code> 卻還維持著」，就是記憶。假設我只告訴你 <code>S = 0</code>、<code>R = 0</code>，然後問「<code>Q</code> 是多少？」這其實答不出來，它可能是 <code>0</code>，也可能是 <code>1</code>，因為要知道的是它之前被設定成什麼。</p>
 <div class="cyber-table-wrap">
 <table class="cyber-table">
-<tr>
-<th>
-元件
-</th>
-<th>
-輸出取決於
-</th>
-</tr>
-<tr>
-<td>
-普通 Logic Gate
-</td>
-<td>
-現在輸入
-</td>
-</tr>
-<tr>
-<td>
-<code>Latch</code>
-</td>
-<td>
-現在輸入 + 之前狀態
-</td>
-</tr>
+<tr><th>元件</th><th>輸出取決於</th></tr>
+<tr><td>普通 Logic Gate</td><td>現在輸入</td></tr>
+<tr><td><code>Latch</code></td><td>現在輸入 + 之前狀態</td></tr>
 </table>
 </div>
-<div class="cyber-note">
-這就是「記憶」的本質。
-</div>
+<div class="cyber-note">這就是「記憶」的本質。</div>
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>需要能寫、也需要能保持
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>需要能寫、也需要能保持</div>
+<p>而且這正是我們希望它具有的能力。如果記憶體寫入一次之後永遠不能修改，那也沒什麼用。所以我們需要兩種能力：</p>
+<div class="cyber-chip-row"><span class="cyber-chip write">① 我想寫入時 → 可以改變 Q</span><span class="cyber-chip hold">② 我不想寫入時 → Q 自己維持</span></div>
+<p><code>SR Latch</code> 的 <code>S</code>、<code>R</code> 就是控制它的外部輸入。在 Hold 狀態下，你必須確保 <code>S</code>、<code>R</code> 都維持在正確的非作用狀態。</p>
 </div>
-<p>
-而且這正是我們希望它具有的能力。如果記憶體寫入一次之後永遠不能修改，那也沒什麼用。所以我們需要兩種能力：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip write">① 我想寫入時 → 可以改變 Q</span><span
-class="cyber-chip hold">② 我不想寫入時 → Q 自己維持</span>
-</div>
-<p>
-<code>SR Latch</code> 的 <code>S</code>、<code>R</code>
-就是控制它的外部輸入。在 Hold 狀態下，你必須確保
-<code>S</code>、<code>R</code> 都維持在正確的非作用狀態。
-</p>
-</div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>S／R 一旦亂變，資料就跟著亂變
-</div>
-<p>
-對這個 NOR <code>SR Latch</code> 來說：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip hold">S = 0</span><span
-class="cyber-chip hold">R = 0</span>
-</div>
-<p>
-代表「不要改資料」。如果外部突然變成：
-</p>
-<div class="cyber-chip-row">
-<span class="cyber-chip write">R = 1</span>
-</div>
-<p>
-那就是在要求 <code>Latch</code> 改變狀態。所以其實已經發現 <code>SR
-Latch</code> 的一個工程問題：既然 <code>S</code>／<code>R</code>
-可以直接影響記憶，就必須非常小心控制它們，避免不小心觸發寫入。
-</p>
-<div class="cyber-note warn">
-這個問題會直接帶我們走向後面的 <code>D Latch</code> 和
-<code>Flip-Flop</code>。
-</div>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>S／R 一旦亂變，資料就跟著亂變</div>
+<p>對這個 NOR <code>SR Latch</code> 來說：</p>
+<div class="cyber-chip-row"><span class="cyber-chip hold">S = 0</span><span class="cyber-chip hold">R = 0</span></div>
+<p>代表「不要改資料」。如果外部突然變成：</p>
+<div class="cyber-chip-row"><span class="cyber-chip write">R = 1</span></div>
+<p>那就是在要求 <code>Latch</code> 改變狀態。所以其實已經發現 <code>SR Latch</code> 的一個工程問題：既然 <code>S</code>／<code>R</code> 可以直接影響記憶，就必須非常小心控制它們，避免不小心觸發寫入。</p>
+<div class="cyber-note warn">這個問題會直接帶我們走向後面的 <code>D Latch</code> 和 <code>Flip-Flop</code>。</div>
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>只准在指定的那一刻寫入
-</div>
-<p>
-既然 <code>Latch</code> 已經能記，為什麼還需要
-<code>Flip-Flop</code>？因為剛才已經發現問題「我要如何確保
-<code>S</code>／<code>R</code> 不會亂變？」
-</p>
-<p>
-我們真正希望的是外面的資料可以一直變（<code>0 → 1 → 0 → 1 → 0 →
-1</code>），但記憶元件不要一直跟著亂變。我們希望能說「現在才准你存！」。例如資料
-<code>D</code> 是
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>只准在指定的那一刻寫入</div>
+<p>既然 <code>Latch</code> 已經能記，為什麼還需要 <code>Flip-Flop</code>？因為剛才已經發現問題「我要如何確保 <code>S</code>／<code>R</code> 不會亂變？」</p>
+<p>我們真正希望的是外面的資料可以一直變（<code>0 → 1 → 0 → 1 → 0 → 1</code>），但記憶元件不要一直跟著亂變。我們希望能說「現在才准你存！」。例如資料 <code>D</code> 是</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">data.waveform</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">data.waveform</span></div>
 <pre class="cyber-terminal-pre"><span class="siglabel">D</span>:  0 ── 1 ── 0 ── 1 ── <span class="sig1">1</span>
                         ↑
                      就這一刻，我只想記住這瞬間的 <span class="sig1">1</span></pre>
 </div>
-<p>
-所以我們需要另外一個控制訊號，這就是 <code>Clock</code>。以最常見的
-<code>D Flip-Flop</code> 來看：
-</p>
+<p>所以我們需要另外一個控制訊號，這就是 <code>Clock</code>。以最常見的 <code>D Flip-Flop</code> 來看：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">d-flip-flop.block</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">d-flip-flop.block</span></div>
 <pre class="cyber-terminal-pre">         ┌───────────────┐
 <span class="siglabel">D</span>   ────→│               │
          │ D Flip-Flop   ├────→ <span class="siglabel">Q</span>
 <span class="siglabel">CLK</span> ────→│               │
          └───────────────┘</pre>
 </div>
-<p>
-你只需要關心：<code>D</code> = 想存什麼、<code>CLK</code> =
-什麼時候存、<code>Q</code> = 現在存著什麼。例如目前 <code>Q =
-0</code>，外面的 <code>D</code> 可以一直變（<code>0 → 1 → 0 → 1 →
-1</code>），<code>Q</code> 不需要每次都跟著變，直到 <code>Clock</code>
-的指定邊緣：
-</p>
+<p>你只需要關心：<code>D</code> = 想存什麼、<code>CLK</code> = 什麼時候存、<code>Q</code> = 現在存著什麼。例如目前 <code>Q = 0</code>，外面的 <code>D</code> 可以一直變（<code>0 → 1 → 0 → 1 → 1</code>），<code>Q</code> 不需要每次都跟著變，直到 <code>Clock</code> 的指定邊緣：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">clock.waveform</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">clock.waveform</span></div>
 <pre class="cyber-terminal-pre"><span class="siglabel">CLK</span>: ________|‾‾‾‾
               ↑
             就現在，假設這一刻 <span class="siglabel">D</span> = <span class="sig1">1</span>，Flip-Flop 就捕捉 <span class="siglabel">Q</span> = <span class="sig1">1</span>，然後繼續保持</pre>
 </div>
-<div class="cyber-note">
-可以把它想成：<code>Clock</code>
-在某個瞬間喊「拍照！」，<code>Flip-Flop</code> 把當下 <code>D</code>
-的值拍下來，然後維持這個值。
+<div class="cyber-note">可以把它想成：<code>Clock</code> 在某個瞬間喊「拍照！」，<code>Flip-Flop</code> 把當下 <code>D</code> 的值拍下來，然後維持這個值。</div>
 </div>
-</div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>一層一層疊上去的抽象
-</div>
-<p>
-完整 <code>Flip-Flop</code> 需要更多電路來控制，是一層一層疊上去的：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>一層一層疊上去的抽象</div>
+<p>完整 <code>Flip-Flop</code> 需要更多電路來控制，是一層一層疊上去的：</p>
 <div class="cyber-flow">
-<div class="cyber-flow-step">
-<span class="cyber-flow-label">Gate</span><span
-class="cyber-flow-value">基本 Logic Gates</span>
+<div class="cyber-flow-step"><span class="cyber-flow-label">Gate</span><span class="cyber-flow-value">基本 Logic Gates</span></div>
+<div class="cyber-flow-arrow">↓ 加入 Feedback</div>
+<div class="cyber-flow-step"><span class="cyber-flow-label">Latch</span><span class="cyber-flow-value">Cross-coupled NOR</span></div>
+<div class="cyber-flow-arrow">↓ 加入資料與時間控制</div>
+<div class="cyber-flow-step"><span class="cyber-flow-label">Flip-Flop</span><span class="cyber-flow-value">D + CLK → Q</span></div>
 </div>
-<div class="cyber-flow-arrow">
-↓ 加入 Feedback
-</div>
-<div class="cyber-flow-step">
-<span class="cyber-flow-label">Latch</span><span
-class="cyber-flow-value">Cross-coupled NOR</span>
-</div>
-<div class="cyber-flow-arrow">
-↓ 加入資料與時間控制
-</div>
-<div class="cyber-flow-step">
-<span class="cyber-flow-label">Flip-Flop</span><span
-class="cyber-flow-value">D + CLK → Q</span>
-</div>
-</div>
-<p>
-例如一個 <code>D Flip-Flop</code> 的內部實作，可以由多個
-Gate／<code>Latch</code> 組成，但對 CPU 設計者來說，可以把它抽象成：
-</p>
+<p>例如一個 <code>D Flip-Flop</code> 的內部實作，可以由多個 Gate／<code>Latch</code> 組成，但對 CPU 設計者來說，可以把它抽象成：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">ff.abstract</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">ff.abstract</span></div>
 <pre class="cyber-terminal-pre">         ┌──────┐
 <span class="siglabel">D</span>   ────→│  FF  │────→ <span class="siglabel">Q</span>
 <span class="siglabel">CLK</span> ────→│      │
          └──────┘</pre>
 </div>
-<p>
-只需要知道：一個 <code>FF</code> 可以保存 1 bit，並且在指定 <code>Clock
-edge</code> 更新。
-</p>
+<p>只需要知道：一個 <code>FF</code> 可以保存 1 bit，並且在指定 <code>Clock edge</code> 更新。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>很多 Flip-Flop 組成 Register
-</div>
-<p>
-假設 CPU 想保存 <code>0101</code>，可以使用四個 <code>Flip-Flop</code>：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>很多 Flip-Flop 組成 Register</div>
+<p>假設 CPU 想保存 <code>0101</code>，可以使用四個 <code>Flip-Flop</code>：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">register.block</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">register.block</span></div>
 <pre class="cyber-terminal-pre"><span class="siglabel">D3</span> ──→ [FF] ──→ <span class="siglabel">Q3</span> = <span class="sig0">0</span>
 <span class="siglabel">D2</span> ──→ [FF] ──→ <span class="siglabel">Q2</span> = <span class="sig1">1</span>
 <span class="siglabel">D1</span> ──→ [FF] ──→ <span class="siglabel">Q1</span> = <span class="sig0">0</span>
@@ -625,56 +394,17 @@ class="cyber-terminal-title">register.block</span>
          │
        Clock</pre>
 </div>
-<p>
-四個一起就是 <code>0 1 0 1</code>，也就是十進位的
-<code>5</code>。這組東西就是 <code>Register</code>（暫存器）
-</p>
+<p>四個一起就是 <code>0 1 0 1</code>，也就是十進位的 <code>5</code>。這組東西就是 <code>Register</code>（暫存器）</p>
 <div class="cyber-table-wrap">
 <table class="cyber-table">
-<tr>
-<th>
-Flip-Flop 數量
-</th>
-<th>
-可保存位元
-</th>
-</tr>
-<tr>
-<td>
-1 個
-</td>
-<td>
-1 bit
-</td>
-</tr>
-<tr>
-<td>
-8 個
-</td>
-<td>
-8 bits
-</td>
-</tr>
-<tr>
-<td>
-64 個
-</td>
-<td>
-64 bits
-</td>
-</tr>
-<tr>
-<td>
-很多個組合
-</td>
-<td>
-<code>Register</code>（暫存器）
-</td>
-</tr>
+<tr><th>Flip-Flop 數量</th><th>可保存位元</th></tr>
+<tr><td>1 個</td><td>1 bit</td></tr>
+<tr><td>8 個</td><td>8 bits</td></tr>
+<tr><td>64 個</td><td>64 bits</td></tr>
+<tr><td>很多個組合</td><td><code>Register</code>（暫存器）</td></tr>
 </table>
 </div>
-</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/08/CS-Flip-Flop/">https://chi-keke.github.io/Mind/2026/08/08/CS-Flip-Flop/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/06/Probability-%E4%B8%89%E9%87%8D%E6%8E%92%E7%90%83%E5%88%86%E9%9A%8A/" title="三重排球分隊"><img class="cover" src="https://i.imgur.com/f2eWUWv.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">三重排球分隊</div></div><div class="info-2"><div class="info-item-1">糖果問題 </div></div></div></a><a class="pagination-related" href="/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/" title="Hexadecimal"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Hexadecimal</div></div><div class="info-2"><div class="info-item-1">進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;} .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed r...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression-pure/" title="Lossless Compression"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression-pure/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="二補數（Two's Complement）"/></a><div class="content"><a class="title" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）">二補數（Two's Complement）</a><time datetime="2026-08-19T00:30:03.000Z" title="Created 2026-08-19 08:30:03">2026-08-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/15/CS-RAM-and-Pointer/" title="RAM and Pointer"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="RAM and Pointer"/></a><div class="content"><a class="title" href="/Mind/2026/08/15/CS-RAM-and-Pointer/" title="RAM and Pointer">RAM and Pointer</a><time datetime="2026-08-15T02:39:03.000Z" title="Created 2026-08-15 10:39:03">2026-08-15</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/08/CS-Flip-Flop/">https://chi-keke.github.io/Mind/2026/08/08/CS-Flip-Flop/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/06/Probability-%E4%B8%89%E9%87%8D%E6%8E%92%E7%90%83%E5%88%86%E9%9A%8A/" title="三重排球分隊"><img class="cover" src="https://i.imgur.com/f2eWUWv.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">三重排球分隊</div></div><div class="info-2"><div class="info-item-1">糖果問題   </div></div></div></a><a class="pagination-related" href="/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/" title="Hexadecimal"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Hexadecimal</div></div><div class="info-2"><div class="info-item-1">進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;} .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed rgb...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">38</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression-pure/" title="Lossless Compression"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression-pure/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="二補數（Two's Complement）"/></a><div class="content"><a class="title" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）">二補數（Two's Complement）</a><time datetime="2026-08-19T00:30:03.000Z" title="Created 2026-08-19 08:30:03">2026-08-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/15/CS-RAM-and-Pointer/" title="RAM and Pointer"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="RAM and Pointer"/></a><div class="content"><a class="title" href="/Mind/2026/08/15/CS-RAM-and-Pointer/" title="RAM and Pointer">RAM and Pointer</a><time datetime="2026-08-15T02:39:03.000Z" title="Created 2026-08-15 10:39:03">2026-08-15</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
