@@ -7,7 +7,7 @@
 <meta property="og:locale">
 <meta property="og:image" content="https://i.imgur.com/f2eWUWv.png">
 <meta property="article:published_time" content="2026-09-10T07:05:03.000Z">
-<meta property="article:modified_time" content="2026-09-12T02:39:11.523Z">
+<meta property="article:modified_time" content="2026-09-12T02:43:20.049Z">
 <meta property="article:author" content="Yo-Lin">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.imgur.com/f2eWUWv.png"><script type="application/ld+json">{
@@ -17,7 +17,7 @@
   "url": "https://chi-keke.github.io/Mind/2026/09/10/CS-ring-buffer/",
   "image": "https://i.imgur.com/f2eWUWv.png",
   "datePublished": "2026-09-10T07:05:03.000Z",
-  "dateModified": "2026-09-12T02:39:11.523Z",
+  "dateModified": "2026-09-12T02:43:20.049Z",
   "author": [
     {
       "@type": "Person",
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">Ring Buffer</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Ring Buffer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-09-12T02:39:11.523Z" title="Updated 2026-09-12 10:39:11">2026-09-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/CS/">CS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">有限的資源</button><button type="button" class="tab">Ring Buffer</button><button type="button" class="tab">移動視角</button><button type="button" class="tab">% 只是實現循環的工具</button><button type="button" class="tab">Producer 與 Consumer</button><button type="button" class="tab">C# 實作</button><button type="button" class="tab">Ring Buffer 如果來不及 Read，新資料一直進來怎麼辦？</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">Ring Buffer</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Ring Buffer</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-09-12T02:43:20.049Z" title="Updated 2026-09-12 10:43:20">2026-09-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/CS/">CS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">有限的資源</button><button type="button" class="tab">Ring Buffer</button><button type="button" class="tab">移動視角</button><button type="button" class="tab">% 只是實現循環的工具</button><button type="button" class="tab">Producer 與 Consumer</button><button type="button" class="tab">C# 實作</button><button type="button" class="tab">Ring Buffer 如果來不及 Read，新資料一直進來怎麼辦？</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
 .cozy{background:transparent;color:var(--cozy-ink);border-radius:0;padding:0;line-height:1.95;font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif}.hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 5% 10%,#88a86955,transparent 65%),linear-gradient(150deg,#6f9250,#547a3d 55%,#3f5f2e);color:#fbf8ef;border-radius:22px;padding:32px 30px 66px;margin:0 0 28px;box-shadow:0 8px 22px #3f5f2e22}.hero h1{color:#fff9eb;font-size:1.65rem;line-height:1.55;margin:0 0 12px}.hero p{color:#f4f4e7;font-size:1rem;line-height:1.9;max-width:95%}.hero small{color:#f4f4e7;letter-spacing:2px}.grid{display:flex;flex-wrap:wrap;gap:14px;margin:18px 0 26px}.card{flex:1 1 210px;padding:18px 20px;border:1px solid var(--cozy-line);border-radius:20px;background:var(--cozy-surface);box-shadow:0 4px 12px #785a320a}.card h3{color:var(--cozy-bear);margin:0 0 6px}.card p{color:var(--cozy-muted);margin:0;font-size:.9rem}.bear{background:#f3e3d4;color:var(--cozy-ink)}.cream{background:var(--cozy-surface);color:var(--cozy-ink)}.moss{background:#edf2e2;color:var(--cozy-ink)}.pre{background:var(--cozy-surface);color:var(--cozy-ink);border:1px solid var(--cozy-line);border-radius:14px;padding:18px;overflow-x:auto;white-space:pre;font-family:Consolas,monospace}.callout{background:#fff8e9;border:1px solid #e5c98d;border-radius:14px;padding:15px;margin:18px 0;color:var(--cozy-muted)}.arch{background:var(--cozy-surface);border:1px solid var(--cozy-line);border-radius:18px;padding:20px;color:var(--cozy-ink);box-shadow:0 4px 14px #785a3208}.arch h2{color:var(--cozy-ink);font-size:1.3rem;border-bottom:2px dashed var(--cozy-line);padding-bottom:12px}.arch-row{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0}.node{flex:1 1 180px;padding:16px;border:1px solid var(--cozy-line);border-radius:12px;text-align:center;background:var(--cozy-node);color:var(--cozy-ink)}.arch .red{background:#f3e3d4;color:var(--cozy-bear);border-color:#c99d7b}.arch .blue{background:var(--cozy-node);color:var(--cozy-green);border-color:var(--cozy-green)}.arch .green{background:#edf2e2;color:var(--cozy-green);border-color:#9eb77d}.arrow{text-align:center;color:var(--cozy-edge);font-size:1.5rem}.table{width:auto;max-width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--cozy-line);border-radius:14px;overflow:hidden;background:var(--cozy-surface);font-size:.9rem}.table th,.table td{padding:11px 14px;border:0;border-bottom:1px solid var(--cozy-line);text-align:left}.table th{background:var(--cozy-node);color:var(--cozy-ink)}.table tr:last-child td{border-bottom:0}.table tr:nth-child(even){background:var(--cozy-paper)}.cozy ol{list-style:none;counter-reset:cozy-step;padding-left:46px;position:relative}.cozy ol:before{content:'';position:absolute;left:16px;top:10px;bottom:12px;width:2px;background:var(--cozy-line)}.cozy ol>li{position:relative;counter-increment:cozy-step;margin:0 0 18px;padding-left:5px}.cozy ol>li:before{content:counter(cozy-step);position:absolute;left:-45px;top:0;width:31px;height:31px;line-height:29px;text-align:center;border:1px solid var(--cozy-bear);border-radius:50%;background:var(--cozy-surface);color:var(--cozy-bear);font-weight:700}#article-container{--cozy-paper:#fbf7ef;--cozy-surface:#fffdf8;--cozy-ink:#4a3a28;--cozy-muted:#6b5c46;--cozy-line:#e5d8c0;--cozy-green:#547a3d;--cozy-bear:#95613d;--cozy-node:#edf2e2;--cozy-edge:#6b7653;color:var(--cozy-ink)}#article-container .tabs{border:1px solid var(--cozy-line);border-radius:22px;background:var(--cozy-paper);box-shadow:0 8px 28px rgba(90,70,40,.08)}#article-container .tabs>.nav-tabs{padding:12px;gap:7px;background:var(--cozy-paper);border-bottom:1px dashed var(--cozy-line)}#article-container .tabs>.nav-tabs>.tab{border:1px solid var(--cozy-line);border-radius:18px;background:var(--cozy-surface);color:var(--cozy-muted);font-size:13px;padding:7px 13px;line-height:1.65}#article-container .tabs>.nav-tabs>.tab.active{background:var(--cozy-green);border-color:var(--cozy-green);color:#fffdf3}#article-container .tabs>.nav-tabs>.tab:hover{border-color:var(--cozy-bear)}#article-container h2{color:var(--cozy-ink);font-size:1.3rem;margin:34px 0 20px;padding:0 0 12px;border-bottom:2px dashed var(--cozy-line)}#article-container h2:before{content:'🌿';font-size:1rem;margin-right:10px}#article-container h3{color:var(--cozy-bear);font-size:1.08rem;margin:26px 0 14px}#article-container :not(pre)>code{color:var(--cozy-bear);background:#efe5d3;border-radius:6px;padding:2px 5px;overflow-wrap:anywhere}[data-theme='dark'] #article-container{--cozy-paper:#252a22;--cozy-surface:#30372b;--cozy-ink:#f0e8d8;--cozy-muted:#d0c5b2;--cozy-line:#535b46;--cozy-green:#adc38b;--cozy-bear:#e1b48b;--cozy-node:#414c35;--cozy-edge:#c6d4ae}[data-theme='dark'] #article-container .tabs>.nav-tabs>.tab.active{background:#547a3d;border-color:#adc38b}@media(max-width:600px){ #article-container .tabs>.nav-tabs{padding:9px;gap:6px}#article-container .tabs>.nav-tabs>.tab{font-size:12px;padding:7px 10px}.hero{padding:24px 20px 64px}.hero h1{font-size:1.35rem}.hero p{max-width:100%}.table{font-size:.84rem}.table th,.table td{padding:9px 10px}.cozy{padding:0}.arch-row{flex-direction:column}}
 </style>
 <div class="cozy">
@@ -397,96 +397,35 @@ Sensor
 <div class="hero">
 <small>C# IMPLEMENTATION</small>
 <h1>
-用 <code>count</code> 分清楚空與滿
+完整的 Ring Buffer 實作
 </h1>
 <p>
-只看 <code>readIndex</code> 與 <code>writeIndex</code>
-會遇到兩者相等的歧義，因此另外維護資料筆數。
+這個版本保留原本的
+<code>Main()</code>、泛型類別、讀寫索引與輸出紀錄，完整展示資料如何進入與離開環形緩衝區。
 </p>
 </div>
-<table class="table">
-<thead>
-<tr>
-<th>
-狀態
-</th>
-<th>
-<code>readIndex</code>
-</th>
-<th>
-<code>writeIndex</code>
-</th>
-<th>
-<code>count</code>
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-空
-</td>
-<td>
-<code>0</code>
-</td>
-<td>
-<code>0</code>
-</td>
-<td>
-<code>0</code>
-</td>
-</tr>
-<tr>
-<td>
-滿
-</td>
-<td>
-<code>0</code>
-</td>
-<td>
-<code>0</code>
-</td>
-<td>
-<code>Capacity</code>
-</td>
-</tr>
-</tbody>
-</table>
-<pre class="pre">public bool TryWrite(T item)
-{
-    if (IsFull)
-    {
-        return false;
-    }
-
-    buffer[writeIndex] = item;
-    writeIndex = (writeIndex + 1) % Capacity;
-    count++;
-    return true;
-}
-
-public bool TryRead(out T item)
-{
-    if (IsEmpty)
-    {
-        item = default!;
-        return false;
-    }
-
-    item = buffer[readIndex];
-    readIndex = (readIndex + 1) % Capacity;
-    count--;
-    return true;
-}</pre>
+<div class="callout">
+<strong>程式碼預設收合：</strong>點擊下方標題即可展開完整 C# 程式碼。
+</div>
+<details class="toggle">
+<summary class="toggle-button" style>
+展開完整 C# 程式碼
+</summary>
+<div class="toggle-content">
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> ringBuffer = <span class="keyword">new</span> RingBuffer&lt;<span class="built_in">string</span>&gt;(<span class="number">5</span>);</span><br><span class="line">    ringBuffer.Write(<span class="string">&quot;Abby&quot;</span>);</span><br><span class="line">    ringBuffer.Write(<span class="string">&quot;Alex&quot;</span>);</span><br><span class="line">    ringBuffer.Read().Dump();</span><br><span class="line">    ringBuffer.Read().Dump();</span><br><span class="line">    ringBuffer.Read().Dump();</span><br><span class="line">    ringBuffer.Read().Dump();</span><br><span class="line">    ringBuffer.Read().Dump();</span><br><span class="line">    ringBuffer.Read().Dump();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">RingBuffer</span>&lt;<span class="title">T</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> T[] buffer;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">int</span> readIndex;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">int</span> writeIndex;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Capacity =&gt; buffer.Length;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RingBuffer</span>(<span class="params"><span class="built_in">int</span> capacity</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (capacity &lt;= <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment"><span class="doctag">///</span> throw</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        writeIndex = <span class="number">0</span>;</span><br><span class="line">        readIndex = <span class="number">0</span>;</span><br><span class="line">        count = <span class="number">0</span>;</span><br><span class="line">        buffer = <span class="keyword">new</span> T[capacity];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Write</span>(<span class="params">T item</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">$&quot;writeIndex:<span class="subst">&#123;writeIndex&#125;</span>&quot;</span>.Dump();</span><br><span class="line">        buffer[writeIndex] = item;</span><br><span class="line">        writeIndex = (writeIndex + <span class="number">1</span>) % Capacity;</span><br><span class="line">        <span class="string">$&quot;NewwriteIndex:<span class="subst">&#123;writeIndex&#125;</span>&quot;</span>.Dump();</span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">Read</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">$&quot;readIndex:<span class="subst">&#123;readIndex&#125;</span>&quot;</span>.Dump();</span><br><span class="line">        T item = buffer[readIndex];</span><br><span class="line">        buffer[readIndex] = <span class="literal">default</span>;</span><br><span class="line">        readIndex = (readIndex + <span class="number">1</span>) % Capacity;</span><br><span class="line">        <span class="string">$&quot;NewreadIndex:<span class="subst">&#123;readIndex&#125;</span>&quot;</span>.Dump();</span><br><span class="line">        count--;</span><br><span class="line">        <span class="keyword">return</span> item;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div>
+</details>
 <ol>
 <li>
-<code>TryWrite</code> 先檢查是否已滿。
+<code>Write</code> 使用 <code>writeIndex</code> 寫入資料，再以 <code>%
+Capacity</code> 移動到下一格。
 </li>
 <li>
-寫入後移動 <code>writeIndex</code>。
+<code>Read</code> 使用 <code>readIndex</code>
+取出資料，再把已讀位置清成預設值。
 </li>
 <li>
-<code>TryRead</code> 先檢查是否為空。
+原始版本保留了完整執行流程，空與滿的安全檢查可在後續版本另外補上。
 </li>
 </ol>
 </div></div><div class="tab-item-content"><div class="cozy">
@@ -590,7 +529,7 @@ Producer → Ring Buffer → Consumer
 </span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.3.</span> <span class="toc-text">
 Sensor
 </span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">
-用 count 分清楚空與滿
+完整的 Ring Buffer 實作
 </span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">
 容量只能延後問題，不能消除速度差
 </span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">
