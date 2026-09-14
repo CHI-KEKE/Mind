@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>hypothesis - 國旅太貴 vs 出國旅遊 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="直覺的推論第一步：先提出假設第二步：蒐集資料第三步：排除其他可能原因第四步：建立統計模型第五步：最好找到自然實驗（Natural Experiment）第六步：最強的證據——直接問旅客這裡的 p value 是什麼p-value 會怎麼算 .bp-navy { background: #0b3d59; } .bp-card { background: #fdfbf3; border: 2px">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>hypothesis - 國旅太貴 vs 出國旅遊 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="直覺的推論第一步：先提出假設第二步：蒐集資料第三步：排除其他可能原因第四步：建立統計模型第五步：最好找到自然實驗（Natural Experiment）第六步：最強的證據——直接問旅客這裡的 p value 是什麼p-value 會怎麼算 .bp-navy { background: #0b3d59; } .bp-card { background: #fdfbf3; border: 2px so">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hypothesis - 國旅太貴 vs 出國旅遊">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/06/28/Statistics-hypothesis-2/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="直覺的推論第一步：先提出假設第二步：蒐集資料第三步：排除其他可能原因第四步：建立統計模型第五步：最好找到自然實驗（Natural Experiment）第六步：最強的證據——直接問旅客這裡的 p value 是什麼p-value 會怎麼算 .bp-navy { background: #0b3d59; } .bp-card { background: #fdfbf3; border: 2px">
+<meta property="og:description" content="直覺的推論第一步：先提出假設第二步：蒐集資料第三步：排除其他可能原因第四步：建立統計模型第五步：最好找到自然實驗（Natural Experiment）第六步：最強的證據——直接問旅客這裡的 p value 是什麼p-value 會怎麼算 .bp-navy { background: #0b3d59; } .bp-card { background: #fdfbf3; border: 2px so">
 <meta property="og:locale">
 <meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/flight-landing.png">
 <meta property="article:published_time" content="2026-06-28T02:04:05.000Z">
@@ -204,364 +204,249 @@
 .gate-row .gate-tag { font-weight: 700; color: #fdfbf3; background: #0b3d59; border-radius: 3px; padding: 2px 8px; flex-shrink: 0; font-size: 0.72rem; letter-spacing: 1px; }
 .gate-arrow { text-align: center; color: #cfe0e8; font-size: 0.9rem; margin: -2px 0; }
 </style>
-<div class="bp-card">
-<div class="bp-livery">
 
-</div>
+<div class="bp-card">
+<div class="bp-livery"></div>
 <div class="bp-head">
-<p><span class="bp-route"><span class="bp-plane">✈</span>國旅<span
-class="bp-plane">→</span>出國</span> <span class="bp-label">Boarding ·
-因果推論</span></p>
+<span class="bp-route"><span class="bp-plane">✈</span>國旅<span class="bp-plane">→</span>出國</span>
+<span class="bp-label">Boarding · 因果推論</span>
 </div>
 <div class="bp-body">
-<p>很多人看到「近年出國旅遊的人變多了，而且國旅住宿很貴」，就直接下結論：「因為國旅太貴，所以大家都跑去出國。」這是一個很好的「<code>因果推論（Causal
-Inference）</code>」案例，但從科學角度，這個結論還不能成立——因為我們只看到了「相關（correlation）」，並沒有證明「因果（causation）」。這張登機證，還不能直接放行登機。</p>
+很多人看到「近年出國旅遊的人變多了，而且國旅住宿很貴」，就直接下結論：「因為國旅太貴，所以大家都跑去出國。」這是一個很好的「<code>因果推論（Causal Inference）</code>」案例，但從科學角度，這個結論還不能成立——因為我們只看到了「相關（correlation）」，並沒有證明「因果（causation）」。這張登機證，還不能直接放行登機。
 </div>
 </div></div><div class="tab-item-content"><p>要檢驗這個說法是否成立，第一步是把直覺的猜測，轉換成兩張可以被檢定的「假設」</p>
 <div class="bp-grid">
+
 <div class="bp-card">
-<div class="bp-livery">
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">GATE H0</span><span class="bp-label">虛無假設</span></div>
+<div class="bp-body">國旅住宿價格，不會影響民眾是否選擇出國。</div>
+<div class="bp-footer"><span>候補中</span><span>PENDING</span></div>
+</div>
 
-</div>
-<div class="bp-head">
-<span class="bp-route">GATE H0</span><span
-class="bp-label">虛無假設</span>
-</div>
-<div class="bp-body">
-國旅住宿價格，不會影響民眾是否選擇出國。
-</div>
-<div class="bp-footer">
-<span>候補中</span><span>PENDING</span>
-</div>
-</div>
 <div class="bp-card h1">
-<div class="bp-livery">
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">GATE H1</span><span class="bp-label">研究假設</span></div>
+<div class="bp-body">國旅住宿越貴，民眾越傾向出國。</div>
+<div class="bp-footer"><span>候補中</span><span>PENDING</span></div>
+</div>
 
-</div>
-<div class="bp-head">
-<span class="bp-route">GATE H1</span><span
-class="bp-label">研究假設</span>
-</div>
-<div class="bp-body">
-國旅住宿越貴，民眾越傾向出國。
-</div>
-<div class="bp-footer">
-<span>候補中</span><span>PENDING</span>
-</div>
-</div>
 </div></div><div class="tab-item-content"><p>有了假設後，接下來要蒐集實際資料來檢驗。例如蒐集最近十年的「出入境紀錄」：</p>
 <div class="tv-itinerary">
+
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">年份</th>
-<th style="text-align: right;">國旅住宿均價</th>
-<th style="text-align: right;">出國人次</th>
+<th align="left">年份</th>
+<th align="right">國旅住宿均價</th>
+<th align="right">出國人次</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align: left;">2016</td>
-<td style="text-align: right;">2500</td>
-<td style="text-align: right;">1200萬</td>
+<tbody><tr>
+<td align="left">2016</td>
+<td align="right">2500</td>
+<td align="right">1200萬</td>
 </tr>
 <tr>
-<td style="text-align: left;">2017</td>
-<td style="text-align: right;">2600</td>
-<td style="text-align: right;">1300萬</td>
+<td align="left">2017</td>
+<td align="right">2600</td>
+<td align="right">1300萬</td>
 </tr>
 <tr>
-<td style="text-align: left;">2018</td>
-<td style="text-align: right;">2800</td>
-<td style="text-align: right;">1450萬</td>
+<td align="left">2018</td>
+<td align="right">2800</td>
+<td align="right">1450萬</td>
 </tr>
 <tr>
-<td style="text-align: left;">2019</td>
-<td style="text-align: right;">3200</td>
-<td style="text-align: right;">1700萬</td>
+<td align="left">2019</td>
+<td align="right">3200</td>
+<td align="right">1700萬</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 </div>
+
 <p>如果只看到「房價上升、出國也上升」，只能說兩者<code>有相關</code>，還不能說誰造成誰，這張行程表本身，還不足以當作相關證據</p></div><div class="tab-item-content"><p>因為還有很多變數也可能影響出國意願，不能一看到相關就直接歸因給住宿價格。這些都是可能同時影響「出國登機率」的隨機因素</p>
 <div class="gate-flow">
-<div class="gate-row">
-<span class="gate-tag">FACTOR</span>機票變便宜
+<div class="gate-row"><span class="gate-tag">FACTOR</span>機票變便宜</div>
+<div class="gate-row"><span class="gate-tag">FACTOR</span>廉價航空增加</div>
+<div class="gate-row"><span class="gate-tag">FACTOR</span>匯率改善</div>
+<div class="gate-row"><span class="gate-tag">FACTOR</span>疫情解封</div>
+<div class="gate-row"><span class="gate-tag">FACTOR</span>薪資提高</div>
+<div class="gate-row"><span class="gate-tag">FACTOR</span>特休增加</div>
+<div class="gate-row"><span class="gate-tag">FACTOR</span>日本匯率大跌</div>
 </div>
-<div class="gate-row">
-<span class="gate-tag">FACTOR</span>廉價航空增加
-</div>
-<div class="gate-row">
-<span class="gate-tag">FACTOR</span>匯率改善
-</div>
-<div class="gate-row">
-<span class="gate-tag">FACTOR</span>疫情解封
-</div>
-<div class="gate-row">
-<span class="gate-tag">FACTOR</span>薪資提高
-</div>
-<div class="gate-row">
-<span class="gate-tag">FACTOR</span>特休增加
-</div>
-<div class="gate-row">
-<span class="gate-tag">FACTOR</span>日本匯率大跌
-</div>
-</div>
+
 <div class="tag-note warn">
-<p>💡 舉例來說：如果日本旅遊突然便宜
-30%，即使國旅住宿完全沒漲，大家仍然可能大量跑去日本。所以不能直接怪住宿太貴。</p>
-</div></div><div class="tab-item-content"><p>排除了直覺的干擾因素後，下一步是用統計模型同時控制這些變數，看看國旅房價是否還有獨立的影響力。例如做多元迴歸（<code>Multiple
-Regression</code>）：</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>出</mi><mi>國</mi><mi>人</mi><mi>數</mi><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>國</mi><mi>旅</mi><mi>房</mi><mi>價</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>β</mi><mn>2</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>機</mi><mi>票</mi><mi>價</mi><mi>格</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>β</mi><mn>3</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>匯</mi><mi>率</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>β</mi><mn>4</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>平</mi><mi>均</mi><mi>薪</mi><mi>資</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>⋯</mi></mrow><annotation encoding="application/x-tex">
-出國人數 = \beta_0 + \beta_1(國旅房價) + \beta_2(機票價格) + \beta_3(匯率) + \beta_4(平均薪資) + \cdots
-</annotation></semantics></math></p>
-<p>如果控制其他因素後，國旅房價仍然有顯著影響，而且 <code>p-value &lt;
-0.05</code> 且 <code>β1 &gt;
-0</code>，就可以說在控制其他因素後，國旅房價越高，出國比例確實越高</p>
+💡 舉例來說：如果日本旅遊突然便宜 30%，即使國旅住宿完全沒漲，大家仍然可能大量跑去日本。所以不能直接怪住宿太貴。
+</div></div><div class="tab-item-content"><p>排除了直覺的干擾因素後，下一步是用統計模型同時控制這些變數，看看國旅房價是否還有獨立的影響力。例如做多元迴歸（<code>Multiple Regression</code>）：</p>
+<p>$$<br>出國人數 &#x3D; \beta_0 + \beta_1(國旅房價) + \beta_2(機票價格) + \beta_3(匯率) + \beta_4(平均薪資) + \cdots<br>$$</p>
+<p>如果控制其他因素後，國旅房價仍然有顯著影響，而且 <code>p-value &lt; 0.05</code> 且 <code>β1 &gt; 0</code>，就可以說在控制其他因素後，國旅房價越高，出國比例確實越高</p>
 <div class="tag-note warn">
-<p>⚠ 注意這仍然只是「有證據支持影響」，而不是絕對證明因果關係</p>
+⚠ 注意這仍然只是「有證據支持影響」，而不是絕對證明因果關係
 </div></div><div class="tab-item-content"><p>比起單純做迴歸，找到一個「自然實驗」情境會更有說服力，也就是現實中剛好出現了近似對照組的情況，像追蹤兩班平行航班的乘客動向</p>
 <div class="flight-path">
+
 <div class="fp-leg">
 <div class="fp-card">
-<div class="fp-title">
-情境設定
-</div>
-<div class="fp-desc">
-某一年，只有某些縣市因大型活動導致住宿價格暴漲，其他縣市價格維持平穩。
+<div class="fp-title">情境設定</div>
+<div class="fp-desc">某一年，只有某些縣市因大型活動導致住宿價格暴漲，其他縣市價格維持平穩。</div>
 </div>
 </div>
-</div>
+
 <div class="fp-leg warn">
 <div class="fp-card">
-<div class="fp-title">
-比較兩組
-</div>
-<div class="fp-desc">
-拿「房價暴漲的縣市」和「房價沒有漲的縣市」對照，觀察居民出國比例是否有明顯不同。
+<div class="fp-title">比較兩組</div>
+<div class="fp-desc">拿「房價暴漲的縣市」和「房價沒有漲的縣市」對照，觀察居民出國比例是否有明顯不同。</div>
 </div>
 </div>
-</div>
+
 <div class="fp-leg done">
 <div class="fp-card">
-<div class="fp-title">
-推論因果
-</div>
-<div class="fp-desc">
-如果只有房價暴漲的地方，居民出國率也跟著一起上升，就更接近「房價真的造成了出國」這個因果推論。
+<div class="fp-title">推論因果</div>
+<div class="fp-desc">如果只有房價暴漲的地方，居民出國率也跟著一起上升，就更接近「房價真的造成了出國」這個因果推論。</div>
 </div>
 </div>
-</div>
+
 </div></div><div class="tab-item-content"><p>最直接的做法，就是跳過推論、直接問旅客本人。例如在機場出境大廳調查一萬位旅客：「今年沒有國旅的主要原因？」結果如下</p>
 <div class="tv-itinerary">
+
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">原因</th>
-<th style="text-align: right;">比例</th>
+<th align="left">原因</th>
+<th align="right">比例</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align: left;">住宿太貴</td>
-<td style="text-align: right;">52%</td>
+<tbody><tr>
+<td align="left">住宿太貴</td>
+<td align="right">52%</td>
 </tr>
 <tr>
-<td style="text-align: left;">想出國</td>
-<td style="text-align: right;">18%</td>
+<td align="left">想出國</td>
+<td align="right">18%</td>
 </tr>
 <tr>
-<td style="text-align: left;">國內景點玩膩</td>
-<td style="text-align: right;">10%</td>
+<td align="left">國內景點玩膩</td>
+<td align="right">10%</td>
 </tr>
 <tr>
-<td style="text-align: left;">交通問題</td>
-<td style="text-align: right;">8%</td>
+<td align="left">交通問題</td>
+<td align="right">8%</td>
 </tr>
 <tr>
-<td style="text-align: left;">其他</td>
-<td style="text-align: right;">12%</td>
+<td align="left">其他</td>
+<td align="right">12%</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 </div>
+
 <div class="tag-note">
-<p>如果超過一半的人都直接回答「住宿太貴」，那就是非常直接的證據，不需要再繞一大圈統計模型推論</p>
-</div></div><div class="tab-item-content"><p>這裡的 <code>p-value</code>
-資料是「旅遊行為」。假設我們做了一份大型調查，訪問了 10,000
-個人，並把人分成兩組來比較</p>
+如果超過一半的人都直接回答「住宿太貴」，那就是非常直接的證據，不需要再繞一大圈統計模型推論
+</div></div><div class="tab-item-content"><p>這裡的 <code>p-value</code> 資料是「旅遊行為」。假設我們做了一份大型調查，訪問了 10,000 個人，並把人分成兩組來比較</p>
 <div class="tv-itinerary">
+
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">住宿感受</th>
-<th style="text-align: right;">出國</th>
-<th style="text-align: right;">沒出國</th>
-<th style="text-align: right;">總計</th>
+<th align="left">住宿感受</th>
+<th align="right">出國</th>
+<th align="right">沒出國</th>
+<th align="right">總計</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align: left;">覺得很貴</td>
-<td style="text-align: right;">4200</td>
-<td style="text-align: right;">1800</td>
-<td style="text-align: right;">6000</td>
+<tbody><tr>
+<td align="left">覺得很貴</td>
+<td align="right">4200</td>
+<td align="right">1800</td>
+<td align="right">6000</td>
 </tr>
 <tr>
-<td style="text-align: left;">覺得不貴</td>
-<td style="text-align: right;">1800</td>
-<td style="text-align: right;">2200</td>
-<td style="text-align: right;">4000</td>
+<td align="left">覺得不貴</td>
+<td align="right">1800</td>
+<td align="right">2200</td>
+<td align="right">4000</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 </div>
-<p>可以看到，覺得住宿很貴的人有 70% 出國，覺得住宿不貴的人只有 45%
-出國，看起來差很多。 但問題來了：這 70% 和 45%
-的差距，是真的因為住宿價格嗎？還是只是剛好抽到這 10,000 人運氣不好？</p>
+
+<p>可以看到，覺得住宿很貴的人有 70% 出國，覺得住宿不貴的人只有 45% 出國，看起來差很多。<br>但問題來了：這 70% 和 45% 的差距，是真的因為住宿價格嗎？還是只是剛好抽到這 10,000 人運氣不好？</p>
 <div class="bp-grid">
+
 <div class="bp-card">
-<div class="bp-livery">
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">STEP 1</span><span class="bp-label">先建立假設</span></div>
+<div class="bp-body">H0（虛無假設）：住宿價格其實跟出不出國沒有關係。意思是真正母體裡，兩組出國比例其實是一樣的，只是抽樣時剛好抽到 70% 和 45%。</div>
+<div class="bp-footer"><span>基準艙</span><span>BASELINE</span></div>
+</div>
 
-</div>
-<div class="bp-head">
-<span class="bp-route">STEP 1</span><span
-class="bp-label">先建立假設</span>
-</div>
-<div class="bp-body">
-H0（虛無假設）：住宿價格其實跟出不出國沒有關係。意思是真正母體裡，兩組出國比例其實是一樣的，只是抽樣時剛好抽到
-70% 和 45%。
-</div>
-<div class="bp-footer">
-<span>基準艙</span><span>BASELINE</span>
-</div>
-</div>
 <div class="bp-card h1">
-<div class="bp-livery">
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">STEP 2</span><span class="bp-label">p-value 回答什麼</span></div>
+<div class="bp-body">如果 H0 是真的（住宿價格完全沒有影響），那麼像現在看到這麼大的差距（70% vs 45%），純粹因為抽樣誤差而發生的機率有多大？</div>
+<div class="bp-footer"><span>檢查中</span><span>CHECKING</span></div>
+</div>
 
 </div>
-<div class="bp-head">
-<span class="bp-route">STEP 2</span><span class="bp-label">p-value
-回答什麼</span>
-</div>
-<div class="bp-body">
-如果 H0 是真的（住宿價格完全沒有影響），那麼像現在看到這麼大的差距（70%
-vs 45%），純粹因為抽樣誤差而發生的機率有多大？
-</div>
-<div class="bp-footer">
-<span>檢查中</span><span>CHECKING</span>
-</div>
-</div>
-</div>
-<p>拿兩種計算結果來對照，就能看出 p-value
-怎麼影響我們最終「放行」還是「攔下」這個假設：</p>
+
+<p>拿兩種計算結果來對照，就能看出 p-value 怎麼影響我們最終「放行」還是「攔下」這個假設：</p>
 <div class="bp-grid">
+
 <div class="bp-card">
-<div class="bp-livery">
-
-</div>
-<div class="bp-head">
-<span class="bp-route">p = 0.18</span><span
-class="bp-label">抽樣運氣範圍內</span>
-</div>
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">p = 0.18</span><span class="bp-label">抽樣運氣範圍內</span></div>
 <div class="bp-body">
-<p><span class="stamp approve">正常登機</span><br>
-如果住宿價格根本沒有影響，還看到現在這麼大的差距，有 18%
-的機率只是抽樣運氣造成。18% 不算罕見，因此<code>不能拒絕 H0</code>。</p>
+<span class="stamp approve">正常登機</span><br>
+如果住宿價格根本沒有影響，還看到現在這麼大的差距，有 18% 的機率只是抽樣運氣造成。18% 不算罕見，因此<code>不能拒絕 H0</code>。
 </div>
-<div class="bp-footer">
-<span>H0 保留</span><span>KEEP</span>
+<div class="bp-footer"><span>H0 保留</span><span>KEEP</span></div>
 </div>
-</div>
+
 <div class="bp-card h1">
-<div class="bp-livery">
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">p = 0.002</span><span class="bp-label">極端罕見</span></div>
+<div class="bp-body">
+<span class="stamp reject">登機門關閉</span><br>
+如果住宿價格真的沒有影響，卻還抽到 70% vs 45% 這種差距，只有 0.2% 的機率會發生。這非常罕見，因此我們會想「既然這麼罕見，也許 H0 根本不是真的」，於是<code>拒絕 H0</code>。
+</div>
+<div class="bp-footer"><span>H0 出局</span><span>REJECT</span></div>
+</div>
 
 </div>
-<div class="bp-head">
-<span class="bp-route">p = 0.002</span><span
-class="bp-label">極端罕見</span>
-</div>
-<div class="bp-body">
-<p><span class="stamp reject">登機門關閉</span><br>
-如果住宿價格真的沒有影響，卻還抽到 70% vs 45% 這種差距，只有 0.2%
-的機率會發生。這非常罕見，因此我們會想「既然這麼罕見，也許 H0
-根本不是真的」，於是<code>拒絕 H0</code>。</p>
-</div>
-<div class="bp-footer">
-<span>H0 出局</span><span>REJECT</span>
-</div>
-</div>
-</div>
+
 <div class="tag-note danger">
-<p>⚠ 但要注意一件更重要的事：即使最後算出 <code>p &lt;
-0.001</code>，我們也不能直接說「住宿太貴導致大家出國」。這個檢定只能告訴我們「住宿價格」和「是否出國」之間存在統計上顯著的關聯，並沒有排除其他可能因素，例如：常出國的人本來就比較容易覺得國旅住宿貴、收入較高的人既願意出國也對國旅價格更敏感、廉價航空與匯率與疫情解封等因素同時影響了出國意願。因此，p-value
-是判斷「這個關聯是否可能只是巧合」的工具，不是判斷「因果」的工具。</p>
-</div></div><div class="tab-item-content"><p>真正數學上可利用統計分布來計算。像這個例子通常會用「兩比例 z
-檢定（<code>Two-proportion
-z-test</code>）」或「卡方檢定（<code>Chi-square
-test</code>）」。整體計算流程，就像一段航班的登機報到流程</p>
+⚠ 但要注意一件更重要的事：即使最後算出 <code>p &lt; 0.001</code>，我們也不能直接說「住宿太貴導致大家出國」。這個檢定只能告訴我們「住宿價格」和「是否出國」之間存在統計上顯著的關聯，並沒有排除其他可能因素，例如：常出國的人本來就比較容易覺得國旅住宿貴、收入較高的人既願意出國也對國旅價格更敏感、廉價航空與匯率與疫情解封等因素同時影響了出國意願。因此，p-value 是判斷「這個關聯是否可能只是巧合」的工具，不是判斷「因果」的工具。
+</div></div><div class="tab-item-content"><p>真正數學上可利用統計分布來計算。像這個例子通常會用「兩比例 z 檢定（<code>Two-proportion z-test</code>）」或「卡方檢定（<code>Chi-square test</code>）」。整體計算流程，就像一段航班的登機報到流程</p>
 <div class="gate-flow">
-<div class="gate-row">
-<span class="gate-tag">CHECK-IN</span>先算 70% 和 50% 差多少
+
+<div class="gate-row"><span class="gate-tag">CHECK-IN</span>先算 70% 和 50% 差多少</div>
+<div class="gate-arrow">↓</div>
+<div class="gate-row"><span class="gate-tag">SECURITY</span>再算抽樣本來應該有多少誤差（標準誤）</div>
+<div class="gate-arrow">↓</div>
+<div class="gate-row"><span class="gate-tag">BOARDING</span>把差距除以標準誤，得到 <code>z = 4.3</code></div>
+<div class="gate-arrow">↓</div>
+<div class="gate-row"><span class="gate-tag">TAKEOFF</span>再去查常態分布，得到 <code>p = 0.00002</code></div>
+
 </div>
-<div class="gate-arrow">
-↓
-</div>
-<div class="gate-row">
-<span
-class="gate-tag">SECURITY</span>再算抽樣本來應該有多少誤差（標準誤）
-</div>
-<div class="gate-arrow">
-↓
-</div>
-<div class="gate-row">
-<span class="gate-tag">BOARDING</span>把差距除以標準誤，得到 <code>z =
-4.3</code>
-</div>
-<div class="gate-arrow">
-↓
-</div>
-<div class="gate-row">
-<span class="gate-tag">TAKEOFF</span>再去查常態分布，得到 <code>p =
-0.00002</code>
-</div>
-</div>
+
 <p>你可以把它想成：<code>差距 ÷ 抽樣本來就會有的誤差 = z 值</code>。</p>
 <div class="bp-grid">
+
 <div class="bp-card">
-<div class="bp-livery">
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">z 很小</span><span class="bp-label">差距只有一點點</span></div>
+<div class="bp-body"><span class="stamp approve">正常登機</span><br>p 很大，代表這個差距只是抽樣誤差造成的。</div>
+<div class="bp-footer"><span>H0 保留</span><span>KEEP</span></div>
+</div>
 
-</div>
-<div class="bp-head">
-<span class="bp-route">z 很小</span><span
-class="bp-label">差距只有一點點</span>
-</div>
-<div class="bp-body">
-<span class="stamp approve">正常登機</span><br>p
-很大，代表這個差距只是抽樣誤差造成的。
-</div>
-<div class="bp-footer">
-<span>H0 保留</span><span>KEEP</span>
-</div>
-</div>
 <div class="bp-card h1">
-<div class="bp-livery">
+<div class="bp-livery"></div>
+<div class="bp-head"><span class="bp-route">z 很大</span><span class="bp-label">差距遠大於誤差</span></div>
+<div class="bp-body"><span class="stamp reject">登機門關閉</span><br>p 很小，代表這個差距不像只是抽樣造成的。</div>
+<div class="bp-footer"><span>H0 出局</span><span>REJECT</span></div>
+</div>
 
-</div>
-<div class="bp-head">
-<span class="bp-route">z 很大</span><span
-class="bp-label">差距遠大於誤差</span>
-</div>
-<div class="bp-body">
-<span class="stamp reject">登機門關閉</span><br>p
-很小，代表這個差距不像只是抽樣造成的。
-</div>
-<div class="bp-footer">
-<span>H0 出局</span><span>REJECT</span>
-</div>
-</div>
 </div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/06/28/Statistics-hypothesis-2/">https://chi-keke.github.io/Mind/2026/06/28/Statistics-hypothesis-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/flight-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/06/17/Statistics-divide-by-n-1/" title="Why Dividing by N Underestimates Variance"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Why Dividing by N Underestimates Variance</div></div><div class="info-2"><div class="info-item-1">變異數「樣本平均數」會讓距離看起來最短為什麼這樣會造成「低估」為甚麼是 n-1summary變異數在算什麼？它在算「資料點與平均值之間的距離平方的平均」。資料點離平均值越遠，變異數越大；離得越近，變異數越小 我們真正想知道的是全部資料圍繞在「母體平均數」周圍的變異程度。但現實中幾乎沒有足夠的時間與金錢去測量母體中的每一個個體，所以必須用抽樣資料來估計母體的變異數。 公式的兩個版本 理想上，真正的母體變異數是用母體平均數 μ\mu 計算的：  母體變異數 σ2=∑(x−μ)2N\sigma^2 = \dfrac{\sum (x - \mu)^2}{N}  但現實中我們只有樣本，只能算出樣本平均數 x‾\bar{x}，並用它代替 μ\mu： 12345678910111213141516樣本資料0        10        20        30        40|---------|---------|---------|---------|   ●          ●    ●     ●      ●   4         14   1...</div></div></div></a><a class="pagination-related" href="/Mind/2026/06/28/Statistics-hypothesis/" title="hypothesis"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">hypothesis</div></div><div class="info-2"><div class="info-item-1">Ronald Fisher 的奶茶故事Fisher 如何設計這個實驗？先算亂猜有多少種可能那猜對幾杯才算真的有能力？這就是假設檢定的誕生假設檢定在幹嘛?網頁轉換率 /* ---- 暖色故事書風格：米黃紙感 + 蜂蜜色點綴，用於整篇假設檢定文章 ---- */ .story-card {   background: #fdf8f0; border: 1px solid #e6d2b5; border-radius: 10px;   padding: 22px 26px; margin: 20px 0; position: relative;   box-shadow: 0 2px 6px rgba(107,68,35,0.08);   font-family: 'Georgia', 'PingFang TC', serif; } .story-card::before {   content: '🍵'; position: absolute; top: -16px; left: 22px; font-size: 1.6rem;   background: #f...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">42</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/flight-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/06/28/Statistics-hypothesis-2/">https://chi-keke.github.io/Mind/2026/06/28/Statistics-hypothesis-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/flight-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/06/17/Statistics-divide-by-n-1/" title="Why Dividing by N Underestimates Variance"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Why Dividing by N Underestimates Variance</div></div><div class="info-2"><div class="info-item-1">變異數「樣本平均數」會讓距離看起來最短為什麼這樣會造成「低估」為甚麼是 n-1summary變異數在算什麼？它在算「資料點與平均值之間的距離平方的平均」。資料點離平均值越遠，變異數越大；離得越近，變異數越小 我們真正想知道的是全部資料圍繞在「母體平均數」周圍的變異程度。但現實中幾乎沒有足夠的時間與金錢去測量母體中的每一個個體，所以必須用抽樣資料來估計母體的變異數。 公式的兩個版本理想上，真正的母體變異數是用母體平均數 $\mu$ 計算的：  母體變異數 $\sigma^2 &#x3D; \dfrac{\sum (x - \mu)^2}{N}$  但現實中我們只有樣本，只能算出樣本平均數 $\bar{x}$，並用它代替 $\mu$： 12345678910111213141516樣本資料0        10        20        30        40|---------|---------|---------|---------|   ●          ●    ●     ●      ●   4         14   18    24     30  ...</div></div></div></a><a class="pagination-related" href="/Mind/2026/06/28/Statistics-hypothesis/" title="hypothesis"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">hypothesis</div></div><div class="info-2"><div class="info-item-1">Ronald Fisher 的奶茶故事Fisher 如何設計這個實驗？先算亂猜有多少種可能那猜對幾杯才算真的有能力？這就是假設檢定的誕生假設檢定在幹嘛?網頁轉換率 /* ---- 暖色故事書風格：米黃紙感 + 蜂蜜色點綴，用於整篇假設檢定文章 ---- */ .story-card {   background: #fdf8f0; border: 1px solid #e6d2b5; border-radius: 10px;   padding: 22px 26px; margin: 20px 0; position: relative;   box-shadow: 0 2px 6px rgba(107,68,35,0.08);   font-family: 'Georgia', 'PingFang TC', serif; } .story-card::before {   content: '🍵'; position: absolute; top: -16px; left: 22px; font-size: 1.6rem;   background: #fdf8f0; pad...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">42</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/flight-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
