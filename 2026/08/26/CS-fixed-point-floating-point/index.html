@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Fixed Point &amp; Floating Point | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="先理解二進位小數為什麼 0.1 無法精確表示Fixed PointFloating Point .fp{ display:block; font-family:&#39;Segoe UI&#39;,-apple-system,BlinkMacSystemFont,&#39;PingFang TC&#39;,&#39;Microsoft JhengHei&#39;,sans-serif; background:radial-gradient(70">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Fixed Point &amp; Floating Point | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="先理解二進位小數為什麼 0.1 無法精確表示Fixed PointFloating Point .fp{ display:block; font-family:&#39;Segoe UI&#39;,-apple-system,BlinkMacSystemFont,&#39;PingFang TC&#39;,&#39;Microsoft JhengHei&#39;,sans-serif; background:radial-gradien">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fixed Point &amp; Floating Point">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/08/26/CS-fixed-point-floating-point/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="先理解二進位小數為什麼 0.1 無法精確表示Fixed PointFloating Point .fp{ display:block; font-family:&#39;Segoe UI&#39;,-apple-system,BlinkMacSystemFont,&#39;PingFang TC&#39;,&#39;Microsoft JhengHei&#39;,sans-serif; background:radial-gradient(70">
+<meta property="og:description" content="先理解二進位小數為什麼 0.1 無法精確表示Fixed PointFloating Point .fp{ display:block; font-family:&#39;Segoe UI&#39;,-apple-system,BlinkMacSystemFont,&#39;PingFang TC&#39;,&#39;Microsoft JhengHei&#39;,sans-serif; background:radial-gradien">
 <meta property="og:locale">
 <meta property="og:image" content="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png">
 <meta property="article:published_time" content="2026-08-26T10:17:03.000Z">
@@ -218,87 +218,383 @@ overflow:hidden;
 .fp .fp-checklist li::before{content:"✓";flex:none;width:22px;height:22px;border-radius:7px;background:#dcfce7;color:#15803d!important;font-size:.75rem;display:flex;align-items:center;justify-content:center;margin-top:2px;font-weight:900}
 @media (max-width:780px){.fp .fp-summary-grid{grid-template-columns:1fr}}
 </style>
-
 <div class="fp">
 <div class="fp-hero">
 <span class="fp-eyebrow">CS · NUMBER REPRESENTATION</span>
-<h1>小數點放在哪裡，決定數值能表示什麼</h1>
-<p>電腦只有有限的 bits，卻要表示從很小到很大的數字。理解二進位小數、fixed point 與 floating point，就能看懂精度、範圍與誤差從哪裡產生。</p>
-<div class="fp-badges"><span class="fp-badge">Binary Fraction</span><span class="fp-badge">Fixed Point</span><span class="fp-badge">Floating Point</span></div>
+<h1>
+小數點放在哪裡，決定數值能表示什麼
+</h1>
+<p>
+電腦只有有限的 bits，卻要表示從很小到很大的數字。理解二進位小數、fixed
+point 與 floating point，就能看懂精度、範圍與誤差從哪裡產生。
+</p>
+<div class="fp-badges">
+<span class="fp-badge">Binary Fraction</span><span
+class="fp-badge">Fixed Point</span><span class="fp-badge">Floating
+Point</span>
+</div>
 </div>
 <div class="fp-container">
 <section>
-<div class="fp-section-head"><div class="fp-chip">01</div><h2>二進位小數如何表示</h2></div>
-<p>十進位小數的小數點後，每一格都有固定權重。第一格是 <code>1/10</code>，第二格是 <code>1/100</code>，第三格是 <code>1/1000</code>。</p>
-<div class="fp-card">
-<p><code>0.123 = 1 × 1/10 + 2 × 1/100 + 3 × 1/1000</code></p>
+<div class="fp-section-head">
+<div class="fp-chip">
+01
 </div>
-<p>二進位小數的規則完全相同，只是底數從 <code>10</code> 改成 <code>2</code>。因此小數點後第一格代表 <code>1/2</code>，第二格代表 <code>1/4</code>，第三格代表 <code>1/8</code>。</p>
-<div class="fp-card">
-<p><code>0.101₂ = 1 × 1/2 + 0 × 1/4 + 1 × 1/8 = 0.625₁₀</code></p>
+<h2>
+二進位小數如何表示
+</h2>
 </div>
-<div class="fp-callout info"><span class="fp-icon">💡</span><p><strong>核心觀念：</strong>二進位小數就是用一連串的 <code>1/2ⁿ</code> 湊出目標數值。</p></div>
+<p>
+十進位小數的小數點後，每一格都有固定權重。第一格是
+<code>1/10</code>，第二格是 <code>1/100</code>，第三格是
+<code>1/1000</code>。
+</p>
+<div class="fp-card">
+<p>
+<code>0.123 = 1 × 1/10 + 2 × 1/100 + 3 × 1/1000</code>
+</p>
+</div>
+<p>
+二進位小數的規則完全相同，只是底數從 <code>10</code> 改成
+<code>2</code>。因此小數點後第一格代表 <code>1/2</code>，第二格代表
+<code>1/4</code>，第三格代表 <code>1/8</code>。
+</p>
+<div class="fp-card">
+<p>
+<code>0.101₂ = 1 × 1/2 + 0 × 1/4 + 1 × 1/8 = 0.625₁₀</code>
+</p>
+</div>
+<div class="fp-callout info">
+<span class="fp-icon">💡</span>
+<p>
+<strong>核心觀念：</strong>二進位小數就是用一連串的 <code>1/2ⁿ</code>
+湊出目標數值。
+</p>
+</div>
 </section>
 </div>
 </div></div><div class="tab-item-content"><div class="fp">
 <div class="fp-container">
 <section>
-<div class="fp-section-head warn"><div class="fp-chip">02</div><h2>十進位的 0.1，為什麼會變成循環小數</h2></div>
-<p>把十進位的 <code>0.1</code> 轉成二進位，本質上是在反覆檢查每個 <code>1/2ⁿ</code> 是否能放進剩餘值。</p>
+<div class="fp-section-head warn">
+<div class="fp-chip">
+02
+</div>
+<h2>
+十進位的 0.1，為什麼會變成循環小數
+</h2>
+</div>
+<p>
+把十進位的 <code>0.1</code> 轉成二進位，本質上是在反覆檢查每個
+<code>1/2ⁿ</code> 是否能放進剩餘值。
+</p>
 <div class="fp-steps">
-<div class="fp-step"><div class="fp-stepnum">1</div><div class="fp-step-title">檢查 <code>1/2 = 0.5</code></div><p><code>0.1 &lt; 0.5</code>，第一格放不下，所以是 <code>0</code>。</p></div>
-<div class="fp-step"><div class="fp-stepnum">2</div><div class="fp-step-title">檢查 <code>1/4 = 0.25</code> 與 <code>1/8 = 0.125</code></div><p>兩者都比剩餘值大，所以第二格與第三格都是 <code>0</code>。</p></div>
-<div class="fp-step"><div class="fp-stepnum">3</div><div class="fp-step-title">檢查 <code>1/16 = 0.0625</code></div><p><code>0.1 ≥ 0.0625</code>，第四格可以放入 <code>1</code>，剩下 <code>0.0375</code>。</p></div>
-<div class="fp-step"><div class="fp-stepnum">4</div><div class="fp-step-title">繼續用後面的權重湊出剩餘值</div><p>第五格放入 <code>1/32</code>，第六格與第七格放入 <code>0</code>，第八格再放入 <code>1/256</code>。結果逐步形成 <code>0.0001100110011...</code>。</p></div>
+<div class="fp-step">
+<div class="fp-stepnum">
+1
 </div>
-<div class="fp-callout warn"><span class="fp-icon">⚠️</span><p><strong>為什麼會循環：</strong><code>0.1 = 1/10 = 1/(2 × 5)</code>。有限長度的二進位小數，其最簡分數的分母只能包含質因數 <code>2</code>。因數 <code>5</code> 無法被有限個二次方消除，因此 <code>0.1</code> 只能用無限循環的小數逼近。</p></div>
+<div class="fp-step-title">
+檢查 <code>1/2 = 0.5</code>
+</div>
+<p>
+<code>0.1 &lt; 0.5</code>，第一格放不下，所以是 <code>0</code>。
+</p>
+</div>
+<div class="fp-step">
+<div class="fp-stepnum">
+2
+</div>
+<div class="fp-step-title">
+檢查 <code>1/4 = 0.25</code> 與 <code>1/8 = 0.125</code>
+</div>
+<p>
+兩者都比剩餘值大，所以第二格與第三格都是 <code>0</code>。
+</p>
+</div>
+<div class="fp-step">
+<div class="fp-stepnum">
+3
+</div>
+<div class="fp-step-title">
+檢查 <code>1/16 = 0.0625</code>
+</div>
+<p>
+<code>0.1 ≥ 0.0625</code>，第四格可以放入 <code>1</code>，剩下
+<code>0.0375</code>。
+</p>
+</div>
+<div class="fp-step">
+<div class="fp-stepnum">
+4
+</div>
+<div class="fp-step-title">
+繼續用後面的權重湊出剩餘值
+</div>
+<p>
+第五格放入 <code>1/32</code>，第六格與第七格放入
+<code>0</code>，第八格再放入 <code>1/256</code>。結果逐步形成
+<code>0.0001100110011…</code>。
+</p>
+</div>
+</div>
+<div class="fp-callout warn">
+<span class="fp-icon">⚠️</span>
+<p>
+<strong>為什麼會循環：</strong><code>0.1 = 1/10 = 1/(2 ×
+5)</code>。有限長度的二進位小數，其最簡分數的分母只能包含質因數
+<code>2</code>。因數 <code>5</code> 無法被有限個二次方消除，因此
+<code>0.1</code> 只能用無限循環的小數逼近。
+</p>
+</div>
 <table>
-<thead><tr><th>十進位數值</th><th>二進位表示</th><th>原因</th></tr></thead>
-<tbody><tr><td><code>0.75</code></td><td><code>0.11₂</code></td><td><code>0.75 = 1/2 + 1/4</code>，可以有限表示。</td></tr><tr><td><code>0.625</code></td><td><code>0.101₂</code></td><td><code>0.625 = 1/2 + 1/8</code>，可以有限表示。</td></tr><tr><td><code>0.1</code></td><td><code>0.000110011...₂</code></td><td>最簡分數分母含有因數 <code>5</code>，只能循環。</td></tr></tbody>
+<thead>
+<tr>
+<th>
+十進位數值
+</th>
+<th>
+二進位表示
+</th>
+<th>
+原因
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>0.75</code>
+</td>
+<td>
+<code>0.11₂</code>
+</td>
+<td>
+<code>0.75 = 1/2 + 1/4</code>，可以有限表示。
+</td>
+</tr>
+<tr>
+<td>
+<code>0.625</code>
+</td>
+<td>
+<code>0.101₂</code>
+</td>
+<td>
+<code>0.625 = 1/2 + 1/8</code>，可以有限表示。
+</td>
+</tr>
+<tr>
+<td>
+<code>0.1</code>
+</td>
+<td>
+<code>0.000110011…₂</code>
+</td>
+<td>
+最簡分數分母含有因數 <code>5</code>，只能循環。
+</td>
+</tr>
+</tbody>
 </table>
 </section>
 </div>
 </div></div><div class="tab-item-content"><div class="fp">
 <div class="fp-container">
 <section>
-<div class="fp-section-head ok"><div class="fp-chip">03</div><h2>Fixed point：小數點位置固定</h2></div>
-<p><code>Fixed point</code> 的做法是先約定小數點永遠放在固定位置。例如使用 <code>xxxx.xxxx</code>，前 4 個 bits 表示整數，後 4 個 bits 表示小數。</p>
+<div class="fp-section-head ok">
+<div class="fp-chip">
+03
+</div>
+<h2>
+Fixed point：小數點位置固定
+</h2>
+</div>
+<p>
+<code>Fixed point</code> 的做法是先約定小數點永遠放在固定位置。例如使用
+<code>xxxx.xxxx</code>，前 4 個 bits 表示整數，後 4 個 bits 表示小數。
+</p>
 <div class="fp-card">
-<p><code>0011.1000₂ = 0 × 8 + 0 × 4 + 1 × 2 + 1 × 1 + 1 × 1/2 = 3.5</code></p>
+<p>
+<code>0011.1000₂ = 0 × 8 + 0 × 4 + 1 × 2 + 1 × 1 + 1 × 1/2 = 3.5</code>
+</p>
 </div>
 <div class="fp-summary-grid">
-<div class="fp-box"><h4>固定精度</h4><p>小數點後有幾格，最小單位就固定。例如 4 個小數 bits 的最小單位是 <code>1/16</code>。</p></div>
-<div class="fp-box"><h4>範圍受限</h4><p>若只有 4 個 bits 表示整數，最大值是 <code>15</code>。增加小數精度，就會減少整數範圍。</p></div>
-<div class="fp-box"><h4>適合固定尺度</h4><p>金額、尺寸、感測值等需要固定小數位的資料，通常容易使用 fixed point 管理。</p></div>
+<div class="fp-box">
+<h4>
+固定精度
+</h4>
+<p>
+小數點後有幾格，最小單位就固定。例如 4 個小數 bits 的最小單位是
+<code>1/16</code>。
+</p>
 </div>
-<div class="fp-callout info"><span class="fp-icon">📌</span><p><strong>取捨關係：</strong>bits 總數固定時，分給整數的 bits 越多，能表示的範圍越大。分給小數的 bits 越多，精度越高。</p></div>
+<div class="fp-box">
+<h4>
+範圍受限
+</h4>
+<p>
+若只有 4 個 bits 表示整數，最大值是
+<code>15</code>。增加小數精度，就會減少整數範圍。
+</p>
+</div>
+<div class="fp-box">
+<h4>
+適合固定尺度
+</h4>
+<p>
+金額、尺寸、感測值等需要固定小數位的資料，通常容易使用 fixed point
+管理。
+</p>
+</div>
+</div>
+<div class="fp-callout info">
+<span class="fp-icon">📌</span>
+<p>
+<strong>取捨關係：</strong>bits 總數固定時，分給整數的 bits
+越多，能表示的範圍越大。分給小數的 bits 越多，精度越高。
+</p>
+</div>
 </section>
 </div>
 </div></div><div class="tab-item-content"><div class="fp">
 <div class="fp-container">
 <section>
-<div class="fp-section-head purple"><div class="fp-chip">04</div><h2>Floating point：讓小數點可以移動</h2></div>
-<p><code>Floating point</code> 不固定小數點位置，而是把數值拆成有效數字與指數。概念上就像科學記號。</p>
-<div class="fp-card">
-<p><code>123000000 = 1.23 × 10⁸</code></p>
-<p><code>0.000000123 = 1.23 × 10⁻⁷</code></p>
+<div class="fp-section-head purple">
+<div class="fp-chip">
+04
 </div>
-<p>兩個數值的有效數字都是 <code>1.23</code>，差異主要由指數決定。二進位 floating point 則使用類似 <code>1.xxxx₂ × 2ⁿ</code> 的形式。</p>
+<h2>
+Floating point：讓小數點可以移動
+</h2>
+</div>
+<p>
+<code>Floating point</code>
+不固定小數點位置，而是把數值拆成有效數字與指數。概念上就像科學記號。
+</p>
+<div class="fp-card">
+<p>
+<code>123000000 = 1.23 × 10⁸</code>
+</p>
+<p>
+<code>0.000000123 = 1.23 × 10⁻⁷</code>
+</p>
+</div>
+<p>
+兩個數值的有效數字都是 <code>1.23</code>，差異主要由指數決定。二進位
+floating point 則使用類似 <code>1.xxxx₂ × 2ⁿ</code> 的形式。
+</p>
 <table>
-<thead><tr><th>欄位</th><th>用途</th></tr></thead>
-<tbody><tr><td><code>sign</code></td><td>表示正數或負數。</td></tr><tr><td><code>exponent</code></td><td>決定二進位小數點要移動的數量級。</td></tr><tr><td><code>fraction</code></td><td>保存有效數字的精細程度。</td></tr></tbody>
+<thead>
+<tr>
+<th>
+欄位
+</th>
+<th>
+用途
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>sign</code>
+</td>
+<td>
+表示正數或負數。
+</td>
+</tr>
+<tr>
+<td>
+<code>exponent</code>
+</td>
+<td>
+決定二進位小數點要移動的數量級。
+</td>
+</tr>
+<tr>
+<td>
+<code>fraction</code>
+</td>
+<td>
+保存有效數字的精細程度。
+</td>
+</tr>
+</tbody>
 </table>
 <div class="fp-summary-grid">
-<div class="fp-box"><h4>Fixed point</h4><p>小數點固定，精度與最小單位穩定，數值範圍比較容易不足。</p></div>
-<div class="fp-box"><h4>Floating point</h4><p>小數點可以浮動，能涵蓋很大的數值範圍，但不同數量級的精度不相同。</p></div>
-<div class="fp-box"><h4>實際差異</h4><p>Floating point 的相鄰可表示數字之間，距離會隨數值大小改變。</p></div>
+<div class="fp-box">
+<h4>
+Fixed point
+</h4>
+<p>
+小數點固定，精度與最小單位穩定，數值範圍比較容易不足。
+</p>
 </div>
-<div class="fp-callout ok"><span class="fp-icon">✓</span><p><strong>總結：</strong>Floating point 的價值不只是表示小數，而是用有限 bits 同時涵蓋極小到極大的數值範圍。若需求是固定最小單位，fixed point 通常更容易控制。</p></div>
-<ul class="fp-checklist"><li>二進位小數的每一格，代表一個 <code>1/2ⁿ</code>。</li><li>最簡分數的分母只含因數 <code>2</code>，才能用有限長度的二進位小數表示。</li><li><code>Fixed point</code> 以固定小數點換取穩定精度。</li><li><code>Floating point</code> 以有效數字加指數換取更大的數值範圍。</li></ul>
+<div class="fp-box">
+<h4>
+Floating point
+</h4>
+<p>
+小數點可以浮動，能涵蓋很大的數值範圍，但不同數量級的精度不相同。
+</p>
+</div>
+<div class="fp-box">
+<h4>
+實際差異
+</h4>
+<p>
+Floating point 的相鄰可表示數字之間，距離會隨數值大小改變。
+</p>
+</div>
+</div>
+<div class="fp-callout ok">
+<span class="fp-icon">✓</span>
+<p>
+<strong>總結：</strong>Floating point 的價值不只是表示小數，而是用有限
+bits 同時涵蓋極小到極大的數值範圍。若需求是固定最小單位，fixed point
+通常更容易控制。
+</p>
+</div>
+<ul class="fp-checklist">
+<li>
+二進位小數的每一格，代表一個 <code>1/2ⁿ</code>。
+</li>
+<li>
+最簡分數的分母只含因數 <code>2</code>，才能用有限長度的二進位小數表示。
+</li>
+<li>
+<code>Fixed point</code> 以固定小數點換取穩定精度。
+</li>
+<li>
+<code>Floating point</code> 以有效數字加指數換取更大的數值範圍。
+</li>
+</ul>
 </section>
 </div>
 </div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/26/CS-fixed-point-floating-point/">https://chi-keke.github.io/Mind/2026/08/26/CS-fixed-point-floating-point/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">二補數（Two's Complement）</div></div><div class="info-2"><div class="info-item-1">為什麼需要二補數Signed Unsigned為什麼是反轉 + 1overflow .hkr{   display:block;   font-family:Consolas,'SFMono-Regular','Courier New',Menlo,monospace;   background:#05080a;   color:#d7ffe4!important;   line-height:1.75;   border-radius:14px;   padding:1px 0 28px;   margin:0 0 20px;   overflow:hidden;   --ink:#d7ffe4; --sub:#7fdba0; --card:#0d1710; --line:rgba(0,255,106,.28);   --green:#00ff6a; --green-bright:#7dffb0; --green-dim:#00b34c; --danger:#ff4d5e; --warn:#ffcc33; --info:#33e0ff;   --glow:0 0 18px rg...</div></div></div></a><a class="pagination-related" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">redis</div></div><div class="info-2"><div class="info-item-1">架構啟動Redis 7 image 拉下來啟動 Redis ContainerRedis Container 裡自己 Ping 自己從另一個 Container 經過 Windows Host 再打進 Redis 12345678910111213141516docker run   │   ├─ -d   │   └─ 背景執行   │   ├─ --name redis-open   │   └─ Container 名稱叫 redis-open   │   ├─ -p 6379:6379   │   └─ Host 6379 → Container 6379   │   ├─ redis:7   │   └─ 使用 Redis 7 image   │   └─ redis-server --bind 0.0.0.0 --protected-mode no       └─ Container 啟動後執行的程式    其中 –bind 0.0.0.0 很重要。它要求 Redis Server 接受 Container 所有網路介面的連線，而不只限於 loopback1234d...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">小數點放在哪裡，決定數值能表示什麼</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">二進位小數如何表示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">十進位的 0.1，為什麼會變成循環小數</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Fixed point：小數點位置固定</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">固定精度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">範圍受限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.3.</span> <span class="toc-text">適合固定尺度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">Floating point：讓小數點可以移動</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">Fixed point</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.2.</span> <span class="toc-text">Floating point</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.3.</span> <span class="toc-text">實際差異</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/26/CS-fixed-point-floating-point/">https://chi-keke.github.io/Mind/2026/08/26/CS-fixed-point-floating-point/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">二補數（Two's Complement）</div></div><div class="info-2"><div class="info-item-1">為什麼需要二補數Signed Unsigned為什麼是反轉 + 1overflow .hkr{   display:block;   font-family:Consolas,'SFMono-Regular','Courier New',Menlo,monospace;   background:#05080a;   color:#d7ffe4!important;   line-height:1.75;   border-radius:14px;   padding:1px 0 28px;   margin:0 0 20px;   overflow:hidden;   --ink:#d7ffe4; --sub:#7fdba0; --card:#0d1710; --line:rgba(0,255,106,.28);   --green:#00ff6a; --green-bright:#7dffb0; --green-dim:#00b34c; --danger:#ff4d5e; --warn:#ffcc33; --info:#33e0ff;   --glo...</div></div></div></a><a class="pagination-related" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">redis</div></div><div class="info-2"><div class="info-item-1">架構啟動Redis 7 image 拉下來啟動 Redis ContainerRedis Container 裡自己 Ping 自己從另一個 Container 經過 Windows Host 再打進 Redis  redis  12345678910111213141516docker run   │   ├─ -d   │   └─ 背景執行   │   ├─ --name redis-open   │   └─ Container 名稱叫 redis-open   │   ├─ -p 6379:6379   │   └─ Host 6379 → Container 6379   │   ├─ redis:7   │   └─ 使用 Redis 7 image   │   └─ redis-server --bind 0.0.0.0 --protected-mode no       └─ Container 啟動後執行的程式 其中 –bind 0.0.0.0 很重要。它要求 Redis Server 接受 Container 所有網路介面的連線，而不只限於 l...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">
+小數點放在哪裡，決定數值能表示什麼
+</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">
+二進位小數如何表示
+</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">
+十進位的 0.1，為什麼會變成循環小數
+</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">
+Fixed point：小數點位置固定
+</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">
+固定精度
+</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">
+範圍受限
+</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.3.</span> <span class="toc-text">
+適合固定尺度
+</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">
+Floating point：讓小數點可以移動
+</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">
+Fixed point
+</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.2.</span> <span class="toc-text">
+Floating point
+</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.3.</span> <span class="toc-text">
+實際差異
+</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

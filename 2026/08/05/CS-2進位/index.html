@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>binary | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="進位為什麼電子元件選擇使用二進位鍵盤 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,2">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>binary | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="進位為什麼電子元件選擇使用二進位鍵盤 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="binary">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/08/05/CS-2%E9%80%B2%E4%BD%8D/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="進位為什麼電子元件選擇使用二進位鍵盤 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,2">
+<meta property="og:description" content="進位為什麼電子元件選擇使用二進位鍵盤 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,">
 <meta property="og:locale">
 <meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/binary-landing.png">
 <meta property="article:published_time" content="2026-08-05T00:28:03.000Z">
@@ -184,106 +184,307 @@
 .cyber-flow-arrow{color:#39ff88;padding:6px 0 6px 20px;font-size:.85em;opacity:.85;}
 .cyber-badge{display:inline-block;background:rgba(57,255,136,.15);color:#39ff88;border:1px solid rgba(57,255,136,.4);border-radius:6px;padding:2px 10px;font-size:.8em;font-weight:700;letter-spacing:1px;margin-right:8px;}
 </style>
-
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>進位是什麼</div>
-<p>進位其實可以濃縮成一句話：</p>
-<div class="cyber-note">當某一個位置能用的符號都用完了，就把多出來的一份數量，搬到左邊更高的一個位置去。</div>
-<p>人類習慣用十進位，所以每一個位置可以放 <code>0～9</code> 這十種符號。數到 <code>9</code> 之後如果再加 <code>1</code>，這個位置就沒有新符號可用了，於是往左邊多寫一位：<code>9 + 1 = 10</code>。這個「多寫一位」的動作，就叫做「進位」。</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>進位是什麼
 </div>
-
+<p>
+進位其實可以濃縮成一句話：
+</p>
+<div class="cyber-note">
+當某一個位置能用的符號都用完了，就把多出來的一份數量，搬到左邊更高的一個位置去。
+</div>
+<p>
+人類習慣用十進位，所以每一個位置可以放 <code>0～9</code>
+這十種符號。數到 <code>9</code> 之後如果再加
+<code>1</code>，這個位置就沒有新符號可用了，於是往左邊多寫一位：<code>9
++ 1 = 10</code>。這個「多寫一位」的動作，就叫做「進位」。
+</p>
+</div>
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>不同進位制，可用的符號數量不同</div>
-<p>「每一位有幾種可能」，就是這個進位制的<b>基底</b>。常見的幾種進位制整理如下：</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>不同進位制，可用的符號數量不同
+</div>
+<p>
+「每一位有幾種可能」，就是這個進位制的<b>基底</b>。常見的幾種進位制整理如下：
+</p>
 <div class="cyber-table-wrap">
 <table class="cyber-table">
-<tr><th>進位制</th><th>可用符號數量</th><th>實際符號</th></tr>
-<tr><td>十進位</td><td>10</td><td>0～9</td></tr>
-<tr><td>二進位</td><td>2</td><td>0、1</td></tr>
-<tr><td>八進位</td><td>8</td><td>0～7</td></tr>
-<tr><td>十六進位</td><td>16</td><td>0～9、A～F</td></tr>
+<tr>
+<th>
+進位制
+</th>
+<th>
+可用符號數量
+</th>
+<th>
+實際符號
+</th>
+</tr>
+<tr>
+<td>
+十進位
+</td>
+<td>
+10
+</td>
+<td>
+0～9
+</td>
+</tr>
+<tr>
+<td>
+二進位
+</td>
+<td>
+2
+</td>
+<td>
+0、1
+</td>
+</tr>
+<tr>
+<td>
+八進位
+</td>
+<td>
+8
+</td>
+<td>
+0～7
+</td>
+</tr>
+<tr>
+<td>
+十六進位
+</td>
+<td>
+16
+</td>
+<td>
+0～9、A～F
+</td>
+</tr>
 </table>
 </div>
 </div>
-
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>為什麼十進位會變成人類的日常</div>
-<p>人類習慣十進位，主要來自生活與歷史上的計數方式——人有十根手指，用手指計數自然又直覺，十進位就這樣逐漸變成日常慣用的系統，並不代表它在數學上比其他進位制更強。事實上，其他進位制一樣可以完成加、減、乘、除，只是書寫方式不同而已。</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>為什麼十進位會變成人類的日常
 </div>
-
+<p>
+人類習慣十進位，主要來自生活與歷史上的計數方式——人有十根手指，用手指計數自然又直覺，十進位就這樣逐漸變成日常慣用的系統，並不代表它在數學上比其他進位制更強。事實上，其他進位制一樣可以完成加、減、乘、除，只是書寫方式不同而已。
+</p>
+</div>
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>如果沒有進位，會發生什麼事</div>
-<p>假設沒有進位這個機制，數到一百萬時就得為每一個數量各自發明一個新符號，多到幾乎沒有人能學會、也沒辦法使用。有了進位以後，只需要少量符號（<code>0～9</code>），再靠位置排列的組合，就能表示任意大的數量。</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>如果沒有進位，會發生什麼事
+</div>
+<p>
+假設沒有進位這個機制，數到一百萬時就得為每一個數量各自發明一個新符號，多到幾乎沒有人能學會、也沒辦法使用。有了進位以後，只需要少量符號（<code>0～9</code>），再靠位置排列的組合，就能表示任意大的數量。
+</p>
 </div></div><div class="tab-item-content"><p>電腦要儲存資料，說穿了就是要讓一個電子元件記住某一種「狀態」。這個物理上的狀態，要怎麼對應到我們熟悉的數字，就是這段要談的事。</p>
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>物理狀態如何對應資料</div>
-<p>例如「低電壓／高電壓」，或是「沒有電／有電」，這些都是電子元件的物理狀態，可以拿來對應成資料。</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>物理狀態如何對應資料
 </div>
-
-<div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>狀態越多，能表達的資訊越豐富，但誤差風險也越高</div>
-<p>理論上，一個元件能分辨的狀態越多，能表示的資訊就越複雜，例如輸入 <code>1V</code> 代表數字 <code>1</code>、輸入 <code>2V</code> 代表數字 <code>2</code>，一路對應下去，理論上可以做到 10 種、甚至 100 種狀態。</p>
-<p>但元件做得越精細，製造成本就越高，可靠度也會跟著下降。原因在於現實中的電壓並不會乖乖固定在整數值上，溫度變化、線路耗損都會造成誤差，例如「應該是 <code>7</code>」的訊號，實際量到的可能是 <code>6.3V</code> 或 <code>6.7V</code>。這種誤差會讓系統時而判讀成 <code>6</code>、時而判讀成 <code>7</code>。</p>
-<div class="cyber-note">把單一元件的狀態切得越細，資料判讀出錯的機率就會跟著提高。</div>
+<p>
+例如「低電壓／高電壓」，或是「沒有電／有電」，這些都是電子元件的物理狀態，可以拿來對應成資料。
+</p>
 </div>
-
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>只留兩種狀態：電晶體</div>
-<p>如果一個元件只需要分辨兩種狀態呢？那就只剩下一個 YES／NO 的問題——這正是現代最基礎的電子元件「電晶體（Transistor）」的原理，概念很像水龍頭的開關：導通就是 <code>1</code>，沒導通就是 <code>0</code>。</p>
+<div class="cyber-card-title">
+<span
+class="cyber-icon">▸</span>狀態越多，能表達的資訊越豐富，但誤差風險也越高
+</div>
+<p>
+理論上，一個元件能分辨的狀態越多，能表示的資訊就越複雜，例如輸入
+<code>1V</code> 代表數字 <code>1</code>、輸入 <code>2V</code> 代表數字
+<code>2</code>，一路對應下去，理論上可以做到 10 種、甚至 100 種狀態。
+</p>
+<p>
+但元件做得越精細，製造成本就越高，可靠度也會跟著下降。原因在於現實中的電壓並不會乖乖固定在整數值上，溫度變化、線路耗損都會造成誤差，例如「應該是
+<code>7</code>」的訊號，實際量到的可能是 <code>6.3V</code> 或
+<code>6.7V</code>。這種誤差會讓系統時而判讀成 <code>6</code>、時而判讀成
+<code>7</code>。
+</p>
+<div class="cyber-note">
+把單一元件的狀態切得越細，資料判讀出錯的機率就會跟著提高。
+</div>
+</div>
+<div class="cyber-card">
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>只留兩種狀態：電晶體
+</div>
+<p>
+如果一個元件只需要分辨兩種狀態呢？那就只剩下一個 YES／NO
+的問題——這正是現代最基礎的電子元件「電晶體（Transistor）」的原理，概念很像水龍頭的開關：導通就是
+<code>1</code>，沒導通就是 <code>0</code>。
+</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">transistor.sim</span></div>
+<div class="cyber-terminal-bar">
+<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
+class="cyber-dot d3"></span><span
+class="cyber-terminal-title">transistor.sim</span>
+</div>
 <pre class="cyber-terminal-pre">      Gate
         │
         │
 Source ─┼──── Drain</pre>
 </div>
-<p>只留兩種狀態的設計，可靠度高上許多，也比較容易大量製造。</p>
+<p>
+只留兩種狀態的設計，可靠度高上許多，也比較容易大量製造。
+</p>
 </div>
-
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>需要更多狀態時，就把電晶體組合起來</div>
-<p>如果需要表示更多狀態，做法不是把單一元件切得更細，而是把很多顆電晶體像積木一樣組合起來，用 <code>2</code> 的次方去疊加可以表示的狀態數量：</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>需要更多狀態時，就把電晶體組合起來
+</div>
+<p>
+如果需要表示更多狀態，做法不是把單一元件切得更細，而是把很多顆電晶體像積木一樣組合起來，用
+<code>2</code> 的次方去疊加可以表示的狀態數量：
+</p>
 <div class="cyber-table-wrap">
 <table class="cyber-table">
-<tr><th>電晶體數量</th><th>可表示狀態數</th></tr>
-<tr><td>1 顆</td><td>2（2¹）</td></tr>
-<tr><td>2 顆</td><td>4（2²）</td></tr>
-<tr><td>3 顆</td><td>8（2³）</td></tr>
-<tr><td>n 顆</td><td>2ⁿ</td></tr>
+<tr>
+<th>
+電晶體數量
+</th>
+<th>
+可表示狀態數
+</th>
+</tr>
+<tr>
+<td>
+1 顆
+</td>
+<td>
+2（2¹）
+</td>
+</tr>
+<tr>
+<td>
+2 顆
+</td>
+<td>
+4（2²）
+</td>
+</tr>
+<tr>
+<td>
+3 顆
+</td>
+<td>
+8（2³）
+</td>
+</tr>
+<tr>
+<td>
+n 顆
+</td>
+<td>
+2ⁿ
+</td>
+</tr>
 </table>
 </div>
-</div></div><div class="tab-item-content"><p>按下鍵盤上的 <code>A</code> 鍵之後，螢幕上就會出現一個「A」字。這中間到底發生了什麼事？這段就用鍵盤打字當例子，把二進位真正被電腦用上的過程走一遍。</p>
+</div></div><div class="tab-item-content"><p>按下鍵盤上的 <code>A</code>
+鍵之後，螢幕上就會出現一個「A」字。這中間到底發生了什麼事？這段就用鍵盤打字當例子，把二進位真正被電腦用上的過程走一遍。</p>
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>鍵盤只回答 Yes／No</div>
-<p>鍵盤裡並沒有一個元件專門代表字母 <code>A</code>。每一顆按鍵能回報的訊息只有兩種狀態：「有按下（<code>1</code>）」跟「沒有按下（<code>0</code>）」。這一步其實還只是感測層面的問題，跟字元的意義無關。</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>鍵盤只回答 Yes／No
 </div>
-
+<p>
+鍵盤裡並沒有一個元件專門代表字母
+<code>A</code>。每一顆按鍵能回報的訊息只有兩種狀態：「有按下（<code>1</code>）」跟「沒有按下（<code>0</code>）」。這一步其實還只是感測層面的問題，跟字元的意義無關。
+</p>
+</div>
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>電腦不認識 A，得靠對照表</div>
-<p>電腦真正認得的只有數字，所以必須先有一張「字元對應數字」的對照表，這就是 <code>ASCII</code> 碼：</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>電腦不認識 A，得靠對照表
+</div>
+<p>
+電腦真正認得的只有數字，所以必須先有一張「字元對應數字」的對照表，這就是
+<code>ASCII</code> 碼：
+</p>
 <div class="cyber-table-wrap">
 <table class="cyber-table">
-<tr><th>字元</th><th>編號</th></tr>
-<tr><td>A</td><td>65</td></tr>
-<tr><td>B</td><td>66</td></tr>
-<tr><td>C</td><td>67</td></tr>
-<tr><td>D</td><td>68</td></tr>
+<tr>
+<th>
+字元
+</th>
+<th>
+編號
+</th>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+65
+</td>
+</tr>
+<tr>
+<td>
+B
+</td>
+<td>
+66
+</td>
+</tr>
+<tr>
+<td>
+C
+</td>
+<td>
+67
+</td>
+</tr>
+<tr>
+<td>
+D
+</td>
+<td>
+68
+</td>
+</tr>
 </table>
 </div>
 </div>
-
 <div class="cyber-card">
-<div class="cyber-card-title"><span class="cyber-icon">▸</span>從 A 到二進位的完整路徑</div>
-<p>當你按下 <code>A</code>，電腦真正儲存、處理的其實是下面這一串轉換：</p>
+<div class="cyber-card-title">
+<span class="cyber-icon">▸</span>從 A 到二進位的完整路徑
+</div>
+<p>
+當你按下 <code>A</code>，電腦真正儲存、處理的其實是下面這一串轉換：
+</p>
 <div class="cyber-flow">
-<div class="cyber-flow-step"><span class="cyber-flow-label">字元</span><span class="cyber-flow-value">A</span></div>
-<div class="cyber-flow-arrow">↓ 查 ASCII 對照表</div>
-<div class="cyber-flow-step"><span class="cyber-flow-label">十進位</span><span class="cyber-flow-value">65</span></div>
-<div class="cyber-flow-arrow">↓ 轉換成二進位</div>
-<div class="cyber-flow-step"><span class="cyber-flow-label">二進位</span><span class="cyber-flow-value">01000001</span></div>
+<div class="cyber-flow-step">
+<span class="cyber-flow-label">字元</span><span
+class="cyber-flow-value">A</span>
 </div>
-<div class="cyber-note">所以嚴格來說，<code>A</code> 並不是「直接」變成二進位，而是先透過編碼規則變成一個數字（<code>65</code>），再把這個數字轉換成二進位表示（<code>01000001</code>）。</div>
-</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/05/CS-2%E9%80%B2%E4%BD%8D/">https://chi-keke.github.io/Mind/2026/08/05/CS-2%E9%80%B2%E4%BD%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/binary-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/02/Statistics-p-hacking/" title="p-hacking"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/p-value/p-hacking-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">p-hacking</div></div><div class="info-2"><div class="info-item-1">實驗背景怎樣的實驗與結論推導會變成 P-hacking正確的推導方法常態分佈實驗假設我們想要研發一種藥物，用來縮短感染某種病毒後的康復時間。研究人員製造了一批候選藥物（如 A 藥、B 藥，一直到 Z 藥），並將它們分別給予 3 位病患測試，同時記錄他們與另外 3 位「沒有吃藥」的病患在康復時間上的差異  .medchart-wrap { display: flex; flex-direction: column; gap: 28px; margin: 24px 0; } .medchart { background: #fbfaf6; border: 1px solid #c9c3ae; border-radius: 4px; position: relative; font-family: 'Courier New', 'Consolas', 'PingFang TC', monospace; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding-bottom: 4px; } .medchart::before { content: '...</div></div></div></a><a class="pagination-related" href="/Mind/2026/08/06/Probability-%E4%B8%89%E9%87%8D%E6%8E%92%E7%90%83%E5%88%86%E9%9A%8A/" title="三重排球分隊"><img class="cover" src="https://i.imgur.com/f2eWUWv.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">三重排球分隊</div></div><div class="info-2"><div class="info-item-1">糖果問題   </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/binary-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+<div class="cyber-flow-arrow">
+↓ 查 ASCII 對照表
+</div>
+<div class="cyber-flow-step">
+<span class="cyber-flow-label">十進位</span><span
+class="cyber-flow-value">65</span>
+</div>
+<div class="cyber-flow-arrow">
+↓ 轉換成二進位
+</div>
+<div class="cyber-flow-step">
+<span class="cyber-flow-label">二進位</span><span
+class="cyber-flow-value">01000001</span>
+</div>
+</div>
+<div class="cyber-note">
+所以嚴格來說，<code>A</code>
+並不是「直接」變成二進位，而是先透過編碼規則變成一個數字（<code>65</code>），再把這個數字轉換成二進位表示（<code>01000001</code>）。
+</div>
+</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/05/CS-2%E9%80%B2%E4%BD%8D/">https://chi-keke.github.io/Mind/2026/08/05/CS-2%E9%80%B2%E4%BD%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/binary-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/02/Statistics-p-hacking/" title="p-hacking"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/p-value/p-hacking-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">p-hacking</div></div><div class="info-2"><div class="info-item-1">實驗背景怎樣的實驗與結論推導會變成 P-hacking正確的推導方法常態分佈實驗假設我們想要研發一種藥物，用來縮短感染某種病毒後的康復時間。研究人員製造了一批候選藥物（如 A 藥、B 藥，一直到 Z 藥），並將它們分別給予 3 位病患測試，同時記錄他們與另外 3 位「沒有吃藥」的病患在康復時間上的差異  .medchart-wrap { display: flex; flex-direction: column; gap: 28px; margin: 24px 0; } .medchart { background: #fbfaf6; border: 1px solid #c9c3ae; border-radius: 4px; position: relative; font-family: 'Courier New', 'Consolas', 'PingFang TC', monospace; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding-bottom: 4px; } .medchart::befo...</div></div></div></a><a class="pagination-related" href="/Mind/2026/08/06/Probability-%E4%B8%89%E9%87%8D%E6%8E%92%E7%90%83%E5%88%86%E9%9A%8A/" title="三重排球分隊"><img class="cover" src="https://i.imgur.com/f2eWUWv.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">三重排球分隊</div></div><div class="info-2"><div class="info-item-1">糖果問題 </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/binary-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))

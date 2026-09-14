@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Capacitor | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 10">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Capacitor | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Capacitor">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/08/11/CS-Capacitor/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 10">
+<meta property="og:description" content="導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 1">
 <meta property="og:locale">
 <meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/capacitor-landing.png">
 <meta property="article:published_time" content="2026-08-11T00:29:03.000Z">
@@ -194,111 +194,221 @@
 .earth-line-steps .ls-desc { font-size:.82rem; color:#5a5648; line-height:1.6; }
 .earth-line-steps .ls-desc code { background:#eef0eb; padding:1px 6px; border-radius:3px; color:#8a6a3f; font-size:.85em; }
 </style>
-
 <div class="organic-hero">
-<span class="oh-leaf l1">🍃</span><span class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
-<div class="oh-tag">材料世界</div>
-<div class="oh-title">導體</div>
-<div class="oh-desc">有些材料裡面的電子很容易到處跑，這種材料就叫導體，例如銅、鋁、銀、金。</div>
+<span class="oh-leaf l1">🍃</span><span
+class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
+<div class="oh-tag">
+材料世界
 </div>
-
+<div class="oh-title">
+導體
+</div>
+<div class="oh-desc">
+有些材料裡面的電子很容易到處跑，這種材料就叫導體，例如銅、鋁、銀、金。
+</div>
+</div>
 <p>金屬裡本來就有很多可以移動的電子，這些電子平常也不是完全不動，只是沒有一個共同的移動方向。導體之所以導電，是因為其中有一部分電子沒有被某一顆原子牢牢綁死，而是處在可以延伸遍布整個材料的電子狀態中，所以一旦整體電荷分布出現不平衡，這些電子就能重新分布。</p>
 <p>在金屬裡，有一些電子的量子狀態是<code>離域（delocalized）</code>的。可以先把「離域」理解成這個電子的可存在狀態延伸到很多原子甚至整塊晶體，不適合再把它想成只屬於左邊某一顆原子。不過「自由」容易讓人誤會成電子完全不受任何東西影響，它們仍然處在晶格的量子環境中，只是沒有被某一顆特定原子局限住而已。</p></div><div class="tab-item-content"><div class="organic-hero">
-<span class="oh-leaf l1">🍂</span><span class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
-<div class="oh-tag">材料世界</div>
-<div class="oh-title">絕緣體</div>
-<div class="oh-desc">反過來，有些材料裡面的電荷很難長距離自由移動，這種材料就叫絕緣體，例如塑膠、玻璃、陶瓷、橡膠。</div>
+<span class="oh-leaf l1">🍂</span><span
+class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
+<div class="oh-tag">
+材料世界
 </div>
-
+<div class="oh-title">
+絕緣體
+</div>
+<div class="oh-desc">
+反過來，有些材料裡面的電荷很難長距離自由移動，這種材料就叫絕緣體，例如塑膠、玻璃、陶瓷、橡膠。
+</div>
+</div>
 <p>在一般條件下，能參與導電的電子狀態，跟下一批「可以拿來導電」的可用狀態之間，隔著一段較大的能量差：</p>
 <div class="glass-feature-row">
 <div class="gf-item">
-<div class="gf-icon">●</div>
-<div class="gf-title">電子目前待的狀態</div>
-<div class="gf-desc">大部分電子都乖乖待在原本的狀態裡</div>
+<div class="gf-icon">
+●
 </div>
-<div class="gf-arrow">⇡</div>
+<div class="gf-title">
+電子目前待的狀態
+</div>
+<div class="gf-desc">
+大部分電子都乖乖待在原本的狀態裡
+</div>
+</div>
+<div class="gf-arrow">
+⇡
+</div>
 <div class="gf-item">
-<div class="gf-icon">⚡</div>
-<div class="gf-title">很大的能量門檻</div>
-<div class="gf-desc">一般的小電壓提供的條件不足以讓大量電子跨過去</div>
+<div class="gf-icon">
+⚡
 </div>
-<div class="gf-arrow">⇡</div>
+<div class="gf-title">
+很大的能量門檻
+</div>
+<div class="gf-desc">
+一般的小電壓提供的條件不足以讓大量電子跨過去
+</div>
+</div>
+<div class="gf-arrow">
+⇡
+</div>
 <div class="gf-item">
-<div class="gf-icon">○</div>
-<div class="gf-title">可讓電子繼續導電的狀態</div>
-<div class="gf-desc">電子跨過門檻後才能參與導電</div>
+<div class="gf-icon">
+○
+</div>
+<div class="gf-title">
+可讓電子繼續導電的狀態
+</div>
+<div class="gf-desc">
+電子跨過門檻後才能參與導電
 </div>
 </div>
-
+</div>
 <p>正因為這道門檻很大，電荷幾乎過不去，這也是為什麼<code>電容</code>會刻意在中間放一層絕緣層，就是要利用這個特性，故意不讓兩邊的電子直接穿過去。</p></div><div class="tab-item-content"><div class="organic-hero">
-<span class="oh-leaf l1">🍃</span><span class="oh-leaf l2">🍃</span><span class="oh-leaf l3">🍂</span>
-<div class="oh-tag">驅動原理</div>
-<div class="oh-title">電子為什麼會移動</div>
-<div class="oh-desc">當一個地方電子很多、另一個地方電子很少時，只要中間出現可移動的路徑，電子就會重新分布，往更接近平衡的狀態發展。</div>
+<span class="oh-leaf l1">🍃</span><span
+class="oh-leaf l2">🍃</span><span class="oh-leaf l3">🍂</span>
+<div class="oh-tag">
+驅動原理
 </div>
-
+<div class="oh-title">
+電子為什麼會移動
+</div>
+<div class="oh-desc">
+當一個地方電子很多、另一個地方電子很少時，只要中間出現可移動的路徑，電子就會重新分布，往更接近平衡的狀態發展。
+</div>
+</div>
 <p>原本被強行做出來的電荷不均勻，會產生讓電荷重新排列的作用；導線只是提供它重新排列的通道，因為電荷系統本來就有往較低能量配置重新分布的傾向。用一條金屬線的例子來看整個過程：</p>
 <div class="earth-line-steps">
 <div class="ls-step leaf">
-<div class="ls-num">01</div>
-<div class="ls-body"><span class="ls-title">兩端原本沒有明顯差異</span><span class="ls-connector"></span><span class="ls-desc">金屬線兩端（A、B）電子分布大致正常，彼此沒有誰多誰少的差別</span></div>
+<div class="ls-num">
+01
+</div>
+<div class="ls-body">
+<span class="ls-title">兩端原本沒有明顯差異</span><span
+class="ls-connector"></span><span
+class="ls-desc">金屬線兩端（A、B）電子分布大致正常，彼此沒有誰多誰少的差別</span>
+</div>
 </div>
 <div class="ls-step clay">
-<div class="ls-num">02</div>
-<div class="ls-body"><span class="ls-title">電池介入，兩端被「弄不平均」</span><span class="ls-connector"></span><span class="ls-desc">電池利用化學能，讓 A 端電子變多、B 端電子變少</span></div>
+<div class="ls-num">
+02
+</div>
+<div class="ls-body">
+<span class="ls-title">電池介入，兩端被「弄不平均」</span><span
+class="ls-connector"></span><span class="ls-desc">電池利用化學能，讓 A
+端電子變多、B 端電子變少</span>
+</div>
 </div>
 <div class="ls-step sand">
-<div class="ls-num">03</div>
-<div class="ls-body"><span class="ls-title">接上導體，電子重新排列</span><span class="ls-connector"></span><span class="ls-desc">電子沿著導體重新分布，往平衡的方向移動</span></div>
+<div class="ls-num">
+03
+</div>
+<div class="ls-body">
+<span class="ls-title">接上導體，電子重新排列</span><span
+class="ls-connector"></span><span
+class="ls-desc">電子沿著導體重新分布，往平衡的方向移動</span>
 </div>
 </div>
-
+</div>
 <p>所以可以把「加電壓」很自然地理解成在電路的兩個位置製造出一個電荷／能量上的不均勻條件，這個不均勻會驅動導體裡能移動的電子重新分布，然後我們才把這個「兩個位置之間的能量差異」叫做電位差。</p>
 <p>回到電容，電池會幫電容做同樣的事，只是中間換成絕緣層擋著：</p>
 <div class="earth-line-steps">
 <div class="ls-step leaf">
-<div class="ls-num">01</div>
-<div class="ls-body"><span class="ls-title">電池把電荷分別堆到兩片極板</span><span class="ls-connector"></span><span class="ls-desc">左板電子變多、右板電子變少，中間隔著絕緣層</span></div>
+<div class="ls-num">
+01
+</div>
+<div class="ls-body">
+<span class="ls-title">電池把電荷分別堆到兩片極板</span><span
+class="ls-connector"></span><span
+class="ls-desc">左板電子變多、右板電子變少，中間隔著絕緣層</span>
+</div>
 </div>
 <div class="ls-step clay">
-<div class="ls-num">02</div>
-<div class="ls-body"><span class="ls-title">電荷過不去，電場越來越強</span><span class="ls-connector"></span><span class="ls-desc">電容自己建立的電場越來越強，這種不平衡被絕緣層擋著保存下來</span></div>
+<div class="ls-num">
+02
+</div>
+<div class="ls-body">
+<span class="ls-title">電荷過不去，電場越來越強</span><span
+class="ls-connector"></span><span
+class="ls-desc">電容自己建立的電場越來越強，這種不平衡被絕緣層擋著保存下來</span>
+</div>
 </div>
 <div class="ls-step sand">
-<div class="ls-num">03</div>
-<div class="ls-body"><span class="ls-title">外部接上燈泡，出現路徑</span><span class="ls-connector"></span><span class="ls-desc">電子較多的一側經過燈泡，補到缺電子的一側</span></div>
+<div class="ls-num">
+03
+</div>
+<div class="ls-body">
+<span class="ls-title">外部接上燈泡，出現路徑</span><span
+class="ls-connector"></span><span
+class="ls-desc">電子較多的一側經過燈泡，補到缺電子的一側</span>
+</div>
 </div>
 <div class="ls-step leaf">
-<div class="ls-num">04</div>
-<div class="ls-body"><span class="ls-title">差異逐漸縮小，趨於平衡</span><span class="ls-connector"></span><span class="ls-desc">這就是電容放電的過程</span></div>
+<div class="ls-num">
+04
+</div>
+<div class="ls-body">
+<span class="ls-title">差異逐漸縮小，趨於平衡</span><span
+class="ls-connector"></span><span
+class="ls-desc">這就是電容放電的過程</span>
+</div>
 </div>
 </div></div><div class="tab-item-content"><div class="organic-hero">
-<span class="oh-leaf l1">🍃</span><span class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
-<div class="oh-tag">實際應用</div>
-<div class="oh-title">電容做什麼</div>
-<div class="oh-desc">電容有一個非常重要的特性，它可以很快吸收電荷，也可以很快釋放電荷，所以很適合處理「短時間變化」。</div>
+<span class="oh-leaf l1">🍃</span><span
+class="oh-leaf l2">🍂</span><span class="oh-leaf l3">🍃</span>
+<div class="oh-tag">
+實際應用
 </div>
-
+<div class="oh-title">
+電容做什麼
+</div>
+<div class="oh-desc">
+電容有一個非常重要的特性，它可以很快吸收電荷，也可以很快釋放電荷，所以很適合處理「短時間變化」。
+</div>
+</div>
 <p>以 <code>CPU</code> 旁邊的電源電容為例：</p>
 <div class="earth-line-steps">
 <div class="ls-step leaf">
-<div class="ls-num">01</div>
-<div class="ls-body"><span class="ls-title">電源穩定供電</span><span class="ls-connector"></span><span class="ls-desc">CPU 平常吃電很穩，電源一直送電過去</span></div>
+<div class="ls-num">
+01
+</div>
+<div class="ls-body">
+<span class="ls-title">電源穩定供電</span><span
+class="ls-connector"></span><span class="ls-desc">CPU
+平常吃電很穩，電源一直送電過去</span>
+</div>
 </div>
 <div class="ls-step clay">
-<div class="ls-num">02</div>
-<div class="ls-body"><span class="ls-title">CPU 瞬間想多拿一大口電</span><span class="ls-connector"></span><span class="ls-desc">大量電晶體同時切換，CPU 突然想拿更多電流</span></div>
+<div class="ls-num">
+02
+</div>
+<div class="ls-body">
+<span class="ls-title">CPU 瞬間想多拿一大口電</span><span
+class="ls-connector"></span><span
+class="ls-desc">大量電晶體同時切換，CPU 突然想拿更多電流</span>
+</div>
 </div>
 <div class="ls-step sand">
-<div class="ls-num">03</div>
-<div class="ls-body"><span class="ls-title">電源來不及補上，電壓開始掉</span><span class="ls-connector"></span><span class="ls-desc">導線本身有電阻、電感，來不及在瞬間補上</span></div>
+<div class="ls-num">
+03
+</div>
+<div class="ls-body">
+<span class="ls-title">電源來不及補上，電壓開始掉</span><span
+class="ls-connector"></span><span
+class="ls-desc">導線本身有電阻、電感，來不及在瞬間補上</span>
+</div>
 </div>
 <div class="ls-step leaf">
-<div class="ls-num">04</div>
-<div class="ls-body"><span class="ls-title">電容就近放電，補住壓降</span><span class="ls-connector"></span><span class="ls-desc">最近的電容先放電，減少電壓掉下去的幅度</span></div>
+<div class="ls-num">
+04
 </div>
-</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/11/CS-Capacitor/">https://chi-keke.github.io/Mind/2026/08/11/CS-Capacitor/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/capacitor-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/" title="Hexadecimal"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Hexadecimal</div></div><div class="info-2"><div class="info-item-1">進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;} .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed rgb...</div></div></div></a><a class="pagination-related" href="/Mind/2026/08/15/CS-RAM-and-Pointer/" title="RAM and Pointer"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">RAM and Pointer</div></div><div class="info-2"><div class="info-item-1">打開一個遊戲RAMPointerC# ref vs C Pointer .cozy-hero { position:relative; overflow:hidden; border-radius:20px; padding:34px 38px; margin:24px 0 30px; background:radial-gradient(circle at 15% 20%, rgba(255,255,255,.10) 0, transparent 45%), linear-gradient(150deg, #6f9250 0%, #547a3d 55%, #3f5f2e 100%); color:#fbf8ef; } .cozy-hero .ch-dot { position:absolute; font-size:1.4rem; opacity:.55; pointer-events:none; } .cozy-hero .ch-dot.d1 { top:16px; right:70px; } .cozy-hero .ch-dot.d2 { bottom:20px; righ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/capacitor-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+<div class="ls-body">
+<span class="ls-title">電容就近放電，補住壓降</span><span
+class="ls-connector"></span><span
+class="ls-desc">最近的電容先放電，減少電壓掉下去的幅度</span>
+</div>
+</div>
+</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/11/CS-Capacitor/">https://chi-keke.github.io/Mind/2026/08/11/CS-Capacitor/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/capacitor-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/" title="Hexadecimal"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Hexadecimal</div></div><div class="info-2"><div class="info-item-1">進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;} .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed r...</div></div></div></a><a class="pagination-related" href="/Mind/2026/08/15/CS-RAM-and-Pointer/" title="RAM and Pointer"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/memory-pointer-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">RAM and Pointer</div></div><div class="info-2"><div class="info-item-1">打開一個遊戲RAMPointerC# ref vs C Pointer .cozy-hero { position:relative; overflow:hidden; border-radius:20px; padding:34px 38px; margin:24px 0 30px; background:radial-gradient(circle at 15% 20%, rgba(255,255,255,.10) 0, transparent 45%), linear-gradient(150deg, #6f9250 0%, #547a3d 55%, #3f5f2e 100%); color:#fbf8ef; } .cozy-hero .ch-dot { position:absolute; font-size:1.4rem; opacity:.55; pointer-events:none; } .cozy-hero .ch-dot.d1 { top:16px; right:70px; } .cozy-hero .ch-dot.d2 { bottom:20px; ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">44</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/capacitor-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
