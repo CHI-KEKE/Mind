@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>重複排列 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="棋盤街道含有 7 個元素的集合，有多少個部分集合？僧多粥少 .rp-note { background:#f7fafd; border:1px dashed #b9cbdc; border-left:4px solid #3a6ea5; padding:12px 18px; margin:14px 0 20px; border-radius:3px; font-size:0.92rem; colo">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>重複排列 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="棋盤街道含有 7 個元素的集合，有多少個部分集合？僧多粥少 .rp-note { background:#f7fafd; border:1px dashed #b9cbdc; border-left:4px solid #3a6ea5; padding:12px 18px; margin:14px 0 20px; border-radius:3px; font-size:0.92rem; col">
 <meta property="og:type" content="article">
 <meta property="og:title" content="重複排列">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/07/15/Probability-%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="棋盤街道含有 7 個元素的集合，有多少個部分集合？僧多粥少 .rp-note { background:#f7fafd; border:1px dashed #b9cbdc; border-left:4px solid #3a6ea5; padding:12px 18px; margin:14px 0 20px; border-radius:3px; font-size:0.92rem; colo">
+<meta property="og:description" content="棋盤街道含有 7 個元素的集合，有多少個部分集合？僧多粥少 .rp-note { background:#f7fafd; border:1px dashed #b9cbdc; border-left:4px solid #3a6ea5; padding:12px 18px; margin:14px 0 20px; border-radius:3px; font-size:0.92rem; col">
 <meta property="og:locale">
 <meta property="og:image" content="https://github.com/CHI-KEKE/pics/blob/main/Probability/RePermutation/landing.png?raw=true">
 <meta property="article:published_time" content="2026-07-15T03:18:05.000Z">
@@ -211,28 +211,33 @@
 .rp-dup-result { flex:1; min-width:180px; background:#fbeeec; border:1px solid #e3bcb5; border-radius:5px; padding:10px 14px; font-size:0.85rem; color:#6e2f27; line-height:1.7; text-align:center; }
 .rp-dup-result .rp-dup-tag { background:#f4d9d4; border-color:#e3bcb5; color:#7a3129; }
 </style>
-
 <p>如圖的棋盤街道，從 A 走到 B，每一步只能</p>
 <ul>
 <li>向右（→）</li>
 <li>向上（↑）</li>
 </ul>
 <p>求：</p>
-<ol>
+<ol type="1">
 <li>從 A 到 B 共有幾種不同的走法？</li>
 <li>從 A 到 B 且不經過 C，共有幾種不同的走法？</li>
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">      ┌───┬───┬───┬───┬───┐ B</span><br><span class="line">      │   │   │   │   │   │</span><br><span class="line">      ├───┼───C───┼───┼───┤</span><br><span class="line">      │   │   │   │   │   │</span><br><span class="line">      ├───┼───┼───┼───┼───┤</span><br><span class="line">A ────┴───┴───┴───┴───┴───┘</span><br></pre></td></tr></table></figure>
-
-<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><p>把一條路徑想成每一步不是 <code>→</code>（向右）就是 <code>↑</code>（向上），因此一條路徑其實就是一串箭頭排列。</p>
+<h2 id="解法">解法</h2>
+<p>把一條路徑想成每一步不是 <code>→</code>（向右）就是
+<code>↑</code>（向上），因此一條路徑其實就是一串箭頭排列。</p>
 <div class="rp-banner">
-<div class="rp-num">1</div>
+<div class="rp-num">
+1
+</div>
 <div class="rp-text">
-<div class="rp-title">先把所有路徑寫成箭頭</div>
-<div class="rp-desc">把「走法」轉換成「箭頭排列」問題</div>
+<div class="rp-title">
+先把所有路徑寫成箭頭
+</div>
+<div class="rp-desc">
+把「走法」轉換成「箭頭排列」問題
 </div>
 </div>
-
+</div>
 <p>由 A 到 B 一共需要</p>
 <ul>
 <li>向右 5 次</li>
@@ -240,41 +245,39 @@
 </ul>
 <p>因此每一條路徑都可以表示成</p>
 <div class="rp-chip-row">
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip up">↑</span>
-<span class="rp-chip up">↑</span>
-<span class="rp-chip up">↑</span>
+<p><span class="rp-chip right">→</span> <span
+class="rp-chip right">→</span> <span class="rp-chip right">→</span>
+<span class="rp-chip right">→</span> <span
+class="rp-chip right">→</span> <span class="rp-chip up">↑</span> <span
+class="rp-chip up">↑</span> <span class="rp-chip up">↑</span></p>
 </div>
-
 <p>只是箭頭排列順序不同，例如</p>
 <div class="rp-chip-row">
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip up">↑</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip up">↑</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip up">↑</span>
+<p><span class="rp-chip right">→</span> <span
+class="rp-chip right">→</span> <span class="rp-chip up">↑</span> <span
+class="rp-chip right">→</span> <span class="rp-chip up">↑</span> <span
+class="rp-chip right">→</span> <span class="rp-chip right">→</span>
+<span class="rp-chip up">↑</span></p>
 </div>
-
 <p>也是一條路。</p>
-<p>$$<br>總走法 &#x3D; 8 個位置中選 3 個放 ↑ &#x3D; C(8,3) &#x3D; 56<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>總</mi><mi>走</mi><mi>法</mi><mo>=</mo><mn>8</mn><mi>個</mi><mi>位</mi><mi>置</mi><mi>中</mi><mi>選</mi><mn>3</mn><mi>個</mi><mi>放</mi><mo>↑</mo><mo>=</mo><mi>C</mi><mo stretchy="false" form="prefix">(</mo><mn>8</mn><mo>,</mo><mn>3</mn><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>56</mn></mrow><annotation encoding="application/x-tex">
+總走法 = 8 個位置中選 3 個放 ↑ = C(8,3) = 56
+</annotation></semantics></math></p>
 <div class="rp-banner">
-<div class="rp-num">2</div>
+<div class="rp-num">
+2
+</div>
 <div class="rp-text">
-<div class="rp-title">哪些箭頭排列一定會經過 C？</div>
-<div class="rp-desc">先鎖定 C 在整條路徑中的位置</div>
+<div class="rp-title">
+哪些箭頭排列一定會經過 C？
+</div>
+<div class="rp-desc">
+先鎖定 C 在整條路徑中的位置
 </div>
 </div>
-
+</div>
 <p>先觀察 C 的位置</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">A</span> →→ ↑↑ C →→→ ↑ <span class="selector-tag">B</span></span><br></pre></td></tr></table></figure>
-
 <p>也就是說，從 A 到 C 一定要先走</p>
 <ul>
 <li>2 個 →</li>
@@ -282,348 +285,704 @@
 </ul>
 <p>所以只要一條路會經過 C，它的箭頭一定可以切成兩段：</p>
 <div class="rp-chip-row">
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip up">↑</span>
-<span class="rp-chip up">↑</span>
-<span class="rp-chip plus">＋</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip right">→</span>
-<span class="rp-chip up">↑</span>
+<p><span class="rp-chip right">→</span> <span
+class="rp-chip right">→</span> <span class="rp-chip up">↑</span> <span
+class="rp-chip up">↑</span> <span class="rp-chip plus">＋</span> <span
+class="rp-chip right">→</span> <span class="rp-chip right">→</span>
+<span class="rp-chip right">→</span> <span
+class="rp-chip up">↑</span></p>
 </div>
-
 <div class="rp-note">
-左邊是（前半段：A → C），右邊是（後半段：C → B）。
+<p>左邊是（前半段：A → C），右邊是（後半段：C → B）。</p>
 </div>
-
-<p><strong>注意！</strong> 前半段、後半段裡面的箭頭順序都可以交換，例如前半段可以是</p>
+<p><strong>注意！</strong>
+前半段、後半段裡面的箭頭順序都可以交換，例如前半段可以是</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">→→↑↑    →↑→↑    →↑↑→</span><br><span class="line">↑→→↑    ↑→↑→    ↑↑→→</span><br></pre></td></tr></table></figure>
-
 <p>這六種都會走到 C</p>
-<h4 id="第一段（A-→-C）"><a href="#第一段（A-→-C）" class="headerlink" title="第一段（A → C）"></a>第一段（A → C）</h4><p>需要：2 個 →、2 個 ↑，就是排列 <code>→→↑↑</code>，共有：</p>
-<p>$$<br>\frac{4!}{2!,2!} &#x3D; 6 \quad (&#x3D; C(4,2))<br>$$</p>
+<h4 id="第一段a-c">第一段（A → C）</h4>
+<p>需要：2 個 →、2 個 ↑，就是排列 <code>→→↑↑</code>，共有：</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mn>4</mn><mi>!</mi></mrow><mrow><mn>2</mn><mi>!</mi><mspace width="0.167em"></mspace><mn>2</mn><mi>!</mi></mrow></mfrac><mo>=</mo><mn>6</mn><mspace width="1.0em"></mspace><mo stretchy="false" form="prefix">(</mo><mo>=</mo><mi>C</mi><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+\frac{4!}{2!\,2!} = 6 \quad (= C(4,2))
+</annotation></semantics></math></p>
 <p>種。</p>
-<h4 id="第二段（C-→-B）"><a href="#第二段（C-→-B）" class="headerlink" title="第二段（C → B）"></a>第二段（C → B）</h4><p>需要：3 個 →、1 個 ↑，箭頭排列例如：</p>
+<h4 id="第二段c-b">第二段（C → B）</h4>
+<p>需要：3 個 →、1 個 ↑，箭頭排列例如：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">→→→↑    →→↑→    →↑→→    ↑→→→</span><br></pre></td></tr></table></figure>
-
 <p>共有：</p>
-<p>$$<br>\frac{4!}{3!,1!} &#x3D; 4 \quad (&#x3D; C(4,1))<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mn>4</mn><mi>!</mi></mrow><mrow><mn>3</mn><mi>!</mi><mspace width="0.167em"></mspace><mn>1</mn><mi>!</mi></mrow></mfrac><mo>=</mo><mn>4</mn><mspace width="1.0em"></mspace><mo stretchy="false" form="prefix">(</mo><mo>=</mo><mi>C</mi><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+\frac{4!}{3!\,1!} = 4 \quad (= C(4,1))
+</annotation></semantics></math></p>
 <p>種。</p>
 <div class="rp-banner">
-<div class="rp-num">3</div>
+<div class="rp-num">
+3
+</div>
 <div class="rp-text">
-<div class="rp-title">利用乘法原理</div>
-<div class="rp-desc">前半段走法 × 後半段走法</div>
+<div class="rp-title">
+利用乘法原理
+</div>
+<div class="rp-desc">
+前半段走法 × 後半段走法
 </div>
 </div>
-
+</div>
 <p>只要經過 C，就是「前半段排列 × 後半段排列」：</p>
-<p>$$<br>6 \times 4 &#x3D; 24 \text{ 種}<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>×</mo><mn>4</mn><mo>=</mo><mn>24</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> 種</mtext></mrow></mrow><annotation encoding="application/x-tex">
+6 \times 4 = 24 \text{ 種}
+</annotation></semantics></math></p>
 <div class="rp-banner">
-<div class="rp-num">4</div>
+<div class="rp-num">
+4
+</div>
 <div class="rp-text">
-<div class="rp-title">扣掉經過 C 的即可</div>
-<div class="rp-desc">全部走法 − 經過 C 的走法 = 不經過 C 的走法</div>
+<div class="rp-title">
+扣掉經過 C 的即可
+</div>
+<div class="rp-desc">
+全部走法 − 經過 C 的走法 = 不經過 C 的走法
 </div>
 </div>
-
+</div>
 <div class="rp-table-wrap">
-
 <table>
-<tr><th>項目</th><th>算式</th><th>結果</th></tr>
-<tr><td>全部箭頭排列</td><td>C(8,3)</td><td>56</td></tr>
-<tr><td>經過 C</td><td>6 × 4</td><td>24</td></tr>
-<tr><td><b>不經過 C</b></td><td>56 − 24</td><td><b>32</b></td></tr>
+<tr>
+<th>
+項目
+</th>
+<th>
+算式
+</th>
+<th>
+結果
+</th>
+</tr>
+<tr>
+<td>
+全部箭頭排列
+</td>
+<td>
+C(8,3)
+</td>
+<td>
+56
+</td>
+</tr>
+<tr>
+<td>
+經過 C
+</td>
+<td>
+6 × 4
+</td>
+<td>
+24
+</td>
+</tr>
+<tr>
+<td>
+<b>不經過 C</b>
+</td>
+<td>
+56 − 24
+</td>
+<td>
+<b>32</b>
+</td>
+</tr>
 </table>
-
 </div>
-
-<h4 id="流程整理"><a href="#流程整理" class="headerlink" title="流程整理"></a>流程整理</h4><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">全部路徑 →→→→→↑↑↑</span><br><span class="line">        │ <span class="built_in">C</span><span class="punctuation">(</span><span class="number">8</span><span class="operator">,</span><span class="number">3</span><span class="punctuation">)</span> <span class="operator">=</span> <span class="number">56</span></span><br><span class="line">        ▼</span><br><span class="line">────────────────────────────</span><br><span class="line">經過 <span class="built_in">C</span>：</span><br><span class="line">  前半段 →→↑↑   <span class="built_in">C</span><span class="punctuation">(</span><span class="number">4</span><span class="operator">,</span><span class="number">2</span><span class="punctuation">)</span> <span class="operator">=</span> <span class="number">6</span></span><br><span class="line">              ×</span><br><span class="line">  後半段 →→→↑   <span class="built_in">C</span><span class="punctuation">(</span><span class="number">4</span><span class="operator">,</span><span class="number">1</span><span class="punctuation">)</span> <span class="operator">=</span> <span class="number">4</span></span><br><span class="line">────────────────────────────</span><br><span class="line">經過 <span class="built_in">C</span> <span class="operator">=</span> <span class="number">6</span> × <span class="number">4</span> <span class="operator">=</span> <span class="number">24</span></span><br><span class="line">────────────────────────────</span><br><span class="line">不經過 <span class="built_in">C</span> <span class="operator">=</span> <span class="number">56</span> − <span class="number">24</span> <span class="operator">=</span> <span class="number">32</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content"><p>含有 7 個元素的集合，有多少個部分集合？</p>
-<h2 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h2><div class="rp-banner">
-<div class="rp-num">1</div>
+<h4 id="流程整理">流程整理</h4>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">全部路徑 →→→→→↑↑↑</span><br><span class="line">        │ <span class="built_in">C</span><span class="punctuation">(</span><span class="number">8</span><span class="operator">,</span><span class="number">3</span><span class="punctuation">)</span> <span class="operator">=</span> <span class="number">56</span></span><br><span class="line">        ▼</span><br><span class="line">────────────────────────────</span><br><span class="line">經過 <span class="built_in">C</span>：</span><br><span class="line">  前半段 →→↑↑   <span class="built_in">C</span><span class="punctuation">(</span><span class="number">4</span><span class="operator">,</span><span class="number">2</span><span class="punctuation">)</span> <span class="operator">=</span> <span class="number">6</span></span><br><span class="line">              ×</span><br><span class="line">  後半段 →→→↑   <span class="built_in">C</span><span class="punctuation">(</span><span class="number">4</span><span class="operator">,</span><span class="number">1</span><span class="punctuation">)</span> <span class="operator">=</span> <span class="number">4</span></span><br><span class="line">────────────────────────────</span><br><span class="line">經過 <span class="built_in">C</span> <span class="operator">=</span> <span class="number">6</span> × <span class="number">4</span> <span class="operator">=</span> <span class="number">24</span></span><br><span class="line">────────────────────────────</span><br><span class="line">不經過 <span class="built_in">C</span> <span class="operator">=</span> <span class="number">56</span> − <span class="number">24</span> <span class="operator">=</span> <span class="number">32</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content"><p>含有 7 個元素的集合，有多少個部分集合？</p>
+<h2 id="解法">解法</h2>
+<div class="rp-banner">
+<div class="rp-num">
+1
+</div>
 <div class="rp-text">
-<div class="rp-title">換個角度想「部分集合」是怎麼產生的</div>
-<div class="rp-desc">把結果導向的問題改成過程導向</div>
+<div class="rp-title">
+換個角度想「部分集合」是怎麼產生的
+</div>
+<div class="rp-desc">
+把結果導向的問題改成過程導向
 </div>
 </div>
-
+</div>
 <p>假設集合是</p>
-<p>$$<br>S &#x3D; {a_1, a_2, a_3, a_4, a_5, a_6, a_7}<br>$$</p>
-<p>要造出一個部分集合，其實就是把 7 個元素<strong>逐一決定</strong>：</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><msub><mi>a</mi><mn>2</mn></msub><mo>,</mo><msub><mi>a</mi><mn>3</mn></msub><mo>,</mo><msub><mi>a</mi><mn>4</mn></msub><mo>,</mo><msub><mi>a</mi><mn>5</mn></msub><mo>,</mo><msub><mi>a</mi><mn>6</mn></msub><mo>,</mo><msub><mi>a</mi><mn>7</mn></msub><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
+S = \{a_1, a_2, a_3, a_4, a_5, a_6, a_7\}
+</annotation></semantics></math></p>
+<p>要造出一個部分集合，其實就是把 7
+個元素<strong>逐一決定</strong>：</p>
 <ul>
 <li>這個元素「要」放進部分集合</li>
 <li>這個元素「不要」放進部分集合</li>
 </ul>
-<p>也就是每個元素都只有兩種選擇：<strong>要</strong> 或 <strong>不要</strong>。</p>
+<p>也就是每個元素都只有兩種選擇：<strong>要</strong> 或
+<strong>不要</strong>。</p>
 <div class="rp-banner">
-<div class="rp-num">2</div>
+<div class="rp-num">
+2
+</div>
 <div class="rp-text">
-<div class="rp-title">畫出決策過程</div>
-<div class="rp-desc">每個元素各自獨立做一次「要／不要」的開關決定</div>
+<div class="rp-title">
+畫出決策過程
+</div>
+<div class="rp-desc">
+每個元素各自獨立做一次「要／不要」的開關決定
 </div>
 </div>
-
+</div>
 <div class="rp-toggle-list-wrap">
-
 <div class="rp-toggle-row">
 <span class="rp-el">a1</span>
-<div class="rp-pill-pair"><span class="rp-pill on">要</span><span class="rp-pill">不要</span></div>
+<div class="rp-pill-pair">
+<span class="rp-pill on">要</span><span class="rp-pill">不要</span>
 </div>
-
+</div>
 <div class="rp-toggle-row">
 <span class="rp-el">a2</span>
-<div class="rp-pill-pair"><span class="rp-pill">要</span><span class="rp-pill on">不要</span></div>
+<div class="rp-pill-pair">
+<span class="rp-pill">要</span><span class="rp-pill on">不要</span>
 </div>
-
+</div>
 <div class="rp-toggle-row">
 <span class="rp-el">a3</span>
-<div class="rp-pill-pair"><span class="rp-pill on">要</span><span class="rp-pill">不要</span></div>
+<div class="rp-pill-pair">
+<span class="rp-pill on">要</span><span class="rp-pill">不要</span>
 </div>
-
+</div>
 <div class="rp-toggle-row">
 <span class="rp-el">a4</span>
-<div class="rp-pill-pair"><span class="rp-pill">要</span><span class="rp-pill on">不要</span></div>
+<div class="rp-pill-pair">
+<span class="rp-pill">要</span><span class="rp-pill on">不要</span>
 </div>
-
+</div>
 <div class="rp-toggle-row">
 <span class="rp-el">a5</span>
-<div class="rp-pill-pair"><span class="rp-pill">要</span><span class="rp-pill on">不要</span></div>
+<div class="rp-pill-pair">
+<span class="rp-pill">要</span><span class="rp-pill on">不要</span>
 </div>
-
+</div>
 <div class="rp-toggle-row">
 <span class="rp-el">a6</span>
-<div class="rp-pill-pair"><span class="rp-pill on">要</span><span class="rp-pill">不要</span></div>
+<div class="rp-pill-pair">
+<span class="rp-pill on">要</span><span class="rp-pill">不要</span>
 </div>
-
+</div>
 <div class="rp-toggle-row">
 <span class="rp-el">a7</span>
-<div class="rp-pill-pair"><span class="rp-pill">要</span><span class="rp-pill on">不要</span></div>
+<div class="rp-pill-pair">
+<span class="rp-pill">要</span><span class="rp-pill on">不要</span>
 </div>
-
 </div>
-
-<p>每個元素都各自獨立做選擇，彼此互不影響，所以這是典型的「重複排列」（每個位置都可從同一組選項中挑，且可以重複使用選項）。上面這組開關組合，剛好就對應到部分集合 <code>{a1, a3, a6}</code>。</p>
+</div>
+<p>每個元素都各自獨立做選擇，彼此互不影響，所以這是典型的「重複排列」（每個位置都可從同一組選項中挑，且可以重複使用選項）。上面這組開關組合，剛好就對應到部分集合
+<code>{a1, a3, a6}</code>。</p>
 <div class="rp-banner">
-<div class="rp-num">3</div>
+<div class="rp-num">
+3
+</div>
 <div class="rp-text">
-<div class="rp-title">利用乘法原理</div>
-<div class="rp-desc">7 個獨立開關的選擇數相乘</div>
+<div class="rp-title">
+利用乘法原理
+</div>
+<div class="rp-desc">
+7 個獨立開關的選擇數相乘
 </div>
 </div>
-
+</div>
 <ul>
-<li>$a_1$ 有 2 種選擇（要／不要）</li>
-<li>$a_2$ 有 2 種選擇</li>
-<li>$a_3$ 有 2 種選擇</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mn>1</mn></msub><annotation encoding="application/x-tex">a_1</annotation></semantics></math>
+有 2 種選擇（要／不要）</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mn>2</mn></msub><annotation encoding="application/x-tex">a_2</annotation></semantics></math>
+有 2 種選擇</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mn>3</mn></msub><annotation encoding="application/x-tex">a_3</annotation></semantics></math>
+有 2 種選擇</li>
 <li>……</li>
-<li>$a_7$ 有 2 種選擇</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mn>7</mn></msub><annotation encoding="application/x-tex">a_7</annotation></semantics></math>
+有 2 種選擇</li>
 </ul>
 <p>7 個元素各自獨立，依乘法原理把所有選擇數相乘：</p>
-<p>$$<br>\underbrace{2 \times 2 \times 2 \times 2 \times 2 \times 2 \times 2}_{7 \text{ 個 } 2} &#x3D; 2^7<br>$$</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><munder><mrow><mn>2</mn><mo>×</mo><mn>2</mn><mo>×</mo><mn>2</mn><mo>×</mo><mn>2</mn><mo>×</mo><mn>2</mn><mo>×</mo><mn>2</mn><mo>×</mo><mn>2</mn></mrow><mo accent="true">⏟</mo></munder><mrow><mn>7</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> 個 </mtext><mspace width="0.333em"></mspace></mrow><mn>2</mn></mrow></munder><mo>=</mo><msup><mn>2</mn><mn>7</mn></msup></mrow><annotation encoding="application/x-tex">
+\underbrace{2 \times 2 \times 2 \times 2 \times 2 \times 2 \times 2}_{7 \text{ 個 } 2} = 2^7
+</annotation></semantics></math></p>
 <div class="rp-banner">
-<div class="rp-num">4</div>
+<div class="rp-num">
+4
+</div>
 <div class="rp-text">
-<div class="rp-title">驗證這個公式合理嗎？</div>
-<div class="rp-desc">用小例子回推檢查</div>
+<div class="rp-title">
+驗證這個公式合理嗎？
+</div>
+<div class="rp-desc">
+用小例子回推檢查
 </div>
 </div>
-
-<p>用小例子檢查：若集合只有 2 個元素 ${x, y}$，部分集合應該有</p>
+</div>
+<p>用小例子檢查：若集合只有 2 個元素
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{x, y\}</annotation></semantics></math>，部分集合應該有</p>
 <div class="rp-chip-row">
-<span class="rp-set-chip">∅</span>
-<span class="rp-set-chip">{x}</span>
-<span class="rp-set-chip">{y}</span>
-<span class="rp-set-chip">{x, y}</span>
+<p><span class="rp-set-chip">∅</span> <span
+class="rp-set-chip">{x}</span> <span class="rp-set-chip">{y}</span>
+<span class="rp-set-chip">{x, y}</span></p>
 </div>
-
-<p>共 4 個，剛好等於 $2^2 &#x3D; 4$，公式成立。</p>
+<p>共 4 個，剛好等於
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>2</mn></msup><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">2^2 = 4</annotation></semantics></math>，公式成立。</p>
 <div class="rp-banner">
-<div class="rp-num">5</div>
+<div class="rp-num">
+5
+</div>
 <div class="rp-text">
-<div class="rp-title">代入計算</div>
-<div class="rp-desc">把 $n=7$ 代進 $2^n$</div>
+<div class="rp-title">
+代入計算
+</div>
+<div class="rp-desc">
+把
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>7</mn></mrow><annotation encoding="application/x-tex">n=7</annotation></semantics></math>
+代進
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>2</mn><mi>n</mi></msup><annotation encoding="application/x-tex">2^n</annotation></semantics></math>
 </div>
 </div>
-
-<p>$$<br>2^7 &#x3D; 128<br>$$</p>
-<h4 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h4><div class="rp-table-wrap">
-
-<table>
-<tr><th>項目</th><th>說明</th></tr>
-<tr><td>每個元素的選擇</td><td>要 / 不要（2 種）</td></tr>
-<tr><td>元素個數</td><td>7 個</td></tr>
-<tr><td>部分集合總數</td><td>$2^7 = 128$ 個</td></tr>
-</table>
-
 </div>
-
-
-<h2 id="怎麼從題目「看出」這是重複排列問題？"><a href="#怎麼從題目「看出」這是重複排列問題？" class="headerlink" title="怎麼從題目「看出」這是重複排列問題？"></a>怎麼從題目「看出」這是重複排列問題？</h2><div class="rp-stage-grid">
-
-<div class="rp-stage-card">
-<div class="rp-stage-head">
-<span class="rp-stage-tag">檢查點 1</span>
-<span class="rp-stage-name">能否拆成一連串獨立決定？</span>
-</div>
-<div class="rp-stage-body">
-原本問「有多少個部分集合」是結果導向、難以下手。換個角度，把「選一個部分集合」重新詮釋成「對每個元素做一次是否納入的決定」，問題就變成一連串好算的小決定：對 <code>a1</code> 做決定 → 對 <code>a2</code> 做決定 → … → 對 <code>a7</code> 做決定。只要能把最終結果拆解成一連串先後（或彼此獨立）的選擇動作，就有機會用排列的角度計算。
-</div>
-</div>
-
-<div class="rp-stage-card">
-<div class="rp-stage-head">
-<span class="rp-stage-tag">檢查點 2</span>
-<span class="rp-stage-name">選項數是否固定、彼此無關？</span>
-</div>
-<div class="rp-stage-body">
-<code>a1</code> 要不要放進去有 2 種選擇，<code>a2</code> 要不要放進去也有 2 種選擇，且不會因為 <code>a1</code> 選了什麼而改變。這一點區分了重複排列跟一般排列：一般排列選過的選項會用完、選項數遞減；重複排列的選項用完後還能再用，選項數恆定。「要 / 不要」這兩個選項每個元素都能各自使用，正是重複排列的核心特徵。
-</div>
-</div>
-
-<div class="rp-stage-card">
-<div class="rp-stage-head">
-<span class="rp-stage-tag">檢查點 3</span>
-<span class="rp-stage-name">決定組合是否不重不漏對應到答案？</span>
-</div>
-<div class="rp-stage-body">
-兩種不同的「要／不要」組合，一定對應到兩個不同的部分集合（不重複）；任何一個部分集合，也都能由某一組「要／不要」組合表示出來（不遺漏）。所有可能的決定組合與所有部分集合之間是<b>一一對應</b>的關係，所以算出決定組合的總數，就等於部分集合的總數。
-</div>
-</div>
-
-</div>
-
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>7</mn></msup><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">
+2^7 = 128
+</annotation></semantics></math></p>
+<h4 id="結論">結論</h4>
 <div class="rp-table-wrap">
-
 <table>
-<tr><th>類型</th><th>選項是否會用完</th><th>範例</th></tr>
-<tr><td>一般排列（不重複）</td><td>選過的選項不能再選，選項數會遞減</td><td>從 7 人中選 3 人排隊</td></tr>
-<tr><td>重複排列</td><td>選項用完後還能再用，選項數恆定</td><td>每個元素都可獨立回答「要／不要」</td></tr>
+<tr>
+<th>
+項目
+</th>
+<th>
+說明
+</th>
+</tr>
+<tr>
+<td>
+每個元素的選擇
+</td>
+<td>
+要 / 不要（2 種）
+</td>
+</tr>
+<tr>
+<td>
+元素個數
+</td>
+<td>
+7 個
+</td>
+</tr>
+<tr>
+<td>
+部分集合總數
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>7</mn></msup><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">2^7 = 128</annotation></semantics></math>
+個
+</td>
+</tr>
 </table>
-
 </div>
-
+<h2
+id="怎麼從題目看出這是重複排列問題">怎麼從題目「看出」這是重複排列問題？</h2>
+<div class="rp-stage-grid">
+<div class="rp-stage-card">
+<div class="rp-stage-head">
+<p><span class="rp-stage-tag">檢查點 1</span> <span
+class="rp-stage-name">能否拆成一連串獨立決定？</span></p>
+</div>
+<div class="rp-stage-body">
+<p>原本問「有多少個部分集合」是結果導向、難以下手。換個角度，把「選一個部分集合」重新詮釋成「對每個元素做一次是否納入的決定」，問題就變成一連串好算的小決定：對
+<code>a1</code> 做決定 → 對 <code>a2</code> 做決定 → … → 對
+<code>a7</code>
+做決定。只要能把最終結果拆解成一連串先後（或彼此獨立）的選擇動作，就有機會用排列的角度計算。</p>
+</div>
+</div>
+<div class="rp-stage-card">
+<div class="rp-stage-head">
+<p><span class="rp-stage-tag">檢查點 2</span> <span
+class="rp-stage-name">選項數是否固定、彼此無關？</span></p>
+</div>
+<div class="rp-stage-body">
+<p><code>a1</code> 要不要放進去有 2 種選擇，<code>a2</code>
+要不要放進去也有 2 種選擇，且不會因為 <code>a1</code>
+選了什麼而改變。這一點區分了重複排列跟一般排列：一般排列選過的選項會用完、選項數遞減；重複排列的選項用完後還能再用，選項數恆定。「要
+/ 不要」這兩個選項每個元素都能各自使用，正是重複排列的核心特徵。</p>
+</div>
+</div>
+<div class="rp-stage-card">
+<div class="rp-stage-head">
+<p><span class="rp-stage-tag">檢查點 3</span> <span
+class="rp-stage-name">決定組合是否不重不漏對應到答案？</span></p>
+</div>
+<div class="rp-stage-body">
+<p>兩種不同的「要／不要」組合，一定對應到兩個不同的部分集合（不重複）；任何一個部分集合，也都能由某一組「要／不要」組合表示出來（不遺漏）。所有可能的決定組合與所有部分集合之間是<b>一一對應</b>的關係，所以算出決定組合的總數，就等於部分集合的總數。</p>
+</div>
+</div>
+</div>
+<div class="rp-table-wrap">
+<table>
+<tr>
+<th>
+類型
+</th>
+<th>
+選項是否會用完
+</th>
+<th>
+範例
+</th>
+</tr>
+<tr>
+<td>
+一般排列（不重複）
+</td>
+<td>
+選過的選項不能再選，選項數會遞減
+</td>
+<td>
+從 7 人中選 3 人排隊
+</td>
+</tr>
+<tr>
+<td>
+重複排列
+</td>
+<td>
+選項用完後還能再用，選項數恆定
+</td>
+<td>
+每個元素都可獨立回答「要／不要」
+</td>
+</tr>
+</table>
+</div>
 <p><strong>歸納成一句話：</strong></p>
 <div class="rp-note">
-當一個問題可以拆成 $n$ 個<b>互不影響</b>的位置／步驟，而每個位置都各自有<b>相同且固定</b>的 $m$ 種選項可選（選項可以重複使用），並且這些選擇彼此一一對應到題目要算的對象時，答案就是 $m^n$。
+<p>當一個問題可以拆成
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+個<b>互不影響</b>的位置／步驟，而每個位置都各自有<b>相同且固定</b>的
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+種選項可選（選項可以重複使用），並且這些選擇彼此一一對應到題目要算的對象時，答案就是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>m</mi><mi>n</mi></msup><annotation encoding="application/x-tex">m^n</annotation></semantics></math>。</p>
 </div>
-
-<p>回到本題：$n &#x3D; 7$（元素個數，也就是決定的次數），$m &#x3D; 2$（要／不要），所以答案是 $2^7 &#x3D; 128$</p></div><div class="tab-item-content"><p>3 本不同的書，分給 A, B, C, D, E, F 六個人，依下列情形，各有幾種方法？</p>
-<p>(1) 每人所得不限<br>(2) C 至少得一本<br>(3) A 與 B 都至少得一本</p>
-<h2 id="這題為什麼是重複排列？"><a href="#這題為什麼是重複排列？" class="headerlink" title="這題為什麼是重複排列？"></a>這題為什麼是重複排列？</h2><div class="rp-shelf">
-
-<div class="rp-book b1">書 1</div>
-
-<div class="rp-book b2">書 2</div>
-
-<div class="rp-book b3">書 3</div>
-
+<p>回到本題：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>7</mn></mrow><annotation encoding="application/x-tex">n = 7</annotation></semantics></math>（元素個數，也就是決定的次數），<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">m = 2</annotation></semantics></math>（要／不要），所以答案是
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>7</mn></msup><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">2^7 = 128</annotation></semantics></math></p></div><div class="tab-item-content"><p>3 本不同的書，分給 A, B, C, D, E, F
+六個人，依下列情形，各有幾種方法？</p>
+<ol type="1">
+<li>每人所得不限</li>
+<li>C 至少得一本</li>
+<li>A 與 B 都至少得一本</li>
+</ol>
+<h2 id="這題為什麼是重複排列">這題為什麼是重複排列？</h2>
+<div class="rp-shelf">
+<div class="rp-book b1">
+書 1
 </div>
-
+<div class="rp-book b2">
+書 2
+</div>
+<div class="rp-book b3">
+書 3
+</div>
+</div>
 <ul>
-<li>3 本書是<strong>不同的</strong>（書 1、書 2、書 3 可以分辨），所以「分配」這件事其實是要對<strong>每一本書</strong>分別決定「要給誰」。</li>
-<li>每一本書可以給下面這 6 人之中的<strong>任何一人</strong>，共有 6 種選擇。</li>
-<li>書 1 給了誰，<strong>完全不影響</strong>書 2、書 3 還能給誰選——因為題目沒說「一人只能拿一本」，所以選項不會用完、可以重複使用。</li>
+<li>3 本書是<strong>不同的</strong>（書 1、書 2、書 3
+可以分辨），所以「分配」這件事其實是要對<strong>每一本書</strong>分別決定「要給誰」。</li>
+<li>每一本書可以給下面這 6 人之中的<strong>任何一人</strong>，共有 6
+種選擇。</li>
+<li>書 1 給了誰，<strong>完全不影響</strong>書 2、書 3
+還能給誰選——因為題目沒說「一人只能拿一本」，所以選項不會用完、可以重複使用。</li>
 </ul>
 <div class="rp-people-grid">
-
-<div class="rp-person"><div class="rp-avatar">A</div><div class="rp-name">A</div></div>
-
-<div class="rp-person"><div class="rp-avatar">B</div><div class="rp-name">B</div></div>
-
-<div class="rp-person"><div class="rp-avatar">C</div><div class="rp-name">C</div></div>
-
-<div class="rp-person"><div class="rp-avatar">D</div><div class="rp-name">D</div></div>
-
-<div class="rp-person"><div class="rp-avatar">E</div><div class="rp-name">E</div></div>
-
-<div class="rp-person"><div class="rp-avatar">F</div><div class="rp-name">F</div></div>
-
+<div class="rp-person">
+<div class="rp-avatar">
+A
 </div>
-
-<p>也就是說，這題的「決定次數」不是「人數」，而是**「書的本數」**：</p>
+<div class="rp-name">
+A
+</div>
+</div>
+<div class="rp-person">
+<div class="rp-avatar">
+B
+</div>
+<div class="rp-name">
+B
+</div>
+</div>
+<div class="rp-person">
+<div class="rp-avatar">
+C
+</div>
+<div class="rp-name">
+C
+</div>
+</div>
+<div class="rp-person">
+<div class="rp-avatar">
+D
+</div>
+<div class="rp-name">
+D
+</div>
+</div>
+<div class="rp-person">
+<div class="rp-avatar">
+E
+</div>
+<div class="rp-name">
+E
+</div>
+</div>
+<div class="rp-person">
+<div class="rp-avatar">
+F
+</div>
+<div class="rp-name">
+F
+</div>
+</div>
+</div>
+<p>也就是說，這題的「決定次數」不是「人數」，而是<strong>「書的本數」</strong>：</p>
 <figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">書1 要給誰？ →<span class="number"> 6 </span>選 1</span><br><span class="line">書2 要給誰？ →<span class="number"> 6 </span>選 1（跟書1的結果無關）</span><br><span class="line">書3 要給誰？ →<span class="number"> 6 </span>選 1（跟書1、書2的結果無關）</span><br></pre></td></tr></table></figure>
-
-<p>3 個獨立的決定，每個決定都有相同、固定的 6 種選項可重複使用，這正是重複排列 $m^n$ 的樣板：這裡 $n&#x3D;3$（書的本數）、$m&#x3D;6$（人數）。</p>
-<h4 id="1-每人所得不限"><a href="#1-每人所得不限" class="headerlink" title="(1) 每人所得不限"></a>(1) 每人所得不限</h4><p>由於每本書都能自由選 6 人中的 1 人，且互不影響，依乘法原理：</p>
-<p>$$<br>\underbrace{6 \times 6 \times 6}_{3 \text{ 本書}} &#x3D; 6^3 &#x3D; 216 \text{ 種}<br>$$</p>
-<h4 id="2-C-至少得一本"><a href="#2-C-至少得一本" class="headerlink" title="(2) C 至少得一本"></a>(2) C 至少得一本</h4><p><strong>第一步：正面算不好算</strong></p>
-<p>如果直接算「C 至少一本」，要考慮 C 拿 1 本、2 本、3 本等各種情況，很麻煩。</p>
-<p><strong>第二步：換成反面思考——用「全部」扣掉「C 一本都沒拿到」</strong></p>
-<p>$$<br>\text{C 至少一本} &#x3D; \text{全部分法} - \text{C 完全沒拿到}<br>$$</p>
-<p>「C 完全沒拿到」代表每本書都只能從<strong>剩下 5 人</strong>（扣掉 C）中選一人，一樣是重複排列：</p>
-<p>$$<br>\text{C 沒拿到} &#x3D; 5^3 &#x3D; 125<br>$$</p>
+<p>3 個獨立的決定，每個決定都有相同、固定的 6
+種選項可重複使用，這正是重複排列
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>m</mi><mi>n</mi></msup><annotation encoding="application/x-tex">m^n</annotation></semantics></math>
+的樣板：這裡
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">n=3</annotation></semantics></math>（書的本數）、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">m=6</annotation></semantics></math>（人數）。</p>
+<h4 id="每人所得不限">(1) 每人所得不限</h4>
+<p>由於每本書都能自由選 6 人中的 1 人，且互不影響，依乘法原理：</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><munder><mrow><mn>6</mn><mo>×</mo><mn>6</mn><mo>×</mo><mn>6</mn></mrow><mo accent="true">⏟</mo></munder><mrow><mn>3</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> 本書</mtext></mrow></mrow></munder><mo>=</mo><msup><mn>6</mn><mn>3</mn></msup><mo>=</mo><mn>216</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> 種</mtext></mrow></mrow><annotation encoding="application/x-tex">
+\underbrace{6 \times 6 \times 6}_{3 \text{ 本書}} = 6^3 = 216 \text{ 種}
+</annotation></semantics></math></p>
+<h4 id="c-至少得一本">(2) C 至少得一本</h4>
+<p><strong>第一步：正面算不好算</strong></p>
+<p>如果直接算「C 至少一本」，要考慮 C 拿 1 本、2 本、3
+本等各種情況，很麻煩。</p>
+<p><strong>第二步：換成反面思考——用「全部」扣掉「C
+一本都沒拿到」</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">C 至少一本</mtext><mo>=</mo><mtext mathvariant="normal">全部分法</mtext><mo>−</mo><mtext mathvariant="normal">C 完全沒拿到</mtext></mrow><annotation encoding="application/x-tex">
+\text{C 至少一本} = \text{全部分法} - \text{C 完全沒拿到}
+</annotation></semantics></math></p>
+<p>「C 完全沒拿到」代表每本書都只能從<strong>剩下 5 人</strong>（扣掉
+C）中選一人，一樣是重複排列：</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">C 沒拿到</mtext><mo>=</mo><msup><mn>5</mn><mn>3</mn></msup><mo>=</mo><mn>125</mn></mrow><annotation encoding="application/x-tex">
+\text{C 沒拿到} = 5^3 = 125
+</annotation></semantics></math></p>
 <p><strong>第三步：相減</strong></p>
-<p>$$<br>6^3 - 5^3 &#x3D; 216 - 125 &#x3D; 91 \text{ 種}<br>$$</p>
-<h4 id="為什麼不能寫成-3-times-6-times-6-？"><a href="#為什麼不能寫成-3-times-6-times-6-？" class="headerlink" title="為什麼不能寫成 $3 \times 6 \times 6$？"></a>為什麼不能寫成 $3 \times 6 \times 6$？</h4><div class="rp-note warn">
-「先從 3 本書裡挑 1 本『指定』給 C（3 種選法），剩下 2 本再自由分給 6 人」，於是寫出 $3 \times 6 \times 6 = 108$（錯誤！正確答案是 91）。
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>6</mn><mn>3</mn></msup><mo>−</mo><msup><mn>5</mn><mn>3</mn></msup><mo>=</mo><mn>216</mn><mo>−</mo><mn>125</mn><mo>=</mo><mn>91</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> 種</mtext></mrow></mrow><annotation encoding="application/x-tex">
+6^3 - 5^3 = 216 - 125 = 91 \text{ 種}
+</annotation></semantics></math></p>
+<h4 id="為什麼不能寫成-3-times-6-times-6">為什麼不能寫成
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>6</mn><mo>×</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">3 \times 6 \times 6</annotation></semantics></math>？</h4>
+<div class="rp-note warn">
+<p>「先從 3 本書裡挑 1 本『指定』給 C（3 種選法），剩下 2 本再自由分給 6
+人」，於是寫出
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>6</mn><mo>×</mo><mn>6</mn><mo>=</mo><mn>108</mn></mrow><annotation encoding="application/x-tex">3 \times 6 \times 6 = 108</annotation></semantics></math>（錯誤！正確答案是
+91）。</p>
 </div>
-
-<p><strong>疑惑的本質出在「選書」這個動作上：</strong> 這個算法表面上是在「選出保底給 C 的那本書」，但它<strong>沒有把「C 到底拿了幾本書」這件事固定住</strong>。因為剩下的 2 本書依然可以自由選到 C，所以「保底給 C 的是哪一本」這個選擇，其實只是一種<strong>人為貼上去的標籤</strong>，並不是這件事本身有意義的區分。</p>
-<p>下面用「書 1、書 2 都給 C、書 3 給 D」這個結果來看，錯誤算法會怎麼重複計算它：</p>
+<p><strong>疑惑的本質出在「選書」這個動作上：</strong>
+這個算法表面上是在「選出保底給 C 的那本書」，但它<strong>沒有把「C
+到底拿了幾本書」這件事固定住</strong>。因為剩下的 2 本書依然可以自由選到
+C，所以「保底給 C
+的是哪一本」這個選擇，其實只是一種<strong>人為貼上去的標籤</strong>，並不是這件事本身有意義的區分。</p>
+<p>下面用「書 1、書 2 都給 C、書 3 給
+D」這個結果來看，錯誤算法會怎麼重複計算它：</p>
 <div class="rp-dup-grid">
-
-<div class="rp-dup-card"><span class="rp-dup-tag">選法 A</span>選書 1 當保底給 C → 書 2 剛好也選到 C → 書 3 選 D</div>
-
-<p><span class="rp-dup-arrow">＋</span></p>
-<div class="rp-dup-card"><span class="rp-dup-tag">選法 B</span>選書 2 當保底給 C → 書 1 剛好也選到 C → 書 3 選 D</div>
-
-<p><span class="rp-dup-arrow">＝</span></p>
-<div class="rp-dup-result"><span class="rp-dup-tag">同一種結果</span>書1、書2 都給 C，書3 給 D，卻被算成 2 種</div>
-
+<div class="rp-dup-card">
+<span class="rp-dup-tag">選法 A</span>選書 1 當保底給 C → 書 2
+剛好也選到 C → 書 3 選 D
 </div>
-
+<p><span class="rp-dup-arrow">＋</span></p>
+<div class="rp-dup-card">
+<span class="rp-dup-tag">選法 B</span>選書 2 當保底給 C → 書 1
+剛好也選到 C → 書 3 選 D
+</div>
+<p><span class="rp-dup-arrow">＝</span></p>
+<div class="rp-dup-result">
+<span class="rp-dup-tag">同一種結果</span>書1、書2 都給 C，書3 給
+D，卻被算成 2 種
+</div>
+</div>
 <p>也就是說：</p>
 <ul>
 <li>「選哪一本書當保底」這個步驟，本身<strong>不是</strong>在區分不同的分配結果，而只是在區分「我用哪個角度去描述同一個結果」。</li>
-<li>當 C 最終只拿到 1 本書時，只有 1 種角度能描述它（本來就只有 1 本给C，沒有模糊空間），所以不會重複算；</li>
-<li>但當 C 最終拿到 2 本或 3 本書時，就會有多個「保底書」的選法都能描述到同一個結果，於是同一個分配方式就被貼上了 2 個、甚至 3 個標籤，造成重複計算。</li>
+<li>當 C 最終只拿到 1 本書時，只有 1 種角度能描述它（本來就只有 1
+本给C，沒有模糊空間），所以不會重複算；</li>
+<li>但當 C 最終拿到 2 本或 3
+本書時，就會有多個「保底書」的選法都能描述到同一個結果，於是同一個分配方式就被貼上了
+2 個、甚至 3 個標籤，造成重複計算。</li>
 </ul>
 <div class="rp-table-wrap">
-
 <table>
-<tr><th>C 拿到的本數</th><th>算法</th><th>結果</th></tr>
-<tr><td>恰好 1 本</td><td>選哪本給C(3) × 剩2本各給非C的5人(5×5)</td><td>75</td></tr>
-<tr><td>恰好 2 本</td><td>選哪2本給C(C(3,2)=3) × 剩1本給非C的5人</td><td>15</td></tr>
-<tr><td>恰好 3 本</td><td>—</td><td>1</td></tr>
-<tr><td><b>合計</b></td><td></td><td><b>91</b></td></tr>
+<tr>
+<th>
+C 拿到的本數
+</th>
+<th>
+算法
+</th>
+<th>
+結果
+</th>
+</tr>
+<tr>
+<td>
+恰好 1 本
+</td>
+<td>
+選哪本給C(3) × 剩2本各給非C的5人(5×5)
+</td>
+<td>
+75
+</td>
+</tr>
+<tr>
+<td>
+恰好 2 本
+</td>
+<td>
+選哪2本給C(C(3,2)=3) × 剩1本給非C的5人
+</td>
+<td>
+15
+</td>
+</tr>
+<tr>
+<td>
+恰好 3 本
+</td>
+<td>
+—
+</td>
+<td>
+1
+</td>
+</tr>
+<tr>
+<td>
+<b>合計</b>
+</td>
+<td>
+</td>
+<td>
+<b>91</b>
+</td>
+</tr>
 </table>
-
 </div>
-
 <div class="rp-note danger">
-「先選一本書當保底」這個動作，只有在<b>其餘書籍被強制排除給 C</b>（例如題目變成「恰好 1 本給 C，其餘都不給 C」）時，才會是一個乾淨、不重疊的分類方式。但本題只要求「至少一本」，並沒有排除其餘書也給 C 的可能，所以用「選書」來分類，天生就會產生重疊，讓同一個結果被多個「選書方式」重複認領。
+<p>「先選一本書當保底」這個動作，只有在<b>其餘書籍被強制排除給
+C</b>（例如題目變成「恰好 1 本給 C，其餘都不給
+C」）時，才會是一個乾淨、不重疊的分類方式。但本題只要求「至少一本」，並沒有排除其餘書也給
+C
+的可能，所以用「選書」來分類，天生就會產生重疊，讓同一個結果被多個「選書方式」重複認領。</p>
 </div>
-
-<p>這也是為什麼遇到「至少」類型的問題，<strong>用反面思考（全部 − 不符合）或依「恰好拿到幾本」精確分類</strong>，會比「先挑一個保底、其餘自由分」更保險——後者的分類方式常常不是「一一對應」，很容易在直覺上漏掉「其餘選項也可能落在同一個對象上」而造成重複。</p>
-<h4 id="3-A-與-B-都至少得一本"><a href="#3-A-與-B-都至少得一本" class="headerlink" title="(3) A 與 B 都至少得一本"></a>(3) A 與 B 都至少得一本</h4><p><strong>第一步：辨識這是「至少」且牽涉兩個對象，要用排容原理（Inclusion–Exclusion）</strong></p>
-<p>想要的事件是「A 至少 1 本 <strong>且</strong> B 至少 1 本」，直接正面算同樣困難，所以改成從全部扣掉「不符合的情況」。</p>
+<p>這也是為什麼遇到「至少」類型的問題，<strong>用反面思考（全部 −
+不符合）或依「恰好拿到幾本」精確分類</strong>，會比「先挑一個保底、其餘自由分」更保險——後者的分類方式常常不是「一一對應」，很容易在直覺上漏掉「其餘選項也可能落在同一個對象上」而造成重複。</p>
+<h4 id="a-與-b-都至少得一本">(3) A 與 B 都至少得一本</h4>
+<p><strong>第一步：辨識這是「至少」且牽涉兩個對象，要用排容原理（Inclusion–Exclusion）</strong></p>
+<p>想要的事件是「A 至少 1 本 <strong>且</strong> B 至少 1
+本」，直接正面算同樣困難，所以改成從全部扣掉「不符合的情況」。</p>
 <p>不符合的情況分兩種，且會重疊：</p>
 <ul>
-<li>事件 $\bar A$：A 一本都沒拿到</li>
-<li>事件 $\bar B$：B 一本都沒拿到</li>
+<li>事件
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>A</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar A</annotation></semantics></math>：A
+一本都沒拿到</li>
+<li>事件
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>B</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar B</annotation></semantics></math>：B
+一本都沒拿到</li>
 </ul>
 <p><strong>第二步：分別計算每個「沒拿到」的情況</strong></p>
 <ul>
-<li>A 沒拿到：每本書只能給剩下 5 人 → $5^3 &#x3D; 125$</li>
-<li>B 沒拿到：同理 → $5^3 &#x3D; 125$</li>
-<li>A 和 B 都沒拿到：每本書只能給剩下 4 人（扣掉 A、B）→ $4^3 &#x3D; 64$</li>
+<li>A 沒拿到：每本書只能給剩下 5 人 →
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>5</mn><mn>3</mn></msup><mo>=</mo><mn>125</mn></mrow><annotation encoding="application/x-tex">5^3 = 125</annotation></semantics></math></li>
+<li>B 沒拿到：同理 →
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>5</mn><mn>3</mn></msup><mo>=</mo><mn>125</mn></mrow><annotation encoding="application/x-tex">5^3 = 125</annotation></semantics></math></li>
+<li>A 和 B 都沒拿到：每本書只能給剩下 4 人（扣掉 A、B）→
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>4</mn><mn>3</mn></msup><mo>=</mo><mn>64</mn></mrow><annotation encoding="application/x-tex">4^3 = 64</annotation></semantics></math></li>
 </ul>
 <p><strong>第三步：排容原理組合起來</strong></p>
-<p>$$<br>\text{A 或 B 至少一人沒拿到} &#x3D; |\bar A| + |\bar B| - |\bar A \cap \bar B| &#x3D; 125 + 125 - 64 &#x3D; 186<br>$$</p>
-<p><strong>第四步：用全部扣掉「不符合」，得到「A 與 B 都至少一本」</strong></p>
-<p>$$<br>6^3 - 186 &#x3D; 216 - 186 &#x3D; 30 \text{ 種}<br>$$</p>
-<h4 id="結論整理"><a href="#結論整理" class="headerlink" title="結論整理"></a>結論整理</h4><table class="rp-table-wrap">
-<tr><th>小題</th><th>想法</th><th>算式</th><th>結果</th></tr>
-<tr><td>(1) 每人所得不限</td><td>3 本書各自 6 選 1，互相獨立</td><td>$6^3$</td><td>216</td></tr>
-<tr><td>(2) C 至少一本</td><td>全部 − C 完全沒拿到</td><td>$6^3 - 5^3$</td><td>91</td></tr>
-<tr><td>(3) A、B 都至少一本</td><td>全部 − (A沒拿 + B沒拿 − 兩人都沒拿)</td><td>$6^3-(5^3+5^3-4^3)$</td><td>30</td></tr>
-</table>
-
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">A 或 B 至少一人沒拿到</mtext><mo>=</mo><mo stretchy="false" form="prefix">|</mo><mover><mi>A</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="prefix">|</mo><mi>+</mi><mo stretchy="false" form="prefix">|</mo><mover><mi>B</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="prefix">|</mo><mi>−</mi><mo stretchy="false" form="prefix">|</mo><mover><mi>A</mi><mo accent="true">‾</mo></mover><mo>∩</mo><mover><mi>B</mi><mo accent="true">‾</mo></mover><mo stretchy="false" form="prefix">|</mo><mo>=</mo><mn>125</mn><mo>+</mo><mn>125</mn><mo>−</mo><mn>64</mn><mo>=</mo><mn>186</mn></mrow><annotation encoding="application/x-tex">
+\text{A 或 B 至少一人沒拿到} = |\bar A| + |\bar B| - |\bar A \cap \bar B| = 125 + 125 - 64 = 186
+</annotation></semantics></math></p>
+<p><strong>第四步：用全部扣掉「不符合」，得到「A 與 B
+都至少一本」</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>6</mn><mn>3</mn></msup><mo>−</mo><mn>186</mn><mo>=</mo><mn>216</mn><mo>−</mo><mn>186</mn><mo>=</mo><mn>30</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> 種</mtext></mrow></mrow><annotation encoding="application/x-tex">
+6^3 - 186 = 216 - 186 = 30 \text{ 種}
+</annotation></semantics></math></p>
+<h4 id="結論整理">結論整理</h4>
+<table class="rp-table-wrap">
+<tr>
+<th>
+小題
+</th>
+<th>
+想法
+</th>
+<th>
+算式
+</th>
+<th>
+結果
+</th>
+</tr>
+<tr>
+<td>
+<ol type="1">
+<li>每人所得不限
+</td>
+<td>
+3 本書各自 6 選 1，互相獨立
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>6</mn><mn>3</mn></msup><annotation encoding="application/x-tex">6^3</annotation></semantics></math>
+</td>
+<td>
+216
+</td>
+</tr>
+<tr>
+<td>
+(2) C 至少一本
+</td>
+<td>
+全部 − C 完全沒拿到
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>6</mn><mn>3</mn></msup><mo>−</mo><msup><mn>5</mn><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">6^3 - 5^3</annotation></semantics></math>
+</td>
+<td>
+91
+</td>
+</tr>
+<tr>
+<td>
+(3) A、B 都至少一本
+</td>
+<td>
+全部 − (A沒拿 + B沒拿 − 兩人都沒拿)
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>6</mn><mn>3</mn></msup><mo>−</mo><mo stretchy="false" form="prefix">(</mo><msup><mn>5</mn><mn>3</mn></msup><mo>+</mo><msup><mn>5</mn><mn>3</mn></msup><mo>−</mo><msup><mn>4</mn><mn>3</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">6^3-(5^3+5^3-4^3)</annotation></semantics></math>
+</td>
+<td>
+30
+</td>
+</tr>
+</table></li>
+</ol>
 <div class="rp-note">
-只要看到「東西不同、可以重複分配給同一批對象、且分配彼此互不影響」，就是重複排列 $m^n$；一旦題目出現「至少」、「都要」這類條件，第一個念頭應該是<b>反面思考（全部 − 不符合）</b>，若牽涉兩個以上的限制條件同時「至少」，就要進一步用<b>排容原理</b>去扣掉重疊算兩次的部分。
+<p>只要看到「東西不同、可以重複分配給同一批對象、且分配彼此互不影響」，就是重複排列
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>m</mi><mi>n</mi></msup><annotation encoding="application/x-tex">m^n</annotation></semantics></math>；一旦題目出現「至少」、「都要」這類條件，第一個念頭應該是<b>反面思考（全部
+−
+不符合）</b>，若牽涉兩個以上的限制條件同時「至少」，就要進一步用<b>排容原理</b>去扣掉重疊算兩次的部分。</p>
 </div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/07/15/Probability-%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97/">https://chi-keke.github.io/Mind/2026/07/15/Probability-%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://github.com/CHI-KEKE/pics/blob/main/Probability/RePermutation/landing.png?raw=true" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/06/28/Statistics-hypothesis-3/" title="hypothesis - 新冠特效藥"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/Bessels-Correction/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">hypothesis - 新冠特效藥</div></div><div class="info-2"><div class="info-item-1">新冠特效藥是否有效？建立假設假設 $H_0$ 成立，建立抽樣分布計算 Z 分數計算 P 值（P-value）與顯著水準比較如何正確解讀 P 值？ .step-banner { display: flex; align-items: center; gap: 12px; background: #f2efe4; border-left: 4px solid #3d6b66; padding: 10px 18px; margin: 0 0 20px; border-radius: 2px; } .step-banner .step-tag { font-family: 'Courier New', Consolas, monospace; font-size: 0.72rem; font-weight: 700; color: #fbfaf6; background: #3d6b66; border-radius: 2px; padding: 3px 10px; flex-shrink: 0; letter-spacing: 1px; } .step-banner .step-tit...</div></div></div></a><a class="pagination-related" href="/Mind/2026/07/21/Statistics-Hypergeometric-Distribution/" title="Hypergeometric Distribution"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypergeometric-distribution/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Hypergeometric Distribution</div></div><div class="info-2"><div class="info-item-1">品管（Quality Control）撲克牌威力彩 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap'); .ind-scope{--ind-bg:#1c1e22;--ind-panel:#24262b;--ind-card:#2f333a;--ind-line:#3a3f47;--ind-line2:#454b54;--ind-amber:#f2a900;--ind-red:#e2432b;--ind-green:#4caf6d;--ind-blue:#5b8db8;--ind-text:#e8e6df;--ind-sub:#9aa0a8;font-family:"Noto Sans TC",sans-serif;} .ind-hero{background:linear-gradient(180deg,#2a2d33,#1c1e22);border:1px solid var(--ind-li...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">40</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">解法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AE%B5%EF%BC%88A-%E2%86%92-C%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">第一段（A → C）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AE%B5%EF%BC%88C-%E2%86%92-B%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">第二段（C → B）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E6%95%B4%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">流程整理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">解法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E8%AB%96"><span class="toc-number">2.1.</span> <span class="toc-text">結論</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E9%BA%BC%E5%BE%9E%E9%A1%8C%E7%9B%AE%E3%80%8C%E7%9C%8B%E5%87%BA%E3%80%8D%E9%80%99%E6%98%AF%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97%E5%95%8F%E9%A1%8C%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">怎麼從題目「看出」這是重複排列問題？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%99%E9%A1%8C%E7%82%BA%E4%BB%80%E9%BA%BC%E6%98%AF%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">這題為什麼是重複排列？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%AF%8F%E4%BA%BA%E6%89%80%E5%BE%97%E4%B8%8D%E9%99%90"><span class="toc-number">4.1.</span> <span class="toc-text">(1) 每人所得不限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-C-%E8%87%B3%E5%B0%91%E5%BE%97%E4%B8%80%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">(2) C 至少得一本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E4%B8%8D%E8%83%BD%E5%AF%AB%E6%88%90-3-times-6-times-6-%EF%BC%9F"><span class="toc-number">4.3.</span> <span class="toc-text">為什麼不能寫成 $3 \times 6 \times 6$？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-A-%E8%88%87-B-%E9%83%BD%E8%87%B3%E5%B0%91%E5%BE%97%E4%B8%80%E6%9C%AC"><span class="toc-number">4.4.</span> <span class="toc-text">(3) A 與 B 都至少得一本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E8%AB%96%E6%95%B4%E7%90%86"><span class="toc-number">4.5.</span> <span class="toc-text">結論整理</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="二補數（Two's Complement）"/></a><div class="content"><a class="title" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）">二補數（Two's Complement）</a><time datetime="2026-08-19T00:30:03.000Z" title="Created 2026-08-19 08:30:03">2026-08-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://github.com/CHI-KEKE/pics/blob/main/Probability/RePermutation/landing.png?raw=true);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/07/15/Probability-%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97/">https://chi-keke.github.io/Mind/2026/07/15/Probability-%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://github.com/CHI-KEKE/pics/blob/main/Probability/RePermutation/landing.png?raw=true" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/06/28/Statistics-hypothesis/" title="hypothesis"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypothesis-1/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">hypothesis</div></div><div class="info-2"><div class="info-item-1">Ronald Fisher 的奶茶故事Fisher 如何設計這個實驗？先算亂猜有多少種可能那猜對幾杯才算真的有能力？這就是假設檢定的誕生假設檢定在幹嘛?網頁轉換率 /* ---- 暖色故事書風格：米黃紙感 + 蜂蜜色點綴，用於整篇假設檢定文章 ---- */ .story-card {   background: #fdf8f0; border: 1px solid #e6d2b5; border-radius: 10px;   padding: 22px 26px; margin: 20px 0; position: relative;   box-shadow: 0 2px 6px rgba(107,68,35,0.08);   font-family: 'Georgia', 'PingFang TC', serif; } .story-card::before {   content: '🍵'; position: absolute; top: -16px; left: 22px; font-size: 1.6rem;   background: #f...</div></div></div></a><a class="pagination-related" href="/Mind/2026/07/21/Statistics-Hypergeometric-Distribution/" title="Hypergeometric Distribution"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypergeometric-distribution/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Hypergeometric Distribution</div></div><div class="info-2"><div class="info-item-1">品管（Quality Control）撲克牌威力彩 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap'); .ind-scope{--ind-bg:#1c1e22;--ind-panel:#24262b;--ind-card:#2f333a;--ind-line:#3a3f47;--ind-line2:#454b54;--ind-amber:#f2a900;--ind-red:#e2432b;--ind-green:#4caf6d;--ind-blue:#5b8db8;--ind-text:#e8e6df;--ind-sub:#9aa0a8;font-family:"Noto Sans TC",sans-serif;} .ind-hero{background:linear-gradient(180deg,#2a2d33,#1c1e22);border:1px solid var(--ind...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">40</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">解法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AE%B5a-c"><span class="toc-number">1.1.</span> <span class="toc-text">第一段（A → C）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AE%B5c-b"><span class="toc-number">1.2.</span> <span class="toc-text">第二段（C → B）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E6%95%B4%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">流程整理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">解法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E8%AB%96"><span class="toc-number">2.1.</span> <span class="toc-text">結論</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E9%BA%BC%E5%BE%9E%E9%A1%8C%E7%9B%AE%E7%9C%8B%E5%87%BA%E9%80%99%E6%98%AF%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97%E5%95%8F%E9%A1%8C"><span class="toc-number">3.</span> <span class="toc-text">怎麼從題目「看出」這是重複排列問題？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%99%E9%A1%8C%E7%82%BA%E4%BB%80%E9%BA%BC%E6%98%AF%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97"><span class="toc-number">4.</span> <span class="toc-text">這題為什麼是重複排列？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AF%8F%E4%BA%BA%E6%89%80%E5%BE%97%E4%B8%8D%E9%99%90"><span class="toc-number">4.1.</span> <span class="toc-text">(1) 每人所得不限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-%E8%87%B3%E5%B0%91%E5%BE%97%E4%B8%80%E6%9C%AC"><span class="toc-number">4.2.</span> <span class="toc-text">(2) C 至少得一本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E4%B8%8D%E8%83%BD%E5%AF%AB%E6%88%90-3-times-6-times-6"><span class="toc-number">4.3.</span> <span class="toc-text">為什麼不能寫成
+3×6×63 \times 6 \times 6？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#a-%E8%88%87-b-%E9%83%BD%E8%87%B3%E5%B0%91%E5%BE%97%E4%B8%80%E6%9C%AC"><span class="toc-number">4.4.</span> <span class="toc-text">(3) A 與 B 都至少得一本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B5%90%E8%AB%96%E6%95%B4%E7%90%86"><span class="toc-number">4.5.</span> <span class="toc-text">結論整理</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="二補數（Two's Complement）"/></a><div class="content"><a class="title" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）">二補數（Two's Complement）</a><time datetime="2026-08-19T00:30:03.000Z" title="Created 2026-08-19 08:30:03">2026-08-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://github.com/CHI-KEKE/pics/blob/main/Probability/RePermutation/landing.png?raw=true);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
