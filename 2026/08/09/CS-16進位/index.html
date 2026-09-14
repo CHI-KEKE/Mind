@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexadecimal | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgb">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexadecimal | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexadecimal">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgb">
+<meta property="og:description" content="進位為什麼選 16Debug 實務情境轉換練習 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba">
 <meta property="og:locale">
 <meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png">
 <meta property="article:published_time" content="2026-08-09T01:08:03.000Z">
@@ -158,7 +158,7 @@
   isHighlightShrink: false,
   isToc: false,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">Hexadecimal</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Hexadecimal</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-09T01:08:03.000Z" title="Created 2026-08-09 09:08:03">2026-08-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-10T00:38:54.094Z" title="Updated 2026-08-10 08:38:54">2026-08-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/CS/">CS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">進位</button><button type="button" class="tab">為什麼選 16</button><button type="button" class="tab">Debug 實務情境</button><button type="button" class="tab">轉換練習</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">40</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">Hexadecimal</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Hexadecimal</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-09T01:08:03.000Z" title="Created 2026-08-09 09:08:03">2026-08-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-10T00:38:54.094Z" title="Updated 2026-08-10 08:38:54">2026-08-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/CS/">CS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">進位</button><button type="button" class="tab">為什麼選 16</button><button type="button" class="tab">Debug 實務情境</button><button type="button" class="tab">轉換練習</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
 .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;}
 .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px dashed rgba(57,255,136,.3);}
 .cyber-card-title .cyber-icon{font-size:1.2em;}
@@ -186,46 +186,26 @@
 .cyber-flow-arrow{color:#39ff88;padding:6px 0 6px 20px;font-size:.85em;opacity:.85;}
 .cyber-badge{display:inline-block;background:rgba(57,255,136,.15);color:#39ff88;border:1px solid rgba(57,255,136,.4);border-radius:6px;padding:2px 10px;font-size:.8em;font-weight:700;letter-spacing:1px;margin-right:8px;}
 </style>
-<p>平常數字用的是十進位，但電腦裡其實到處都是別種進位系統，這篇要講的就是「進位」這件事的本質，以及為什麼工程師特別愛用
-16 進位。</p>
+
+<p>平常數字用的是十進位，但電腦裡其實到處都是別種進位系統，這篇要講的就是「進位」這件事的本質，以及為什麼工程師特別愛用 16 進位。</p>
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>十進位怎麼進位
-</div>
-<p>
-十進位的規則很單純：一個位置只能放 <code>0～9</code>，超過
-<code>9</code> 就往左邊進一位。
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>十進位怎麼進位</div>
+<p>十進位的規則很單純：一個位置只能放 <code>0～9</code>，超過 <code>9</code> 就往左邊進一位。</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">decimal.count</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">decimal.count</span></div>
 <pre class="cyber-terminal-pre">8
 9
 10  ← 進位發生的瞬間
 11</pre>
 </div>
-<p>
-這個 <code>10</code> 的意思其實是「1 個十、0 個一」，展開來看就是
-<code>1 × 10¹ + 0 × 10⁰ = 10</code>。
-</p>
+<p>這個 <code>10</code> 的意思其實是「1 個十、0 個一」，展開來看就是 <code>1 × 10¹ + 0 × 10⁰ = 10</code>。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>二進位是同一套規則，只是符號更少
-</div>
-<p>
-<code>二進位</code>是完全相同的概念，只是每個位置只剩
-<code>0</code>、<code>1</code> 兩種選擇，所以進位進得更頻繁：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>二進位是同一套規則，只是符號更少</div>
+<p><code>二進位</code>是完全相同的概念，只是每個位置只剩 <code>0</code>、<code>1</code> 兩種選擇，所以進位進得更頻繁：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">binary.count</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">binary.count</span></div>
 <pre class="cyber-terminal-pre">0
 1
 10
@@ -233,26 +213,14 @@ class="cyber-terminal-title">binary.count</span>
 100
 101</pre>
 </div>
-<p>
-例如 <code>1011</code> 這個二進位數字，展開後是 <code>1×8 + 0×4 + 1×2 +
-1×1 = 11</code>（十進位）。
-</p>
+<p>例如 <code>1011</code> 這個二進位數字，展開後是 <code>1×8 + 0×4 + 1×2 + 1×1 = 11</code>（十進位）。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>16 進位一樣是同一套規則
-</div>
-<p>
-而 <code>16 進位</code>用的也是同一套規則，只是每個位置可以放滿 16
-種數值：<code>0~9</code> 之後接著用 <code>A~F</code> 代表
-<code>10~15</code>：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>16 進位一樣是同一套規則</div>
+<p>而 <code>16 進位</code>用的也是同一套規則，只是每個位置可以放滿 16 種數值：<code>0~9</code> 之後接著用 <code>A~F</code> 代表 <code>10~15</code>：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">hex.count</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">hex.count</span></div>
 <pre class="cyber-terminal-pre">F
 10  ← 進位發生的瞬間
 11
@@ -261,72 +229,20 @@ class="cyber-terminal-title">hex.count</span>
 1F
 20</pre>
 </div>
-<p>
-例如 <code>2F</code> 這個 16 進位數字，展開後是 <code>2 × 16 + 15 =
-47</code>（十進位）。
-</p>
+<p>例如 <code>2F</code> 這個 16 進位數字，展開後是 <code>2 × 16 + 15 = 47</code>（十進位）。</p>
 <div class="cyber-table-wrap">
 <table class="cyber-table">
-<tr>
-<th>
-進位系統
-</th>
-<th>
-每位可放的符號
-</th>
-<th>
-進位時機
-</th>
-</tr>
-<tr>
-<td>
-十進位
-</td>
-<td>
-<code>0~9</code>（10 種）
-</td>
-<td>
-滿 10 就進位
-</td>
-</tr>
-<tr>
-<td>
-二進位
-</td>
-<td>
-<code>0~1</code>（2 種）
-</td>
-<td>
-滿 2 就進位
-</td>
-</tr>
-<tr>
-<td>
-16 進位
-</td>
-<td>
-<code>0<sub>9</code>、<code>A</sub>F</code>（16 種）
-</td>
-<td>
-滿 16 就進位
-</td>
-</tr>
+<tr><th>進位系統</th><th>每位可放的符號</th><th>進位時機</th></tr>
+<tr><td>十進位</td><td><code>0~9</code>（10 種）</td><td>滿 10 就進位</td></tr>
+<tr><td>二進位</td><td><code>0~1</code>（2 種）</td><td>滿 2 就進位</td></tr>
+<tr><td>16 進位</td><td><code>0~9</code>、<code>A~F</code>（16 種）</td><td>滿 16 就進位</td></tr>
 </table>
 </div>
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>4 個 bit 剛好對上 16 種組合
-</div>
-<p>
-<code>16 = 2⁴</code>，這代表 4 個 bit 剛好可以湊出 16
-種組合，一個不多、一個不少：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>4 個 bit 剛好對上 16 種組合</div>
+<p><code>16 = 2⁴</code>，這代表 4 個 bit 剛好可以湊出 16 種組合，一個不多、一個不少：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">4bit-to-hex.table</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">4bit-to-hex.table</span></div>
 <pre class="cyber-terminal-pre">0000 = 0        1000 = 8
 0001 = 1        1001 = 9
 0010 = 2        1010 = A
@@ -337,281 +253,131 @@ class="cyber-terminal-title">4bit-to-hex.table</span>
 0111 = 7        1111 = F</pre>
 </div>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>查表就能轉換，不需要計算
-</div>
-<p>
-這個對應關係漂亮到幾乎不需要計算，只要把二進位每 4
-個一組切開，直接查表轉換就好。例如看到：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>查表就能轉換，不需要計算</div>
+<p>這個對應關係漂亮到幾乎不需要計算，只要把二進位每 4 個一組切開，直接查表轉換就好。例如看到：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">binary-to-hex.convert</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">binary-to-hex.convert</span></div>
 <pre class="cyber-terminal-pre">1010 1111
 
-四個四個切開：
-
-1010 → A
-1111 → F
-
-得到：AF</pre>
+<p>四個四個切開：</p>
+<p>1010 → A<br>1111 → F</p>
+<p>得到：AF</pre></p>
 </div>
-<p>
-反過來，看到 <code>3C</code> 也可以直接展開回二進位：
-</p>
+<p>反過來，看到 <code>3C</code> 也可以直接展開回二進位：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">hex-to-binary.convert</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">hex-to-binary.convert</span></div>
 <pre class="cyber-terminal-pre">3 → 0011
 C → 1100
 
-3C → 0011 1100</pre>
+<p>3C → 0011 1100</pre></p>
 </div>
-<div class="cyber-note">
-這種「查表就能轉換」的特性，正是 16
-進位和電腦特別合拍的原因——不需要任何乘除運算，純粹是分組對照。
-</div>
+<div class="cyber-note">這種「查表就能轉換」的特性，正是 16 進位和電腦特別合拍的原因——不需要任何乘除運算，純粹是分組對照。</div>
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>32-bit 數值的可讀性差異
-</div>
-<p>
-假設你正在 Debug，記憶體裡跳出一個 32-bit 數值。如果全部用二進位顯示：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>32-bit 數值的可讀性差異</div>
+<p>假設你正在 Debug，記憶體裡跳出一個 32-bit 數值。如果全部用二進位顯示：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">memory.raw</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">memory.raw</span></div>
 <pre class="cyber-terminal-pre">11010110101000111100101011110001</pre>
 </div>
-<p>
-工程師看到這串數字，大概得先數一下到底有幾個 <code>0</code>。換成 16
-進位之後：
-</p>
+<p>工程師看到這串數字，大概得先數一下到底有幾個 <code>0</code>。換成 16 進位之後：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">memory.hex</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">memory.hex</span></div>
 <pre class="cyber-terminal-pre">1101 0110 1010 0011 1100 1010 1111 0001
  ↓    ↓    ↓    ↓    ↓    ↓    ↓    ↓
  D    6    A    3    C    A    F    1
 
-結果：D6A3CAF1</pre>
+<p>結果：D6A3CAF1</pre></p>
 </div>
-<p>
-32 個二進位數字，直接縮成 8 個 16 進位數字，而且每個 <code>Hex
-digit</code> 都能精準對應 4 bits，不會有進位錯位的問題。
-</p>
+<p>32 個二進位數字，直接縮成 8 個 16 進位數字，而且每個 <code>Hex digit</code> 都能精準對應 4 bits，不會有進位錯位的問題。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>Hex 出現的場合
-</div>
-<p>
-也因此在很多地方都會看到它：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>Hex 出現的場合</div>
+<p>也因此在很多地方都會看到它：</p>
 <div class="cyber-table-wrap">
 <table class="cyber-table">
-<tr>
-<th>
-使用場景
-</th>
-<th>
-範例
-</th>
-</tr>
-<tr>
-<td>
-記憶體位址
-</td>
-<td>
-<code>0x7FFFA120</code>
-</td>
-</tr>
-<tr>
-<td>
-顏色
-</td>
-<td>
-<code>#FF5733</code>
-</td>
-</tr>
-<tr>
-<td>
-Unicode
-</td>
-<td>
-<code>U+4E2D</code>
-</td>
-</tr>
-<tr>
-<td>
-Byte 資料
-</td>
-<td>
-<code>FF 0A 3C 82</code>
-</td>
-</tr>
-<tr>
-<td>
-程式中的 bit mask
-</td>
-<td>
-<code>0xFF</code>
-</td>
-</tr>
+<tr><th>使用場景</th><th>範例</th></tr>
+<tr><td>記憶體位址</td><td><code>0x7FFFA120</code></td></tr>
+<tr><td>顏色</td><td><code>#FF5733</code></td></tr>
+<tr><td>Unicode</td><td><code>U+4E2D</code></td></tr>
+<tr><td>Byte 資料</td><td><code>FF 0A 3C 82</code></td></tr>
+<tr><td>程式中的 bit mask</td><td><code>0xFF</code></td></tr>
 </table>
 </div>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>那 8 進位呢
-</div>
-<p>
-那為什麼不是用 8 進位或 32 進位呢？其實 <code>8
-進位</code>也跟二進位很搭，因為 <code>8 = 2³</code>，可以三個 bit
-一組轉換：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>那 8 進位呢</div>
+<p>那為什麼不是用 8 進位或 32 進位呢？其實 <code>8 進位</code>也跟二進位很搭，因為 <code>8 = 2³</code>，可以三個 bit 一組轉換：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">octal.convert</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">octal.convert</span></div>
 <pre class="cyber-terminal-pre">111 101 010
  ↓   ↓   ↓
  7   5   2
 
-結果：752（8 進位）</pre>
+<p>結果：752（8 進位）</pre></p>
 </div>
-<p>
-早期電腦確實大量使用過 8 進位，直到今天 Unix
-權限指令還看得到它的影子，例如 <code>chmod 755</code>。
-</p>
+<p>早期電腦確實大量使用過 8 進位，直到今天 Unix 權限指令還看得到它的影子，例如 <code>chmod 755</code>。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>16 進位贏在剛好對齊 byte
-</div>
-<p>
-但 16 進位有個 8 進位比不上的優勢：<code>16 = 2⁴</code> 剛好對應「1 個
-Hex 符號 = 4 bits，2 個 Hex 符號 = 8 bits = 1 個 byte」，所以：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>16 進位贏在剛好對齊 byte</div>
+<p>但 16 進位有個 8 進位比不上的優勢：<code>16 = 2⁴</code> 剛好對應「1 個 Hex 符號 = 4 bits，2 個 Hex 符號 = 8 bits = 1 個 byte」，所以：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">byte-range.map</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">byte-range.map</span></div>
 <pre class="cyber-terminal-pre">00 ~ FF  剛好對應  00000000 ~ 11111111
 
-也就是一個 byte 完整的範圍：0 ~ 255</pre>
+<p>也就是一個 byte 完整的範圍：0 ~ 255</pre></p>
 </div>
-<div class="cyber-note warn">
-16 進位剛好取得最舒服的平衡：一個符號代表整整 4
-bits，數字長度縮短很多，同時只需要多記住 <code>A～F</code> 這 6
-個符號。這也是之後學記憶體位址、RGB
-色碼、Unicode、組合語言、封包、位元運算時，會一直遇到 Hex 的原因。
-</div>
+<div class="cyber-note warn">16 進位剛好取得最舒服的平衡：一個符號代表整整 4 bits，數字長度縮短很多，同時只需要多記住 <code>A～F</code> 這 6 個符號。這也是之後學記憶體位址、RGB 色碼、Unicode、組合語言、封包、位元運算時，會一直遇到 Hex 的原因。</div>
 </div></div><div class="tab-item-content"><div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>十進位 79，換成 16 進位
-</div>
-<p>
-十六進位總共只有 <code>0<sub>9</code>、<code>A</sub>F</code> 這 16
-個符號，所以只要找出最接近又不超過 <code>79</code> 的 <code>16</code>
-倍數，剩下的餘數就是下一位：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>十進位 79，換成 16 進位</div>
+<p>十六進位總共只有 <code>0~9</code>、<code>A~F</code> 這 16 個符號，所以只要找出最接近又不超過 <code>79</code> 的 <code>16</code> 倍數，剩下的餘數就是下一位：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">decimal-to-hex.convert</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">decimal-to-hex.convert</span></div>
 <pre class="cyber-terminal-pre">4 × 16 = 64  ← 最接近 79 又不超過的倍數
 79 - 64 = 15 = F
 
-結果：4F</pre>
+<p>結果：4F</pre></p>
 </div>
-<p>
-所以十進位的 <code>79</code>，換成十六進位之後就是
-<code>4F</code>。程式語言通常會特別標示十六進位，例如
-<code>0x4F</code>，開頭的 <code>0x</code>
-就是在告訴你後面的數字請用十六進位解讀。
-</p>
+<p>所以十進位的 <code>79</code>，換成十六進位之後就是 <code>4F</code>。程式語言通常會特別標示十六進位，例如 <code>0x4F</code>，開頭的 <code>0x</code> 就是在告訴你後面的數字請用十六進位解讀。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>16 進位 3F7，換成十進位
-</div>
-<p>
-反過來，從十六進位換回十進位，就是把每一位乘上對應的權重（<code>16⁰</code>、<code>16¹</code>、<code>16²</code>…）再加總：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>16 進位 3F7，換成十進位</div>
+<p>反過來，從十六進位換回十進位，就是把每一位乘上對應的權重（<code>16⁰</code>、<code>16¹</code>、<code>16²</code>...）再加總：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">hex-to-decimal.convert</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">hex-to-decimal.convert</span></div>
 <pre class="cyber-terminal-pre">3 × 16² + 15 × 16 + 7
 = 3 × 256 + 240 + 7
 = 768 + 240 + 7
 = 1015</pre>
 </div>
-<p>
-所以 <code>3F7</code>（16 進位）換成十進位就是 <code>1015</code>，這裡的
-<code>F</code> 依照前面提過的對照表就是 <code>15</code>。
-</p>
+<p>所以 <code>3F7</code>（16 進位）換成十進位就是 <code>1015</code>，這裡的 <code>F</code> 依照前面提過的對照表就是 <code>15</code>。</p>
 </div>
+
 <div class="cyber-card">
-<div class="cyber-card-title">
-<span class="cyber-icon">▸</span>十進位 500，換成 16 進位
-</div>
-<p>
-當數字比較大、不方便直接用「湊倍數」估算時，改用「不斷除以
-16、記錄餘數」的方法會更穩定：
-</p>
+<div class="cyber-card-title"><span class="cyber-icon">▸</span>十進位 500，換成 16 進位</div>
+<p>當數字比較大、不方便直接用「湊倍數」估算時，改用「不斷除以 16、記錄餘數」的方法會更穩定：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">decimal-to-hex.divide</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">decimal-to-hex.divide</span></div>
 <pre class="cyber-terminal-pre">500 ÷ 16 = 31 餘 4
 31  ÷ 16 =  1 餘 15
 1   ÷ 16 =  0 餘 1</pre>
 </div>
-<p>
-餘數要「由下往上」讀，才是正確的結果：
-</p>
+<p>餘數要「由下往上」讀，才是正確的結果：</p>
 <div class="cyber-terminal">
-<div class="cyber-terminal-bar">
-<span class="cyber-dot"></span><span class="cyber-dot d2"></span><span
-class="cyber-dot d3"></span><span
-class="cyber-terminal-title">remainder.read-bottom-up</span>
-</div>
+<div class="cyber-terminal-bar"><span class="cyber-dot"></span><span class="cyber-dot d2"></span><span class="cyber-dot d3"></span><span class="cyber-terminal-title">remainder.read-bottom-up</span></div>
 <pre class="cyber-terminal-pre">1
 15 → F
 4
 
-結果：1F4</pre>
+<p>結果：1F4</pre></p>
 </div>
-<p>
-所以十進位的 <code>500</code>，換成十六進位之後就是 <code>1F4</code>。
-</p>
-</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/">https://chi-keke.github.io/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/08/CS-Flip-Flop/" title="Flip-Flop - 讓電路記住一件事情"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Flip-Flop - 讓電路記住一件事情</div></div><div class="info-2"><div class="info-item-1">保存狀態Feedback兩顆 NOR 交叉 Feedback為什麼這東西可以「記住」如果我改 R，狀態不就變了Clock to Flip-Flop .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;} .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:1...</div></div></div></a><a class="pagination-related" href="/Mind/2026/08/11/CS-Capacitor/" title="Capacitor"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/capacitor-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Capacitor</div></div><div class="info-2"><div class="info-item-1">導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 100%); color:#f5f1e6; } .organic-hero .oh-leaf { position:absolute; font-size:2.6rem; opacity:0.32; filter:drop-shadow(0 2px 3px rgba(0,0,0,.25)); pointer-events:none; } .organic-hero .oh-leaf.l1 { top:-10px; right:60px; transform:rotate(15deg); } .organic-hero .oh-leaf.l2 { top:40px; right:6px...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">39</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">6</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="二補數（Two's Complement）"/></a><div class="content"><a class="title" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）">二補數（Two's Complement）</a><time datetime="2026-08-19T00:30:03.000Z" title="Created 2026-08-19 08:30:03">2026-08-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+<p>所以十進位的 <code>500</code>，換成十六進位之後就是 <code>1F4</code>。</p>
+</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/">https://chi-keke.github.io/Mind/2026/08/09/CS-16%E9%80%B2%E4%BD%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/08/08/CS-Flip-Flop/" title="Flip-Flop - 讓電路記住一件事情"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/flip-flop-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Flip-Flop - 讓電路記住一件事情</div></div><div class="info-2"><div class="info-item-1">保存狀態Feedback兩顆 NOR 交叉 Feedback為什麼這東西可以「記住」如果我改 R，狀態不就變了Clock to Flip-Flop .cyber-card{background:linear-gradient(180deg,#0d1410,#0a0f0c);border:1px solid rgba(57,255,136,.35);border-radius:14px;padding:22px 24px;margin:22px 0;box-shadow:0 0 22px rgba(57,255,136,.08),inset 0 0 30px rgba(0,0,0,.4);color:#c9ffe0;} .cyber-card-title{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05em;color:#39ff88;text-shadow:0 0 10px rgba(57,255,136,.55);letter-spacing:1px;margin-bottom:14p...</div></div></div></a><a class="pagination-related" href="/Mind/2026/08/11/CS-Capacitor/" title="Capacitor"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/capacitor-landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Capacitor</div></div><div class="info-2"><div class="info-item-1">導體絕緣體電子為什麼會移動電容做什麼 .organic-hero { position:relative; overflow:hidden; border-radius:16px; padding:36px 40px; margin:24px 0 30px; background:linear-gradient(135deg, #2f4a3e 0%, #3f5c47 45%, #6b5a44 100%); color:#f5f1e6; } .organic-hero .oh-leaf { position:absolute; font-size:2.6rem; opacity:0.32; filter:drop-shadow(0 2px 3px rgba(0,0,0,.25)); pointer-events:none; } .organic-hero .oh-leaf.l1 { top:-10px; right:60px; transform:rotate(15deg); } .organic-hero .oh-leaf.l2 { top:40px; right:6px; fo...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">40</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/twos-complement.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="二補數（Two's Complement）"/></a><div class="content"><a class="title" href="/Mind/2026/08/19/CS-twos-complement/" title="二補數（Two's Complement）">二補數（Two's Complement）</a><time datetime="2026-08-19T00:30:03.000Z" title="Created 2026-08-19 08:30:03">2026-08-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/CS/hexa-landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
