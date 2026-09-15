@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hypergeometric Distribution | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="品管（Quality Control）撲克牌威力彩 @import url(&#39;https:&#x2F;&#x2F;fonts.googleapis.com&#x2F;css2?family&#x3D;Oswald:wght@400;500;600;700&amp;family&#x3D;Share+Tech+Mono&amp;display&#x3D;swap&#39;); .ind-scope{--ind-bg:#1c1e22;--ind-panel:#24262b;--i">
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hypergeometric Distribution | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="品管（Quality Control）撲克牌威力彩 @import url(&#39;https:&#x2F;&#x2F;fonts.googleapis.com&#x2F;css2?family&#x3D;Oswald:wght@400;500;600;700&amp;family&#x3D;Share+Tech+Mono&amp;display&#x3D;swap&#39;); .ind-scope{--ind-bg:#1c1e22;--ind-panel:#24262b;--ind">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hypergeometric Distribution">
 <meta property="og:url" content="https://chi-keke.github.io/Mind/2026/07/21/Statistics-Hypergeometric-Distribution/">
 <meta property="og:site_name" content="平屋慢本質">
-<meta property="og:description" content="品管（Quality Control）撲克牌威力彩 @import url(&#39;https:&#x2F;&#x2F;fonts.googleapis.com&#x2F;css2?family&#x3D;Oswald:wght@400;500;600;700&amp;family&#x3D;Share+Tech+Mono&amp;display&#x3D;swap&#39;); .ind-scope{--ind-bg:#1c1e22;--ind-panel:#24262b;--i">
+<meta property="og:description" content="品管（Quality Control）撲克牌威力彩 @import url(&#39;https:&#x2F;&#x2F;fonts.googleapis.com&#x2F;css2?family&#x3D;Oswald:wght@400;500;600;700&amp;family&#x3D;Share+Tech+Mono&amp;display&#x3D;swap&#39;); .ind-scope{--ind-bg:#1c1e22;--ind-panel:#24262b;--ind">
 <meta property="og:locale">
 <meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypergeometric-distribution/landing.png">
 <meta property="article:published_time" content="2026-07-21T00:45:05.000Z">
@@ -220,251 +220,160 @@
 .ind-final-stamp-label{font-family:"Oswald",sans-serif;font-weight:700;letter-spacing:3px;font-size:13px;color:#f2a900;text-transform:uppercase;margin-bottom:8px;}
 .ind-final-stamp-text{font-size:17px;color:#e8e6df;font-weight:500;}
 </style>
-<p>我要抽多少個、而且都沒發現瑕疵，才能有足夠信心認為整批的瑕疵率低於某個門檻？這個問題在品管上叫做
-<code>Acceptance Sampling</code>（允收抽樣）。</p>
+
+<p>我要抽多少個、而且都沒發現瑕疵，才能有足夠信心認為整批的瑕疵率低於某個門檻？這個問題在品管上叫做 <code>Acceptance Sampling</code>（允收抽樣）。</p>
 <div class="ind-scope">
 <div class="ind-hero">
 <span class="ind-hero-eyebrow">Acceptance Sampling · 允收抽樣</span>
-<div class="ind-hero-title">
-從「抽幾件檢查」推導出「敢不敢驗收整批」
+<div class="ind-hero-title">從「抽幾件檢查」推導出「敢不敢驗收整批」</div>
+<p class="ind-hero-desc">這篇要解決的問題只有一個：整批貨裡藏著看不見的瑕疵品，我們要抽多少件出來檢查，抽到 0 個瑕疵時，才有把握說「這批貨可以驗收」。下面用同一組情境，一步步把邏輯、算式、結論都走過一遍。</p>
 </div>
-<p class="ind-hero-desc">
-這篇要解決的問題只有一個：整批貨裡藏著看不見的瑕疵品，我們要抽多少件出來檢查，抽到
-0
-個瑕疵時，才有把握說「這批貨可以驗收」。下面用同一組情境，一步步把邏輯、算式、結論都走過一遍。
-</p>
-</div>
+
 <div class="ind-plate">
-<p><span class="ind-plate-num">STAGE 01</span> <span
-class="ind-plate-title">情境：1,000 件產品裡藏了 10 個瑕疵品</span></p>
+<span class="ind-plate-num">STAGE 01</span>
+<span class="ind-plate-title">情境：1,000 件產品裡藏了 10 個瑕疵品</span>
 </div>
-<p>假設有一批 1,000 個產品，裡面其實偷偷混了 990 個正常品、10
-個瑕疵品，但你不知道是哪 10 個，只能隨機抽一些出來檢查。</p>
+
+<p>假設有一批 1,000 個產品，裡面其實偷偷混了 990 個正常品、10 個瑕疵品，但你不知道是哪 10 個，只能隨機抽一些出來檢查。</p>
 <div class="ind-panel ind-panel--danger">
 <span class="ind-label">⚠ 抽樣風險</span>
-<p>
-雖然整批真的有 10
-個瑕疵品，但抽樣時可能運氣很好，抽到的全部都是正常品——你看到全部正常，可能誤以為整批很好，但事實上瑕疵品只是沒被你抽中而已。
-</p>
+<p>雖然整批真的有 10 個瑕疵品，但抽樣時可能運氣很好，抽到的全部都是正常品——你看到全部正常，可能誤以為整批很好，但事實上瑕疵品只是沒被你抽中而已。</p>
 </div>
+
 <p>例如只抽 5 個：</p>
 <div class="ind-readout">
-<div class="ind-readout-line">
-<span class="ind-readout-label">整批（1,000 件示意，● 共 10
-個）</span><span class="ind-dots">○○○●○○○○●○……</span>
+<div class="ind-readout-line"><span class="ind-readout-label">整批（1,000 件示意，● 共 10 個）</span><span class="ind-dots">○○○●○○○○●○……</span></div>
+<div class="ind-readout-line"><span class="ind-readout-label">實際抽到的 5 件</span><span class="ind-dots ind-dots--pass">○ ○ ○ ○ ○</span></div>
 </div>
-<div class="ind-readout-line">
-<span class="ind-readout-label">實際抽到的 5 件</span><span
-class="ind-dots ind-dots--pass">○ ○ ○ ○ ○</span>
-</div>
-</div>
+
 <p>（○ 是正常品，● 是瑕疵品）</p>
 <div class="ind-plate">
-<p><span class="ind-plate-num">STAGE 02</span> <span
-class="ind-plate-title">「不得超過 5%」是什麼意思</span></p>
+<span class="ind-plate-num">STAGE 02</span>
+<span class="ind-plate-title">「不得超過 5%」是什麼意思</span>
 </div>
-<p>把「同樣的一批產品、同樣的抽法」想像重複做 100
-次，而且這批產品每次都確實有 10 個瑕疵品。我希望在這 100
-次抽樣中，最多只有大約 5 次會完全漏掉所有瑕疵品——也就是約 95 次至少抓到
-1 個瑕疵品，最多約 5 次一個瑕疵品都沒抓到。寫成算式就是：</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">完全沒抽到瑕疵</mtext><mo>∣</mo><mtext mathvariant="normal">整批有 10 個瑕疵</mtext><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>5</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">P(\text{完全沒抽到瑕疵} \mid \text{整批有 10 個瑕疵}) \le 5\%</annotation></semantics></math></p>
-<p>這並不是說產品有 5% 瑕疵，而是「抽樣檢查漏掉不良批次的風險，最多接受
-5%」。</p>
+
+<p>把「同樣的一批產品、同樣的抽法」想像重複做 100 次，而且這批產品每次都確實有 10 個瑕疵品。我希望在這 100 次抽樣中，最多只有大約 5 次會完全漏掉所有瑕疵品——也就是約 95 次至少抓到 1 個瑕疵品，最多約 5 次一個瑕疵品都沒抓到。寫成算式就是：</p>
+<p>$$P(\text{完全沒抽到瑕疵} \mid \text{整批有 10 個瑕疵}) \le 5%$$</p>
+<p>這並不是說產品有 5% 瑕疵，而是「抽樣檢查漏掉不良批次的風險，最多接受 5%」。</p>
 <div class="ind-plate">
-<p><span class="ind-plate-num">STAGE 03</span> <span
-class="ind-plate-title">用比較小的例子直接算給你看</span></p>
+<span class="ind-plate-num">STAGE 03</span>
+<span class="ind-plate-title">用比較小的例子直接算給你看</span>
 </div>
+
 <p>假設有 10 顆球，正常 8 顆、瑕疵 2 顆。</p>
 <div class="ind-stamp-row">
 <div class="ind-stamp ind-stamp--danger">
-<span class="ind-stamp-tag">Sample 1</span> <span
-class="ind-stamp-title">只抽 1 顆</span>
-<div class="ind-stamp-formula">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle displaystyle="true"><mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>8</mn><mn>1</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>10</mn><mn>1</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mstyle><annotation encoding="application/x-tex">\dfrac{\binom{8}{1}}{\binom{10}{1}}</annotation></semantics></math>
-</div>
-<div class="ind-stamp-result">
-80%
-</div>
-<p><span class="ind-stamp-verdict">明明有瑕疵，卻高機率看不見</span></p>
+<span class="ind-stamp-tag">Sample 1</span>
+<span class="ind-stamp-title">只抽 1 顆</span>
+<div class="ind-stamp-formula">$\dfrac{\binom{8}{1}}{\binom{10}{1}}$</div>
+<div class="ind-stamp-result">80%</div>
+<span class="ind-stamp-verdict">明明有瑕疵，卻高機率看不見</span>
 </div>
 <div class="ind-stamp ind-stamp--warn">
-<span class="ind-stamp-tag">Sample 2</span> <span
-class="ind-stamp-title">抽 5 顆</span>
-<div class="ind-stamp-formula">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mstyle displaystyle="true"><mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>8</mn><mn>5</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>10</mn><mn>5</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mstyle><mo>=</mo><mstyle displaystyle="true"><mfrac><mn>56</mn><mn>252</mn></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\dfrac{\binom{8}{5}}{\binom{10}{5}}=\dfrac{56}{252}</annotation></semantics></math>
-</div>
-<div class="ind-stamp-result">
-≈22.2%
-</div>
-<p><span class="ind-stamp-verdict">仍有約兩成漏掉瑕疵品</span></p>
+<span class="ind-stamp-tag">Sample 2</span>
+<span class="ind-stamp-title">抽 5 顆</span>
+<div class="ind-stamp-formula">$\dfrac{\binom{8}{5}}{\binom{10}{5}}=\dfrac{56}{252}$</div>
+<div class="ind-stamp-result">≈22.2%</div>
+<span class="ind-stamp-verdict">仍有約兩成漏掉瑕疵品</span>
 </div>
 <div class="ind-stamp ind-stamp--safe">
-<span class="ind-stamp-tag">Sample 3</span> <span
-class="ind-stamp-title">抽 8 顆</span>
-<div class="ind-stamp-formula">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mstyle displaystyle="true"><mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>8</mn><mn>8</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>10</mn><mn>8</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mstyle><mo>=</mo><mstyle displaystyle="true"><mfrac><mn>1</mn><mn>45</mn></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\dfrac{\binom{8}{8}}{\binom{10}{8}}=\dfrac{1}{45}</annotation></semantics></math>
-</div>
-<div class="ind-stamp-result">
-≈2.22%
-</div>
-<p><span class="ind-stamp-verdict">已低於 5%，達標</span></p>
+<span class="ind-stamp-tag">Sample 3</span>
+<span class="ind-stamp-title">抽 8 顆</span>
+<div class="ind-stamp-formula">$\dfrac{\binom{8}{8}}{\binom{10}{8}}=\dfrac{1}{45}$</div>
+<div class="ind-stamp-result">≈2.22%</div>
+<span class="ind-stamp-verdict">已低於 5%，達標</span>
 </div>
 </div>
-<p>抽 8 顆時，完全沒抽到瑕疵就代表你剛好把 8 顆正常品全部抽走，機率只剩
-<code>2.22%</code>，已經小於 5%
-的門檻。反過來說，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>2.22</mn><mi>%</mi><mo>=</mo><mn>97.78</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">1-2.22\%=97.78\%</annotation></semantics></math>，你有
-97.78% 的機率至少抓到一顆瑕疵。</p>
+
+<p>抽 8 顆時，完全沒抽到瑕疵就代表你剛好把 8 顆正常品全部抽走，機率只剩 <code>2.22%</code>，已經小於 5% 的門檻。反過來說，$1-2.22%&#x3D;97.78%$，你有 97.78% 的機率至少抓到一顆瑕疵。</p>
 <div class="ind-plate">
-<p><span class="ind-plate-num">STAGE 04</span> <span
-class="ind-plate-title">回到 1,000 件產品的例子</span></p>
+<span class="ind-plate-num">STAGE 04</span>
+<span class="ind-plate-title">回到 1,000 件產品的例子</span>
 </div>
-<p>我們先假設一個需要排除的狀況：整批有 10 個瑕疵，也就是瑕疵率達到
-1%。現在決定抽 n 個，希望這個抽樣計畫具有以下能力：</p>
+
+<p>我們先假設一個需要排除的狀況：整批有 10 個瑕疵，也就是瑕疵率達到 1%。現在決定抽 n 個，希望這個抽樣計畫具有以下能力：</p>
 <div class="ind-flow">
-<div class="ind-flow-step">
-假如整批真的有 10 個瑕疵
+<div class="ind-flow-step">假如整批真的有 10 個瑕疵</div>
+<div class="ind-flow-arrow">↓</div>
+<div class="ind-flow-step">抽 n 個時</div>
+<div class="ind-flow-arrow">↓</div>
+<div class="ind-flow-step">至少有 95% 機率抓到一個以上</div>
 </div>
-<div class="ind-flow-arrow">
-↓
-</div>
-<div class="ind-flow-step">
-抽 n 個時
-</div>
-<div class="ind-flow-arrow">
-↓
-</div>
-<div class="ind-flow-step">
-至少有 95% 機率抓到一個以上
-</div>
-</div>
-<p>因為結果只有「抓到至少一個」和「完全沒抓到」兩種，<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">抓到至少一個</mtext><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">完全沒抓到</mtext><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>100</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">P(\text{抓到至少一個})+P(\text{完全沒抓到})=100\%</annotation></semantics></math>，所以「等價地說」就是：</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">沒抓到</mtext><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>5</mn><mi>%</mi><mo>⇔</mo><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">至少抓到一個</mtext><mo stretchy="false" form="postfix">)</mo><mo>≥</mo><mn>95</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">P(\text{沒抓到}) \le 5\% \iff P(\text{至少抓到一個}) \ge 95\%</annotation></semantics></math></p>
-<p><strong>為什麼先假設「真的有 10 個瑕疵」？</strong>
-這是在設定你想防守的品質底線。例如公司規定 1% 瑕疵率已經不可接受，對
-1,000 個產品而言，1% 就是 10
-個。因此設計抽樣方式時會問：如果有一批不合格產品真的含有 10
-個瑕疵，我們的抽樣方法能不能以至少 95%
-的機率把它抓出來？能抓出來，代表這套抽樣方法有足夠辨識能力；經常抓不出來，就代表抽得太少、這套方法不可靠。</p>
+
+<p>因為結果只有「抓到至少一個」和「完全沒抓到」兩種，$P(\text{抓到至少一個})+P(\text{完全沒抓到})&#x3D;100%$，所以「等價地說」就是：</p>
+<p>$$P(\text{沒抓到}) \le 5% \iff P(\text{至少抓到一個}) \ge 95%$$</p>
+<p><strong>為什麼先假設「真的有 10 個瑕疵」？</strong> 這是在設定你想防守的品質底線。例如公司規定 1% 瑕疵率已經不可接受，對 1,000 個產品而言，1% 就是 10 個。因此設計抽樣方式時會問：如果有一批不合格產品真的含有 10 個瑕疵，我們的抽樣方法能不能以至少 95% 的機率把它抓出來？能抓出來，代表這套抽樣方法有足夠辨識能力；經常抓不出來，就代表抽得太少、這套方法不可靠。</p>
 <div class="ind-plate ind-plate--sub">
-<p><span class="ind-plate-num">STAGE 04-A</span> <span
-class="ind-plate-title">那到底該抽多少個？</span></p>
+<span class="ind-plate-num">STAGE 04-A</span>
+<span class="ind-plate-title">那到底該抽多少個？</span>
 </div>
-<p>跟前面「10 顆球」的小例子邏輯完全一樣，只是母體從 10 顆換成 1,000
-件、瑕疵從 2 個換成 10 個。抽 n 個時，完全沒抽到瑕疵的機率是：</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">沒抓到</mtext><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mstyle displaystyle="true"><mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>990</mn><mi>n</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>1000</mn><mi>n</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac></mstyle><mo>≤</mo><mn>5</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">P(\text{沒抓到}) = \dfrac{\binom{990}{n}}{\binom{1000}{n}} \le 5\%</annotation></semantics></math></p>
-<p>這一步<code>不是人工一個一個帶入算出來的</code>——<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>990</mn><mn>257</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\binom{990}{257}</annotation></semantics></math>、<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mn>1000</mn><mn>257</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\binom{1000}{257}</annotation></semantics></math>
-這種組合數，分子分母都是幾百位數的天文數字，人腦或計算機根本算不出來，實務上會這樣分工：</p>
+
+<p>跟前面「10 顆球」的小例子邏輯完全一樣，只是母體從 10 顆換成 1,000 件、瑕疵從 2 個換成 10 個。抽 n 個時，完全沒抽到瑕疵的機率是：</p>
+<p>$$P(\text{沒抓到}) &#x3D; \dfrac{\binom{990}{n}}{\binom{1000}{n}} \le 5%$$</p>
+<p>這一步<code>不是人工一個一個帶入算出來的</code>——$\binom{990}{257}$、$\binom{1000}{257}$ 這種組合數，分子分母都是幾百位數的天文數字，人腦或計算機根本算不出來，實務上會這樣分工：</p>
 <div class="ind-steps">
 <div class="ind-step">
 <span class="ind-step-num">1</span>
 <div class="ind-step-body">
 <span class="ind-step-title">取 log，避免數字爆掉</span>
-<p class="ind-step-desc">
-電腦不會真的把每個
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-的組合數乘開，而是先取
-<code>log</code>，把乘除變成加減：<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>a</mi><mi>b</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>a</mi><mi>!</mi><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mi>b</mi><mi>!</mi><mo>−</mo><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>−</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo><mi>!</mi></mrow><annotation encoding="application/x-tex">\log\binom{a}{b}=\log a! - \log b! - \log(a-b)!</annotation></semantics></math>，數值才不會超出電腦能處理的範圍。
-</p>
+<p class="ind-step-desc">電腦不會真的把每個 $n$ 的組合數乘開，而是先取 <code>log</code>，把乘除變成加減：$\log\binom{a}{b}=\log a! - \log b! - \log(a-b)!$，數值才不會超出電腦能處理的範圍。</p>
 </div>
 </div>
 <div class="ind-step">
 <span class="ind-step-num">2</span>
 <div class="ind-step-body">
 <span class="ind-step-title">用二分搜尋，不用逐一硬試</span>
-<p class="ind-step-desc">
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">沒抓到</mtext><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">P(\text{沒抓到})</annotation></semantics></math>
-會隨著
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-增加而<code>單調遞減</code>（樣本抽得越多，完全漏網的機率當然越低），所以不需要從
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n=1</annotation></semantics></math>
-一路試到
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>258</mn></mrow><annotation encoding="application/x-tex">n=258</annotation></semantics></math>——用二分搜尋法，大約十幾次運算就能鎖定「第一個機率跌破
-5% 的
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>」，這也是
-Excel 內建函式 <code>HYPGEOM.DIST</code> 在背後做的事。
-</p>
+<p class="ind-step-desc">$P(\text{沒抓到})$ 會隨著 $n$ 增加而<code>單調遞減</code>（樣本抽得越多，完全漏網的機率當然越低），所以不需要從 $n=1$ 一路試到 $n=258$——用二分搜尋法，大約十幾次運算就能鎖定「第一個機率跌破 5% 的 $n$」，這也是 Excel 內建函式 <code>HYPGEOM.DIST</code> 在背後做的事。</p>
 </div>
 </div>
 <div class="ind-step ind-step--legacy">
 <span class="ind-step-num">3</span>
 <div class="ind-step-body">
 <span class="ind-step-title">電腦普及前：直接查表</span>
-<p class="ind-step-desc">
-在還沒有電腦的年代，品管工程師是靠事先算好的<code>允收抽樣表</code>（例如
-<code>MIL-STD-105E</code>、<code>ANSI/ASQ Z1.4</code>）直接查表決定
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>，不需要每次臨時計算。
-</p>
+<p class="ind-step-desc">在還沒有電腦的年代，品管工程師是靠事先算好的<code>允收抽樣表</code>（例如 <code>MIL-STD-105E</code>、<code>ANSI/ASQ Z1.4</code>）直接查表決定 $n$，不需要每次臨時計算。</p>
 </div>
 </div>
 </div>
-<p>用電腦跑出來的結果，剛好落在
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>257</mn></mrow><annotation encoding="application/x-tex">n=257</annotation></semantics></math>
-與
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>258</mn></mrow><annotation encoding="application/x-tex">n=258</annotation></semantics></math>
-的交界：</p>
+
+<p>用電腦跑出來的結果，剛好落在 $n&#x3D;257$ 與 $n&#x3D;258$ 的交界：</p>
 <div class="ind-stamp-row">
 <div class="ind-stamp ind-stamp--danger">
-<span class="ind-stamp-tag">n = 257</span> <span
-class="ind-stamp-title">抽 257 件</span>
-<div class="ind-stamp-result">
-5.048%
-</div>
-<p><span class="ind-stamp-verdict">仍高於 5%，風險不合格</span></p>
+<span class="ind-stamp-tag">n = 257</span>
+<span class="ind-stamp-title">抽 257 件</span>
+<div class="ind-stamp-result">5.048%</div>
+<span class="ind-stamp-verdict">仍高於 5%，風險不合格</span>
 </div>
 <div class="ind-stamp ind-stamp--safe">
-<span class="ind-stamp-tag">n = 258</span> <span
-class="ind-stamp-title">抽 258 件</span>
-<div class="ind-stamp-result">
-4.980%
-</div>
-<p><span class="ind-stamp-verdict">首次低於 5%，達標</span></p>
+<span class="ind-stamp-tag">n = 258</span>
+<span class="ind-stamp-title">抽 258 件</span>
+<div class="ind-stamp-result">4.980%</div>
+<span class="ind-stamp-verdict">首次低於 5%，達標</span>
 </div>
 </div>
-<p>也就是說，1,000 件產品中，<code>至少要抽 258
-件</code>，才能保證「如果整批真的有 10 個瑕疵（瑕疵率
-1%），完全抽不到瑕疵的機率不超過 5%」；抽 257 件則還差一點點，機率是
-5.048%，仍未達標。</p>
+
+<p>也就是說，1,000 件產品中，<code>至少要抽 258 件</code>，才能保證「如果整批真的有 10 個瑕疵（瑕疵率 1%），完全抽不到瑕疵的機率不超過 5%」；抽 257 件則還差一點點，機率是 5.048%，仍未達標。</p>
 <div class="ind-plate">
-<p><span class="ind-plate-num">STAGE 05</span> <span
-class="ind-plate-title">最容易搞混的地方</span></p>
+<span class="ind-plate-num">STAGE 05</span>
+<span class="ind-plate-title">最容易搞混的地方</span>
 </div>
-<p>抽到 0 個瑕疵，<code>不是</code>直接證明整批瑕疵率低於
-1%。比較精確的說法是：假如整批瑕疵率真的已達
-1%，以目前的抽樣數量仍然抽到 0 個瑕疵的機率不到 5%。因此當你真的抽到 0
-個時，就有理由認為「整批至少有 1%
-瑕疵」這個假設不太符合觀察結果——整個邏輯和假設檢定非常像：</p>
+
+<p>抽到 0 個瑕疵，<code>不是</code>直接證明整批瑕疵率低於 1%。比較精確的說法是：假如整批瑕疵率真的已達 1%，以目前的抽樣數量仍然抽到 0 個瑕疵的機率不到 5%。因此當你真的抽到 0 個時，就有理由認為「整批至少有 1% 瑕疵」這個假設不太符合觀察結果——整個邏輯和假設檢定非常像：</p>
 <div class="ind-flow">
-<div class="ind-flow-step">
-先假設：整批有 10 個瑕疵
+<div class="ind-flow-step">先假設：整批有 10 個瑕疵</div>
+<div class="ind-flow-arrow">↓</div>
+<div class="ind-flow-step">計算：抽樣卻完全沒看到瑕疵有多罕見</div>
+<div class="ind-flow-arrow">↓</div>
+<div class="ind-flow-step">如果非常罕見（≤ 5%），實際又真的抽到 0 個</div>
+<div class="ind-flow-arrow">↓</div>
+<div class="ind-flow-step">有理由排除「整批有 10 個以上瑕疵」</div>
 </div>
-<div class="ind-flow-arrow">
-↓
-</div>
-<div class="ind-flow-step">
-計算：抽樣卻完全沒看到瑕疵有多罕見
-</div>
-<div class="ind-flow-arrow">
-↓
-</div>
-<div class="ind-flow-step">
-如果非常罕見（≤ 5%），實際又真的抽到 0 個
-</div>
-<div class="ind-flow-arrow">
-↓
-</div>
-<div class="ind-flow-step">
-有理由排除「整批有 10 個以上瑕疵」
-</div>
-</div>
+
 <div class="ind-final-stamp">
-<p><span class="ind-final-stamp-label">驗收準則 · Acceptance
-Criterion</span> <span
-class="ind-final-stamp-text">我們想讓壞批次成功蒙混過關的機率低於
-5%。</span></p>
+<span class="ind-final-stamp-label">驗收準則 · Acceptance Criterion</span>
+<span class="ind-final-stamp-text">我們想讓壞批次成功蒙混過關的機率低於 5%。</span>
 </div>
-<div class="ind-closing">
-— End of Inspection Report —
-</div>
+
+<div class="ind-closing">— End of Inspection Report —</div>
 </div></div><div class="tab-item-content"><style>
 .pk-scope{--pk-felt:#0b3d2e;--pk-felt2:#125843;--pk-line:rgba(212,175,55,0.4);--pk-gold:#d4af37;--pk-cream:#f5f1e6;--pk-red:#d1373f;--pk-black:#1c1c1c;--pk-sub:#bcd9cb;font-family:"Noto Sans TC",sans-serif;}
 .pk-hero{background:linear-gradient(180deg,#0f4d38,#0b3d2e);border:1px solid var(--pk-line);border-radius:10px;padding:24px 28px;margin:6px 0 26px;position:relative;overflow:hidden;}
@@ -507,195 +416,59 @@ class="ind-final-stamp-text">我們想讓壞批次成功蒙混過關的機率低
 .pk-final-sub{font-size:13px;color:var(--pk-sub);margin-top:6px;}
 .pk-closing{text-align:center;padding:10px 0 4px;color:var(--pk-gold);font-family:"Share Tech Mono",Consolas,monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;}
 </style>
+
 <p>換一個大家更有感覺的情境：撲克牌。同樣是「一批東西裡混著兩種類型，不放回地抽幾張」，只是這次我們關心的不是瑕疵品，而是抽到的花色。</p>
 <div class="pk-scope">
 <div class="pk-hero">
 <span class="pk-hero-eyebrow">Card Draw · 抽牌問題</span>
-<div class="pk-hero-title">
-洗勻的一副牌，抽 5 張剛好湊到 3 張愛心的機率有多高？
+<div class="pk-hero-title">洗勻的一副牌，抽 5 張剛好湊到 3 張愛心的機率有多高？</div>
+<p class="pk-hero-desc">拿一副完整的撲克牌（52 張，愛心 ♥ 有 13 張），洗勻後隨機抽出 5 張。想知道「剛好抽到 3 張愛心」的機率，跟前面瑕疵品的問題是同一套數學：整批東西只分兩種身分（愛心／不是愛心），抽出來的牌不放回去，所以每抽一張都會改變剩下牌堆的組成。</p>
 </div>
-<p class="pk-hero-desc">
-拿一副完整的撲克牌（52 張，愛心 ♥ 有 13 張），洗勻後隨機抽出 5
-張。想知道「剛好抽到 3
-張愛心」的機率，跟前面瑕疵品的問題是同一套數學：整批東西只分兩種身分（愛心／不是愛心），抽出來的牌不放回去，所以每抽一張都會改變剩下牌堆的組成。
-</p>
-</div>
+
 <div class="pk-stat-row">
-<div class="pk-stat">
-<span class="pk-stat-num">52</span><span
-class="pk-stat-label">整副牌總張數</span>
+<div class="pk-stat"><span class="pk-stat-num">52</span><span class="pk-stat-label">整副牌總張數</span></div>
+<div class="pk-stat"><span class="pk-stat-num">13<span class="pk-stat-suit red">♥</span></span><span class="pk-stat-label">愛心張數</span></div>
+<div class="pk-stat"><span class="pk-stat-num">5</span><span class="pk-stat-label">實際抽出張數</span></div>
+<div class="pk-stat"><span class="pk-stat-num">3<span class="pk-stat-suit red">♥</span></span><span class="pk-stat-label">想湊到的愛心張數</span></div>
 </div>
-<div class="pk-stat">
-<span class="pk-stat-num">13<span
-class="pk-stat-suit red">♥</span></span><span
-class="pk-stat-label">愛心張數</span>
-</div>
-<div class="pk-stat">
-<span class="pk-stat-num">5</span><span
-class="pk-stat-label">實際抽出張數</span>
-</div>
-<div class="pk-stat">
-<span class="pk-stat-num">3<span
-class="pk-stat-suit red">♥</span></span><span
-class="pk-stat-label">想湊到的愛心張數</span>
-</div>
-</div>
+
 <div class="pk-panel">
-<p>
-這題符合超幾何分布的三個條件：<code>牌堆總數固定</code>（52
-張）、<code>只分兩類</code>（愛心 13 張、非愛心 39
-張），以及<code>抽出來不放回</code>（手上的 5
-張牌不會再洗回牌堆）。只要這三點成立，不管是瑕疵品還是撲克牌，算法都長一樣。
-</p>
+<p>這題符合超幾何分布的三個條件：<code>牌堆總數固定</code>（52 張）、<code>只分兩類</code>（愛心 13 張、非愛心 39 張），以及<code>抽出來不放回</code>（手上的 5 張牌不會再洗回牌堆）。只要這三點成立，不管是瑕疵品還是撲克牌，算法都長一樣。</p>
 </div>
+
 <table class="pk-map-table">
-<tr>
-<th>
-超幾何分布的符號
-</th>
-<th>
-代表意義
-</th>
-<th>
-對應到這副牌
-</th>
-</tr>
-<tr>
-<td>
-<code>N</code>
-</td>
-<td>
-整批東西的總數
-</td>
-<td>
-52 張牌
-</td>
-</tr>
-<tr>
-<td>
-<code>K</code>
-</td>
-<td>
-整批裡「感興趣類型」的數量
-</td>
-<td>
-13 張愛心
-</td>
-</tr>
-<tr>
-<td>
-<code>n</code>
-</td>
-<td>
-實際抽出的數量
-</td>
-<td>
-5 張
-</td>
-</tr>
-<tr>
-<td>
-<code>k</code>
-</td>
-<td>
-想湊到「感興趣類型」的張數
-</td>
-<td>
-3 張愛心
-</td>
-</tr>
+<tr><th>超幾何分布的符號</th><th>代表意義</th><th>對應到這副牌</th></tr>
+<tr><td><code>N</code></td><td>整批東西的總數</td><td>52 張牌</td></tr>
+<tr><td><code>K</code></td><td>整批裡「感興趣類型」的數量</td><td>13 張愛心</td></tr>
+<tr><td><code>n</code></td><td>實際抽出的數量</td><td>5 張</td></tr>
+<tr><td><code>k</code></td><td>想湊到「感興趣類型」的張數</td><td>3 張愛心</td></tr>
 </table>
+
 <div class="pk-card">
-<div class="pk-card-labelwrap">
-<span class="pk-card-label">Formula · 算式</span>
+<div class="pk-card-labelwrap"><span class="pk-card-label">Formula · 算式</span></div>
+<div class="pk-card-formula">P(剛好 3 張愛心) = C(13,3) × C(39,2) ÷ C(52,5)</div>
+<div class="pk-card-formula">= 286 × 741 ÷ 2,598,960</div>
+<div class="pk-card-formula">= 211,926 ÷ 2,598,960 ≈ <code>8.15%</code></div>
 </div>
-<div class="pk-card-formula">
-P(剛好 3 張愛心) = C(13,3) × C(39,2) ÷ C(52,5)
-</div>
-<div class="pk-card-formula">
-= 286 × 741 ÷ 2,598,960
-</div>
-<div class="pk-card-formula">
-= 211,926 ÷ 2,598,960 ≈ <code>8.15%</code>
-</div>
-</div>
-<p>拆開來看這個算式在算什麼：<code>C(13,3)</code> 是「從 13 張愛心裡挑 3
-張出來」的組合數，<code>C(39,2)</code> 是「從剩下 39 張非愛心裡挑 2
-張湊滿 5 張手牌」的組合數，兩者相乘就是「剛好 3 張愛心、2
-張非愛心」的所有可能手牌數；分母 <code>C(52,5)</code> 則是「從 52
-張裡任意抽 5 張」的所有可能手牌總數，兩者相除就是機率。</p>
+
+<p>拆開來看這個算式在算什麼：<code>C(13,3)</code> 是「從 13 張愛心裡挑 3 張出來」的組合數，<code>C(39,2)</code> 是「從剩下 39 張非愛心裡挑 2 張湊滿 5 張手牌」的組合數，兩者相乘就是「剛好 3 張愛心、2 張非愛心」的所有可能手牌數；分母 <code>C(52,5)</code> 則是「從 52 張裡任意抽 5 張」的所有可能手牌總數，兩者相除就是機率。</p>
 <div class="pk-dist">
-<div class="pk-dist-row">
-<span class="pk-dist-k">k = 0 張</span>
-<div class="pk-dist-bar-wrap">
-<div class="pk-dist-bar" style="width:22.2%;">
+<div class="pk-dist-row"><span class="pk-dist-k">k = 0 張</span><div class="pk-dist-bar-wrap"><div class="pk-dist-bar" style="width:22.2%;"></div></div><span class="pk-dist-pct">22.15%</span></div>
+<div class="pk-dist-row"><span class="pk-dist-k">k = 1 張</span><div class="pk-dist-bar-wrap"><div class="pk-dist-bar" style="width:41.1%;"></div></div><span class="pk-dist-pct">41.14%</span></div>
+<div class="pk-dist-row"><span class="pk-dist-k">k = 2 張</span><div class="pk-dist-bar-wrap"><div class="pk-dist-bar" style="width:27.4%;"></div></div><span class="pk-dist-pct">27.43%</span></div>
+<div class="pk-dist-row pk-dist-row--hit"><span class="pk-dist-k">k = 3 張 ★</span><div class="pk-dist-bar-wrap"><div class="pk-dist-bar" style="width:8.2%;"></div></div><span class="pk-dist-pct">8.15%</span></div>
+<div class="pk-dist-row"><span class="pk-dist-k">k = 4 張</span><div class="pk-dist-bar-wrap"><div class="pk-dist-bar" style="width:1.1%;"></div></div><span class="pk-dist-pct">1.07%</span></div>
+<div class="pk-dist-row"><span class="pk-dist-k">k = 5 張</span><div class="pk-dist-bar-wrap"><div class="pk-dist-bar" style="width:0.3%;"></div></div><span class="pk-dist-pct">0.05%</span></div>
+</div>
 
-</div>
-</div>
-<span class="pk-dist-pct">22.15%</span>
-</div>
-<div class="pk-dist-row">
-<span class="pk-dist-k">k = 1 張</span>
-<div class="pk-dist-bar-wrap">
-<div class="pk-dist-bar" style="width:41.1%;">
-
-</div>
-</div>
-<span class="pk-dist-pct">41.14%</span>
-</div>
-<div class="pk-dist-row">
-<span class="pk-dist-k">k = 2 張</span>
-<div class="pk-dist-bar-wrap">
-<div class="pk-dist-bar" style="width:27.4%;">
-
-</div>
-</div>
-<span class="pk-dist-pct">27.43%</span>
-</div>
-<div class="pk-dist-row pk-dist-row--hit">
-<span class="pk-dist-k">k = 3 張 ★</span>
-<div class="pk-dist-bar-wrap">
-<div class="pk-dist-bar" style="width:8.2%;">
-
-</div>
-</div>
-<span class="pk-dist-pct">8.15%</span>
-</div>
-<div class="pk-dist-row">
-<span class="pk-dist-k">k = 4 張</span>
-<div class="pk-dist-bar-wrap">
-<div class="pk-dist-bar" style="width:1.1%;">
-
-</div>
-</div>
-<span class="pk-dist-pct">1.07%</span>
-</div>
-<div class="pk-dist-row">
-<span class="pk-dist-k">k = 5 張</span>
-<div class="pk-dist-bar-wrap">
-<div class="pk-dist-bar" style="width:0.3%;">
-
-</div>
-</div>
-<span class="pk-dist-pct">0.05%</span>
-</div>
-</div>
-<p>把 k = 0 到 5 全部算完會發現：抽 5 張牌，最容易出現的其實是<code>剛好
-1
-張愛心</code>（41.14%），因為愛心只佔整副牌的四分之一左右；反而是「剛好
-3
-張」或更多愛心，因為要連續湊到偏離平均的張數，機率自然快速下滑。這也是超幾何分布的典型長相——中間某個值機率最高，往兩端遞減。</p>
+<p>把 k &#x3D; 0 到 5 全部算完會發現：抽 5 張牌，最容易出現的其實是<code>剛好 1 張愛心</code>（41.14%），因為愛心只佔整副牌的四分之一左右；反而是「剛好 3 張」或更多愛心，因為要連續湊到偏離平均的張數，機率自然快速下滑。這也是超幾何分布的典型長相——中間某個值機率最高，往兩端遞減。</p>
 <div class="pk-final">
-<span class="pk-final-label">Card Table Verdict · 結論</span> <span
-class="pk-final-text">洗勻的一副牌抽 5 張，剛好湊到 3 張愛心的機率約
-8.15%</span>
-<div class="pk-final-sub">
-比抽到 1 張愛心（41.14%）低了整整 5 倍，但仍遠比抽到 4、5 張常見
+<span class="pk-final-label">Card Table Verdict · 結論</span>
+<span class="pk-final-text">洗勻的一副牌抽 5 張，剛好湊到 3 張愛心的機率約 8.15%</span>
+<div class="pk-final-sub">比抽到 1 張愛心（41.14%）低了整整 5 倍，但仍遠比抽到 4、5 張常見</div>
 </div>
-</div>
-<div class="pk-closing">
-— Shuffle Up And Deal —
-</div>
+
+<div class="pk-closing">— Shuffle Up And Deal —</div>
 </div></div><div class="tab-item-content"><style>
 .lp-scope{--lp-red:#c8102e;--lp-red-dark:#8f0c20;--lp-gold:#f2b705;--lp-gold-dark:#c8960c;--lp-cream:#fff8e7;--lp-ink:#2b241a;--lp-sub:#8a7a55;--lp-green:#2f9e5b;font-family:"Noto Sans TC",sans-serif;}
 .lp-hero{background:linear-gradient(135deg,#c8102e,#8f0c20);border-radius:10px;padding:24px 28px;margin:6px 0 26px;position:relative;overflow:hidden;}
@@ -739,227 +512,83 @@ class="pk-final-text">洗勻的一副牌抽 5 張，剛好湊到 3 張愛心的�
 .lp-final-sub{font-size:13px;color:#f0d9c8;margin-top:6px;}
 .lp-closing{text-align:center;padding:10px 0 4px;color:var(--lp-gold-dark);font-family:"Share Tech Mono",Consolas,monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;}
 </style>
+
 <p>你自己選的號碼和開獎號碼各是一組固定的數字，比對兩邊「剛好對中幾個」，骨子裡還是同一套超幾何分布</p>
 <div class="lp-scope">
 <div class="lp-hero">
 <span class="lp-hero-eyebrow">Lottery Match · 威力彩對獎</span>
-<div class="lp-hero-title">
-你選的 6 個號碼，剛好對中 4 個的機率有多低？
+<div class="lp-hero-title">你選的 6 個號碼，剛好對中 4 個的機率有多低？</div>
+<p class="lp-hero-desc">威力彩第一區從 38 個號碼裡開出 6 個號碼。你事先自己選了 6 個號碼，開獎後把你的號碼跟開出的 6 個號碼比對，看剛好對中幾個。這裡的「整批」是 38 個號碼、「感興趣的類型」是開獎開出的那 6 個號碼，跟前面瑕疵品、撲克牌的差別只在於這次「感興趣的類型」是由開獎機決定，不是我們自己指定。</p>
 </div>
-<p class="lp-hero-desc">
-威力彩第一區從 38 個號碼裡開出 6 個號碼。你事先自己選了 6
-個號碼，開獎後把你的號碼跟開出的 6
-個號碼比對，看剛好對中幾個。這裡的「整批」是 38
-個號碼、「感興趣的類型」是開獎開出的那 6
-個號碼，跟前面瑕疵品、撲克牌的差別只在於這次「感興趣的類型」是由開獎機決定，不是我們自己指定。
-</p>
-</div>
+
 <div class="lp-stat-row">
-<div class="lp-stat">
-<span class="lp-stat-num">38</span><span
-class="lp-stat-label">號碼總數（1~38）</span>
+<div class="lp-stat"><span class="lp-stat-num">38</span><span class="lp-stat-label">號碼總數（1~38）</span></div>
+<div class="lp-stat"><span class="lp-stat-num">6</span><span class="lp-stat-label">開獎開出的號碼數</span></div>
+<div class="lp-stat"><span class="lp-stat-num">6</span><span class="lp-stat-label">你自己選的號碼數</span></div>
+<div class="lp-stat"><span class="lp-stat-num">4</span><span class="lp-stat-label">想對中的號碼數</span></div>
 </div>
-<div class="lp-stat">
-<span class="lp-stat-num">6</span><span
-class="lp-stat-label">開獎開出的號碼數</span>
-</div>
-<div class="lp-stat">
-<span class="lp-stat-num">6</span><span
-class="lp-stat-label">你自己選的號碼數</span>
-</div>
-<div class="lp-stat">
-<span class="lp-stat-num">4</span><span
-class="lp-stat-label">想對中的號碼數</span>
-</div>
-</div>
+
 <div class="lp-panel">
-<p>
-符合超幾何分布的原因跟前面一樣：<code>號碼池固定</code>（38
-個號碼不會變）、<code>只分兩類</code>（開獎的 6 個號碼 vs 沒開出的 32
-個號碼），而且<code>不會重複開獎</code>（同一期不會有兩顆一樣的號碼球）。差別只在於這次「哪
-6 個是感興趣的類型」要等開獎才知道。
-</p>
+<p>符合超幾何分布的原因跟前面一樣：<code>號碼池固定</code>（38 個號碼不會變）、<code>只分兩類</code>（開獎的 6 個號碼 vs 沒開出的 32 個號碼），而且<code>不會重複開獎</code>（同一期不會有兩顆一樣的號碼球）。差別只在於這次「哪 6 個是感興趣的類型」要等開獎才知道。</p>
 </div>
+
 <div class="lp-ticket">
 <div class="lp-ticket-row">
-<p><span class="lp-ticket-row-label">你選的號碼</span> <span
-class="lp-ball lp-ball--match">05</span> <span
-class="lp-ball lp-ball--match">12</span> <span
-class="lp-ball lp-ball--match">19</span> <span
-class="lp-ball lp-ball--match">24</span> <span class="lp-ball">31</span>
-<span class="lp-ball">36</span></p>
+<span class="lp-ticket-row-label">你選的號碼</span>
+<span class="lp-ball lp-ball--match">05</span>
+<span class="lp-ball lp-ball--match">12</span>
+<span class="lp-ball lp-ball--match">19</span>
+<span class="lp-ball lp-ball--match">24</span>
+<span class="lp-ball">31</span>
+<span class="lp-ball">36</span>
 </div>
 <div class="lp-ticket-row">
-<p><span class="lp-ticket-row-label">開獎號碼</span> <span
-class="lp-ball lp-ball--match">05</span> <span
-class="lp-ball lp-ball--match">12</span> <span
-class="lp-ball lp-ball--match">19</span> <span
-class="lp-ball lp-ball--match">24</span> <span class="lp-ball">08</span>
-<span class="lp-ball">27</span></p>
+<span class="lp-ticket-row-label">開獎號碼</span>
+<span class="lp-ball lp-ball--match">05</span>
+<span class="lp-ball lp-ball--match">12</span>
+<span class="lp-ball lp-ball--match">19</span>
+<span class="lp-ball lp-ball--match">24</span>
+<span class="lp-ball">08</span>
+<span class="lp-ball">27</span>
 </div>
-<div class="lp-ticket-note">
-綠色球代表兩邊都有的號碼——這一組剛好對中 4 個
+<div class="lp-ticket-note">綠色球代表兩邊都有的號碼——這一組剛好對中 4 個</div>
 </div>
-</div>
+
 <table class="lp-map-table">
-<tr>
-<th>
-超幾何分布的符號
-</th>
-<th>
-代表意義
-</th>
-<th>
-對應到威力彩
-</th>
-</tr>
-<tr>
-<td>
-<code>N</code>
-</td>
-<td>
-整批東西的總數
-</td>
-<td>
-38 個號碼
-</td>
-</tr>
-<tr>
-<td>
-<code>K</code>
-</td>
-<td>
-整批裡「感興趣類型」的數量
-</td>
-<td>
-開獎開出的 6 個號碼
-</td>
-</tr>
-<tr>
-<td>
-<code>n</code>
-</td>
-<td>
-實際抽出的數量
-</td>
-<td>
-你自己選的 6 個號碼
-</td>
-</tr>
-<tr>
-<td>
-<code>k</code>
-</td>
-<td>
-想對中「感興趣類型」的數量
-</td>
-<td>
-4 個對中的號碼
-</td>
-</tr>
+<tr><th>超幾何分布的符號</th><th>代表意義</th><th>對應到威力彩</th></tr>
+<tr><td><code>N</code></td><td>整批東西的總數</td><td>38 個號碼</td></tr>
+<tr><td><code>K</code></td><td>整批裡「感興趣類型」的數量</td><td>開獎開出的 6 個號碼</td></tr>
+<tr><td><code>n</code></td><td>實際抽出的數量</td><td>你自己選的 6 個號碼</td></tr>
+<tr><td><code>k</code></td><td>想對中「感興趣類型」的數量</td><td>4 個對中的號碼</td></tr>
 </table>
+
 <div class="lp-card">
-<div class="lp-card-labelwrap">
-<span class="lp-card-label">Formula · 算式</span>
+<div class="lp-card-labelwrap"><span class="lp-card-label">Formula · 算式</span></div>
+<div class="lp-card-formula">P(剛好對中 4 個) = C(6,4) × C(32,2) ÷ C(38,6)</div>
+<div class="lp-card-formula">= 15 × 496 ÷ 2,760,681</div>
+<div class="lp-card-formula">= 7,440 ÷ 2,760,681 ≈ <code>0.27%</code></div>
 </div>
-<div class="lp-card-formula">
-P(剛好對中 4 個) = C(6,4) × C(32,2) ÷ C(38,6)
-</div>
-<div class="lp-card-formula">
-= 15 × 496 ÷ 2,760,681
-</div>
-<div class="lp-card-formula">
-= 7,440 ÷ 2,760,681 ≈ <code>0.27%</code>
-</div>
-</div>
-<p>這裡的 <code>C(6,4)</code> 是「開出的 6 個號碼裡，你剛好對中哪 4
-個」的組合數；<code>C(32,2)</code> 是「你剩下 2
-個號碼，剛好都落在沒開出的 32 個號碼裡」的組合數；分母
-<code>C(38,6)</code> 則是「38 個號碼裡任選 6
-個」的所有可能組合數，也就是開獎結果的全部可能性。</p>
+
+<p>這裡的 <code>C(6,4)</code> 是「開出的 6 個號碼裡，你剛好對中哪 4 個」的組合數；<code>C(32,2)</code> 是「你剩下 2 個號碼，剛好都落在沒開出的 32 個號碼裡」的組合數；分母 <code>C(38,6)</code> 則是「38 個號碼裡任選 6 個」的所有可能組合數，也就是開獎結果的全部可能性。</p>
 <div class="lp-dist">
-<div class="lp-dist-row">
-<span class="lp-dist-k">對中 0 個</span>
-<div class="lp-dist-bar-wrap">
-<div class="lp-dist-bar" style="width:32.8%;">
+<div class="lp-dist-row"><span class="lp-dist-k">對中 0 個</span><div class="lp-dist-bar-wrap"><div class="lp-dist-bar" style="width:32.8%;"></div></div><span class="lp-dist-pct">32.83%</span></div>
+<div class="lp-dist-row"><span class="lp-dist-k">對中 1 個</span><div class="lp-dist-bar-wrap"><div class="lp-dist-bar" style="width:43.8%;"></div></div><span class="lp-dist-pct">43.77%</span></div>
+<div class="lp-dist-row"><span class="lp-dist-k">對中 2 個</span><div class="lp-dist-bar-wrap"><div class="lp-dist-bar" style="width:19.5%;"></div></div><span class="lp-dist-pct">19.54%</span></div>
+<div class="lp-dist-row"><span class="lp-dist-k">對中 3 個</span><div class="lp-dist-bar-wrap"><div class="lp-dist-bar" style="width:3.6%;"></div></div><span class="lp-dist-pct">3.59%</span></div>
+<div class="lp-dist-row lp-dist-row--hit"><span class="lp-dist-k">對中 4 個 ★</span><div class="lp-dist-bar-wrap"><div class="lp-dist-bar" style="width:0.27%;"></div></div><span class="lp-dist-pct">0.27%</span></div>
+<div class="lp-dist-row"><span class="lp-dist-k">對中 5 個</span><div class="lp-dist-bar-wrap"><div class="lp-dist-bar" style="width:0.05%;"></div></div><span class="lp-dist-pct">0.007%</span></div>
+<div class="lp-dist-row"><span class="lp-dist-k">對中 6 個</span><div class="lp-dist-bar-wrap"><div class="lp-dist-bar" style="width:0.02%;"></div></div><span class="lp-dist-pct">0.00004%</span></div>
+</div>
 
-</div>
-</div>
-<span class="lp-dist-pct">32.83%</span>
-</div>
-<div class="lp-dist-row">
-<span class="lp-dist-k">對中 1 個</span>
-<div class="lp-dist-bar-wrap">
-<div class="lp-dist-bar" style="width:43.8%;">
-
-</div>
-</div>
-<span class="lp-dist-pct">43.77%</span>
-</div>
-<div class="lp-dist-row">
-<span class="lp-dist-k">對中 2 個</span>
-<div class="lp-dist-bar-wrap">
-<div class="lp-dist-bar" style="width:19.5%;">
-
-</div>
-</div>
-<span class="lp-dist-pct">19.54%</span>
-</div>
-<div class="lp-dist-row">
-<span class="lp-dist-k">對中 3 個</span>
-<div class="lp-dist-bar-wrap">
-<div class="lp-dist-bar" style="width:3.6%;">
-
-</div>
-</div>
-<span class="lp-dist-pct">3.59%</span>
-</div>
-<div class="lp-dist-row lp-dist-row--hit">
-<span class="lp-dist-k">對中 4 個 ★</span>
-<div class="lp-dist-bar-wrap">
-<div class="lp-dist-bar" style="width:0.27%;">
-
-</div>
-</div>
-<span class="lp-dist-pct">0.27%</span>
-</div>
-<div class="lp-dist-row">
-<span class="lp-dist-k">對中 5 個</span>
-<div class="lp-dist-bar-wrap">
-<div class="lp-dist-bar" style="width:0.05%;">
-
-</div>
-</div>
-<span class="lp-dist-pct">0.007%</span>
-</div>
-<div class="lp-dist-row">
-<span class="lp-dist-k">對中 6 個</span>
-<div class="lp-dist-bar-wrap">
-<div class="lp-dist-bar" style="width:0.02%;">
-
-</div>
-</div>
-<span class="lp-dist-pct">0.00004%</span>
-</div>
-</div>
-<p>把完整分布攤開來看，就是彩券公司公告的中獎機率表：<code>對中 0～1
-個</code>合計超過 76%，才是你每次對獎最常看到的結果；對中 4
-個以上的機率已經低到千分之三以下，這也是為什麼威力彩把「對中 4
-個」以上才設計成有獎金的門檻——機率池越往兩端（尤其是對中 6
-個、也就是頭獎），下滑速度快到幾乎垂直。</p>
+<p>把完整分布攤開來看，就是彩券公司公告的中獎機率表：<code>對中 0～1 個</code>合計超過 76%，才是你每次對獎最常看到的結果；對中 4 個以上的機率已經低到千分之三以下，這也是為什麼威力彩把「對中 4 個」以上才設計成有獎金的門檻——機率池越往兩端（尤其是對中 6 個、也就是頭獎），下滑速度快到幾乎垂直。</p>
 <div class="lp-final">
-<span class="lp-final-label">Draw Result · 結論</span> <span
-class="lp-final-text">6 個號碼剛好對中 4 個的機率約 0.27%（約 371 分之
-1）</span>
-<div class="lp-final-sub">
-比對中 1 個（43.77%）低了超過 160 倍，越接近全對中，機率掉得越快
+<span class="lp-final-label">Draw Result · 結論</span>
+<span class="lp-final-text">6 個號碼剛好對中 4 個的機率約 0.27%（約 371 分之 1）</span>
+<div class="lp-final-sub">比對中 1 個（43.77%）低了超過 160 倍，越接近全對中，機率掉得越快</div>
 </div>
-</div>
-<div class="lp-closing">
-— Good Luck, Draw Again Next Week —
-</div>
-</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/07/21/Statistics-Hypergeometric-Distribution/">https://chi-keke.github.io/Mind/2026/07/21/Statistics-Hypergeometric-Distribution/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypergeometric-distribution/landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/07/15/Probability-%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97/" title="重複排列"><img class="cover" src="https://github.com/CHI-KEKE/pics/blob/main/Probability/RePermutation/landing.png?raw=true" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">重複排列</div></div><div class="info-2"><div class="info-item-1">棋盤街道含有 7 個元素的集合，有多少個部分集合？僧多粥少 .rp-note { background:#f7fafd; border:1px dashed #b9cbdc; border-left:4px solid #3a6ea5; padding:12px 18px; margin:14px 0 20px; border-radius:3px; font-size:0.92rem; color:#2b3c4d; line-height:1.85; } .rp-note code { background:#e7eff7; padding:1px 6px; border-radius:3px; color:#1f3a5f; } .rp-note.warn { background:#fbf3ec; border-color:#e0c6a5; border-left-color:#b98a4e; color:#5c4526; } .rp-note.warn code { background:#f4e6d3; color:#7a5a26; } .rp-note.dan...</div></div></div></a><a class="pagination-related" href="/Mind/2026/07/22/Probability-%E9%9A%94%E6%9D%BF%E6%B3%95/" title="隔板法"><img class="cover" src="https://github.com/CHI-KEKE/pics/blob/main/Probability/board-split/landing.png?raw=true" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">隔板法</div></div><div class="info-2"><div class="info-item-1">飲料其他算法一一對應判斷要用隔板法 .tea-pill { display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.8rem; font-weight:700; letter-spacing:1px; color:#fff; } .tea-pill.red { background:#a3441e; } .tea-pill.green { background:#4f7942; } .tea-pill.milk { background:#a9723a; }  .order-grid { display:flex; gap:20px; margin:20px 0; flex-wrap:wrap; } .order-card { flex:1; min-width:220px; background:#fbf8f2; border:1px solid #ddd0b8; border-radius:6px; padding:14px 18px; } .order-card .ord...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">45</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypergeometric-distribution/landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+
+<div class="lp-closing">— Good Luck, Draw Again Next Week —</div>
+</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/07/21/Statistics-Hypergeometric-Distribution/">https://chi-keke.github.io/Mind/2026/07/21/Statistics-Hypergeometric-Distribution/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypergeometric-distribution/landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/07/15/Probability-%E9%87%8D%E8%A4%87%E6%8E%92%E5%88%97/" title="重複排列"><img class="cover" src="https://github.com/CHI-KEKE/pics/blob/main/Probability/RePermutation/landing.png?raw=true" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">重複排列</div></div><div class="info-2"><div class="info-item-1">棋盤街道含有 7 個元素的集合，有多少個部分集合？僧多粥少 .rp-note { background:#f7fafd; border:1px dashed #b9cbdc; border-left:4px solid #3a6ea5; padding:12px 18px; margin:14px 0 20px; border-radius:3px; font-size:0.92rem; color:#2b3c4d; line-height:1.85; } .rp-note code { background:#e7eff7; padding:1px 6px; border-radius:3px; color:#1f3a5f; } .rp-note.warn { background:#fbf3ec; border-color:#e0c6a5; border-left-color:#b98a4e; color:#5c4526; } .rp-note.warn code { background:#f4e6d3; color:#7a5a26; } .rp-note.danger {...</div></div></div></a><a class="pagination-related" href="/Mind/2026/07/22/Probability-%E9%9A%94%E6%9D%BF%E6%B3%95/" title="隔板法"><img class="cover" src="https://github.com/CHI-KEKE/pics/blob/main/Probability/board-split/landing.png?raw=true" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">隔板法</div></div><div class="info-2"><div class="info-item-1">飲料其他算法一一對應判斷要用隔板法 .tea-pill { display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.8rem; font-weight:700; letter-spacing:1px; color:#fff; } .tea-pill.red { background:#a3441e; } .tea-pill.green { background:#4f7942; } .tea-pill.milk { background:#a9723a; }  .order-grid { display:flex; gap:20px; margin:20px 0; flex-wrap:wrap; } .order-card { flex:1; min-width:220px; background:#fbf8f2; border:1px solid #ddd0b8; border-radius:6px; padding:14px 18px; } .order-card .order-title...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">45</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/fixed-floating-point.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Fixed Point &amp; Floating Point"/></a><div class="content"><a class="title" href="/Mind/2026/08/26/CS-fixed-point-floating-point/" title="Fixed Point &amp; Floating Point">Fixed Point &amp; Floating Point</a><time datetime="2026-08-26T10:17:03.000Z" title="Created 2026-08-26 18:17:03">2026-08-26</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Statistics/hypergeometric-distribution/landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
