@@ -1,0 +1,534 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>docker-daemon、docker engine、runc、containerd | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="docker engine    daemonwebserver daemondockerdDocker EngineOCI 規範containerdsummarydaemon 這個詞在電腦世界裡，起源自早期 MIT 的作業系統研究圈，後來被 Unix 沿用，因為系統裡總有一堆沒人想手動一直顧的瑣事，所以工程師乾脆替這些工作取了一個像隱形幫手的名字，工程師會用 daemon 來稱呼背景工作的程式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker-daemon、docker engine、runc、containerd">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2026/04/06/Docker-docker-daemon/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="docker engine    daemonwebserver daemondockerdDocker EngineOCI 規範containerdsummarydaemon 這個詞在電腦世界裡，起源自早期 MIT 的作業系統研究圈，後來被 Unix 沿用，因為系統裡總有一堆沒人想手動一直顧的瑣事，所以工程師乾脆替這些工作取了一個像隱形幫手的名字，工程師會用 daemon 來稱呼背景工作的程式">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png">
+<meta property="article:published_time" content="2026-04-06T00:06:05.000Z">
+<meta property="article:modified_time" content="2026-09-05T02:55:05.015Z">
+<meta property="article:author" content="Yo-Lin">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "docker-daemon、docker engine、runc、containerd",
+  "url": "https://chi-keke.github.io/Mind/2026/04/06/Docker-docker-daemon/",
+  "image": "https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png",
+  "datePublished": "2026-04-06T00:06:05.000Z",
+  "dateModified": "2026-09-05T02:55:05.015Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2026/04/06/Docker-docker-daemon/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'docker-daemon、docker engine、runc、containerd',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">50</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">docker-daemon、docker engine、runc、containerd</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">docker-daemon、docker engine、runc、containerd</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-04-06T00:06:05.000Z" title="Created 2026-04-06 08:06:05">2026-04-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-09-05T02:55:05.015Z" title="Updated 2026-09-05 10:55:05">2026-09-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/Docker/">Docker</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><a class="btn-beautify " target="_blank" rel="noopener" href="https://docs.docker.com/engine/?utm_source=chatgpt.com" title="docker engine"><i class="far fa-hand-point-right"></i><span>docker engine</span></a>
+
+
+
+<div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">daemon</button><button type="button" class="tab">webserver daemon</button><button type="button" class="tab">dockerd</button><button type="button" class="tab">Docker Engine</button><button type="button" class="tab">OCI 規範</button><button type="button" class="tab">containerd</button><button type="button" class="tab">summary</button></div><div class="tab-contents"><div class="tab-item-content active"><p>daemon 這個詞在電腦世界裡，起源自早期 MIT 的作業系統研究圈，後來被 Unix 沿用，因為系統裡總有一堆沒人想手動一直顧的瑣事，所以工程師乾脆替這些工作取了一個像隱形幫手的名字，工程師會用 daemon 來稱呼背景工作的程式</p>
+<p><code>sshd</code>、<code>httpd</code> 這些名字後面的 d，就是這個文化留下來的痕跡</p>
+<p>當我們開了一台多人共用的電腦，總不能每次有人要上網、登入、列印、記 log，才有人衝出來手動開一個程式幫忙，所以系統會先放一些常駐背景的程式在那邊</p>
+<ul>
+<li><code>sshd</code>：有人連 SSH 進來時接手</li>
+<li><code>httpd</code> &#x2F; <code>nginx</code>：有人送 HTTP request 時接手</li>
+<li><code>cron</code>：時間到了就跑排程</li>
+<li><code>dockerd</code>：有人下 Docker 指令時接手</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/1_what_is_d.png" alt="dockerfile"></p></div><div class="tab-item-content"><p>Nginx 和 Apache 都可以算是 web server daemon，它們是提供 HTTP 服務的背景常駐程式，也就是你常說的 Web Server</p>
+<p>當開啟 <a target="_blank" rel="noopener" href="https://example.com/">https://example.com</a> 的時候，背後大概是這樣</p>
+<ol>
+<li>主機上的 Nginx 已經先在背景執行，它監聽 443 port</li>
+<li>瀏覽器送出 HTTPS request</li>
+<li>Nginx 收到之後，可能先處理憑證</li>
+<li>如果是靜態頁面，就直接把 HTML&#x2F;CSS&#x2F;JS 回給你</li>
+<li>如果是動態網站，就把請求轉給 Node.js、PHP、Java 之類的後端</li>
+<li>最後把結果回傳給瀏覽器</li>
+</ol>
+<p>所以雖然我們看到的是一個網站，背後其實是 daemon 一直在顧入口</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/2_webserver_daemon.png" alt="dockerfile"></p></div><div class="tab-item-content"><p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/3_client_server.png" alt="dockerfile"></p>
+<p>dockerd 是 Docker 的背景總管程式，我們在 terminal 打的 docker 指令，真正接手去管理 image、container、network、volume 的，就是 dockerd，Docker 官方把它描述成「持續運行、管理 containers 的 process」，而 Docker Engine 也被官方定義成一個 client-server 架構，其中 server 端就是 dockerd</p>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/4_dockerd_include.png" alt="dockerfile"></p></div><div class="tab-item-content"><p>Docker Engine 是整套 Docker 執行核心，它包含 Docker daemon（dockerd）、REST API、以及 Docker CLI client<br>，官方文件把它定義成一個 client-server technology，裡面有三塊很核心的東西</p>
+<ul>
+<li>dockerd 這個 long-running daemon</li>
+<li>REST API</li>
+<li>docker CLI client</li>
+</ul></div><div class="tab-item-content"><p><code>OCI</code> 規範是 <code>container</code> 世界的共同語言，不先講好格式和動作，不同工具根本接不起來</p>
+<p><code>OCI</code> 是 <code>Open Container Initiative</code> 制定的一組標準，它的工作之一就是建立 <code>container image formats</code> 和 runtime 的正式規範，讓相容實作能跨平台運作。OCI 官網也列出目前三大規範：<code>Runtime</code>、<code>Image</code>、<code>Distribution</code></p>
+<ul>
+<li><code>OCI Runtime Spec</code>：規定一個低層 <code>runtime</code> 應該怎麼把 <code>container</code> 跑起來</li>
+<li><code>OCI Image Spec</code>：規定 <code>image</code> 的格式該怎麼描述</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/5_OCI.png" alt="dockerfile"></p></div><div class="tab-item-content"><p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/6_containerd.png" alt="dockerfile"></p>
+<p><code>dockerd</code> 把 <code>container</code> 生命週期管理交給 <code>containerd</code>，再由 <code>containerd</code> 用 <code>runc</code> 去真的執行</p>
+<ul>
+<li><p>Docker Engine uses containerd for managing the container lifecycle</p>
+</li>
+<li><p>By default, containerd uses runc as its container runtime</p>
+</li>
+<li><p><code>dockerd</code>：Docker 世界的總管，管 API、image、network、volume、整體協調</p>
+</li>
+<li><p><code>containerd</code>：中間那層，專門處理 container lifecycle 和 image management</p>
+</li>
+<li><p><code>runc</code>：最底層 runtime，真的照 OCI 規格把 container process 跑起來</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/7_runc.png" alt="dockerfile"></p></div><div class="tab-item-content"><p><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/Docker/daemon/8_all_flow.png" alt="dockerfile"></p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/04/06/Docker-docker-daemon/">https://chi-keke.github.io/Mind/2026/04/06/Docker-docker-daemon/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/Mind/tags/Docker/">Docker</a></div><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/01/11/Docker-Command/" title="Cammand"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">Cammand</div></div><div class="info-2"><div class="info-item-1">指令觀察 container 狀態觀察 Image拉取 api server image將 server 在本地跑起來 Docker 把「你要操作的東西」放在指令正中間，為了讓人一眼就知道「你在動誰、要對它做什麼」  docker：告訴系統你要使用 Docker 這套工具，就像進入一個控制台，後面的內容都在 Docker 的語境裡 container &#x2F; image &#x2F; volume &#x2F; network（對象）：明確指定你要操作的資源種類先講「我要動的是容器？映像檔？還是網路？」 run &#x2F; ps &#x2F; rm &#x2F; build（指令）：對這個對象要做的行為，在對象已經清楚的前提下，再說你要做什麼動作 參數：補充條件與細節，像是名稱、port、detach、env，這些都是「怎麼做」的細節  工具 → 目標 → 動作 → 細節 例如 1docker container rm my-nginx  用 docker對 container做 rm（刪除）目標是 my-nginx 這句話幾乎可以直接唸成白話，不需要先背語法規則! Do...</div></div></div></a><a class="pagination-related" href="/Mind/2026/04/24/Docker-docker-compose/" title="docker-compose"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">docker-compose</div></div><div class="info-2"><div class="info-item-1">docker-compose網站Compose 的限制Docker Compose vs Dockerfile手動連通不同 container--linkdocker composesummary把「一堆需要一起啟動的容器」用一份設定檔講清楚，讓環境可以一鍵重現  本質就是把多容器的操作流程「腳本化 + 結構化」  步驟大致上是  先寫一個 docker-compose.yml : 定義有哪些服務（例如 web、db）、每個服務用哪個 image、要開哪些 port、環境變數是什麼 Compose 讀這個檔案 : 解析 services、networks、volumes 確認彼此的依賴關係 建立資源 : 它會自動幫你建立 network（讓容器可以互相用名稱溝通）、建立 volume（資料持久化）    啟動多個 container : 按照設定一次把所有服務跑起來，幫我們處理啟動順序（例如 db 先起）    維持這個「整組環境」 up：全部啟動 down：全部關掉並清理 logs：一起看所有服務的 log    今天有一個網站需要  前端（React） 後端（Node.js）...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/Mind/2026/04/24/Docker-docker-compose/" title="docker-compose"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-24</div><div class="info-item-2">docker-compose</div></div><div class="info-2"><div class="info-item-1">docker-compose網站Compose 的限制Docker Compose vs Dockerfile手動連通不同 container--linkdocker composesummary把「一堆需要一起啟動的容器」用一份設定檔講清楚，讓環境可以一鍵重現  本質就是把多容器的操作流程「腳本化 + 結構化」  步驟大致上是  先寫一個 docker-compose.yml : 定義有哪些服務（例如 web、db）、每個服務用哪個 image、要開哪些 port、環境變數是什麼 Compose 讀這個檔案 : 解析 services、networks、volumes 確認彼此的依賴關係 建立資源 : 它會自動幫你建立 network（讓容器可以互相用名稱溝通）、建立 volume（資料持久化）    啟動多個 container : 按照設定一次把所有服務跑起來，幫我們處理啟動順序（例如 db 先起）    維持這個「整組環境」 up：全部啟動 down：全部關掉並清理 logs：一起看所有服務的 log    今天有一個網站需要  前端（React） 後端（Node.js）...</div></div></div></a><a class="pagination-related" href="/Mind/2026/05/04/Docker-%E5%8C%85-NET-%E7%B5%A6-PO-%E4%BD%BF%E7%94%A8/" title="Docker for Dotnet and share"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-04</div><div class="info-item-2">Docker for Dotnet and share</div></div><div class="info-2"><div class="info-item-1">建立專案Dockerfilewhy multi stage建立 Image、 push Docker hub123456789101112131415## 建立專案dotnet new mvc -n MyMvcApp## or 指定版本dotnet new mvc -n MyMvcApp --framework net8.0cd .\MyMvcApp\## 觀察結構tree /F## 測試dotnet run一開始怎麼知道要這樣寫?首先，我們要從這個問題開始：我的程式要跑起來，需要哪些步驟？ 1234dotnet restoredotnet builddotnet publish -c Release -o ./publishdotnet ./publish/MyMvcApp.dll    而其實 Dockerfile 只是把這些步驟搬進 container 裡，並且我們可以一段一段作  本機 dotnet run 成功 本機 dotnet publish 成功 本機 dotnet .&#x2F;publish&#x2F;MyMvcApp.dll 成功 寫 SDK-only Do...</div></div></div></a><a class="pagination-related" href="/Mind/2026/01/03/Docker-Image-Layer/" title="Image Layer"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-03</div><div class="info-item-2">Image Layer</div></div><div class="info-2"><div class="info-item-1">Image Layer唯獨層、可寫層實驗形成新的 layer驗證「Docker 不會重複存兩份 node:20（layer 共用）」summary30 歲的那天我睡著了，隔天醒來，用「30 歲為止的 Image」，啟動了一個新的 Container，這個 Image 是過去經驗的凍結結果，你沒辦法在 Container 裡直接改 Image，把某一層人生經驗 hot fix，你只能用現在這份 Image 決定今天要跑出怎樣的一個實例  Image 就是那一疊已經整理好、不能再亂改的「環境變更記錄」，他是一份「如何把環境一步步疊起來的凍結結果」，而不是一個正在運作的東西，這些變更記錄加起來，組成一個「可執行的環境起點」  比較一下就是 Image「我『應該長怎樣』的說明書 + 已經準備好的環境層」Container「照著這份說明書，真的跑起來的一次實例」  Image 結構是多個 layer，每一層都是一次檔案系統的變更（新增 &#x2F; 修改 &#x2F; 刪除），最終組合成一個完整檔案系統視圖，他可以被重複掛載、可以被重複使用，用來作為 container 的起始基準 確認 ...</div></div></div></a><a class="pagination-related" href="/Mind/2026/01/04/Docker-Docker-file/" title="Dockerfile"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-04</div><div class="info-item-2">Dockerfile</div></div><div class="info-2"><div class="info-item-1">Dcokerfile工作流程Dockerfile 實作Dockerfile 實作Dockerfile 是「怎麼做」的規則，而 Image 是「照規則做完後」的結果；一個負責描述過程，一個負責被拿來用，Dockerfile 本質上就是一份「把環境準備流程寫成程式碼」的說明書，讓電腦每次都用一模一樣的步驟，生出一模一樣的執行環境  假設寫了一個後端 API，你的電腦可以跑，而同事電腦版本不合，可能是因為環境完全不同，如果沒有 Dockerfile，只能用嘴巴或 README 描述：「先裝這個、再裝那個、版本要對喔」，而有 Dockerfile，等於是直接說「照這份 Dockerfile build，就一定能跑。」  撰寫 Dockerfile 先寫 Dockerfile ，其中裡面要寫清楚從哪個基底環境開始、要裝哪些套件、程式放哪、容器啟動要幹嘛 設定工作目錄，決定之後所有指令是在容器裡的哪個資料夾執行 準備需要的檔案，把程式碼、設定檔複製進容器 安裝依賴套件，用指令把程式需要的套件一次裝好 設定啟動方式，告訴 Docker 這個環境「跑起來」時，要執行哪個指令  👉 Docker...</div></div></div></a><a class="pagination-related" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-09-05</div><div class="info-item-2">redis</div></div><div class="info-2"><div class="info-item-1">架構啟動Redis 7 image 拉下來啟動 Redis ContainerRedis Container 裡自己 Ping 自己從另一個 Container 經過 Windows Host 再打進 Redis 12345678910111213141516docker run   │   ├─ -d   │   └─ 背景執行   │   ├─ --name redis-open   │   └─ Container 名稱叫 redis-open   │   ├─ -p 6379:6379   │   └─ Host 6379 → Container 6379   │   ├─ redis:7   │   └─ 使用 Redis 7 image   │   └─ redis-server --bind 0.0.0.0 --protected-mode no       └─ Container 啟動後執行的程式    其中 –bind 0.0.0.0 很重要。它要求 Redis Server 接受 Container 所有網路介面的連線，而不只限於 loopback1234d...</div></div></div></a><a class="pagination-related" href="/Mind/2026/04/27/Docker-container-is-env/" title="Container is environment"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-27</div><div class="info-item-2">Container is environment</div></div><div class="info-2"><div class="info-item-1">指令原本流程開發的問題改用 Docker 自建環境開發volume 掛載（bind mount）summary概念上是把 環境 抽離出你的電腦，讓專案去哪裡跑都長一樣，不再被本機設定搞壞，此時我們可以透過 Docker container 取代「本機安裝 Node.js」，來提供一致的開發環境  本機先裝 Node.js 進專案資料夾 跑 npm install 跑 npm start  雖然在自己的電腦開完了，但自己的電腦要裝 Node 18、同事可能裝 Node 16、CI&#x2F;CD 用 Node 20 現在改成 Docker 做的事 1234567891011121314151617181920212223242526272829303132333435# 還沒有react#### 建一個測試資料夾mkdir docker-react-testcd docker-react-test#### 用 Docker 建立 React 專案docker container run -it --rm -w=/app -v &quot;$&#123;PWD&#125;:/app&...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">50</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID"><img src="https://i.imgur.com/ltxqyEt.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Taiwan-ID"/></a><div class="content"><a class="title" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID">Taiwan-ID</a><time datetime="2026-09-17T00:28:11.000Z" title="Created 2026-09-17 08:28:11">2026-09-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/compress-1-landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Lossless Compression"/></a><div class="content"><a class="title" href="/Mind/2026/09/06/CS-compression/" title="Lossless Compression">Lossless Compression</a><time datetime="2026-09-06T03:23:03.000Z" title="Created 2026-09-06 11:23:03">2026-09-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/05/Docker-redis/" title="redis"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="redis"/></a><div class="content"><a class="title" href="/Mind/2026/09/05/Docker-redis/" title="redis">redis</a><time datetime="2026-09-05T03:56:05.000Z" title="Created 2026-09-05 11:56:05">2026-09-05</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Random/Whale.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
