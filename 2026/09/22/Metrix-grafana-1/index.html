@@ -158,169 +158,149 @@
   isHighlightShrink: false,
   isToc: false,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">56</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">監控基礎架構</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">監控基礎架構</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-09-22T00:29:00.000Z" title="Created 2026-09-22 08:29:00">2026-09-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-09-22T00:48:40.494Z" title="Updated 2026-09-22 08:48:40">2026-09-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/Metric/">Metric</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">架構</button><button type="button" class="tab">架構</button><button type="button" class="tab">metric</button><button type="button" class="tab">Prometheus</button><button type="button" class="tab">Loki</button><button type="button" class="tab">Grafana</button></div><div class="tab-contents"><div class="tab-item-content active"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">你的系統</span><br><span class="line">Pod / API / Worker / DB</span><br><span class="line">       │</span><br><span class="line">       ├── 數值型資料 ──→ Prometheus ──┐</span><br><span class="line">       │   CPU、Memory、Request 數     │</span><br><span class="line">       │                              ├──→ Grafana</span><br><span class="line">       └── 文字型 Log ──→ Loki ───────┘</span><br><span class="line">           Error、Exception、訊息</span><br></pre></td></tr></table></figure></div><div class="tab-item-content"></div><div class="tab-item-content"><p>metric：單數，一個指標，例如「CPU 使用率這個 metric」
-metrics：複數，多個指標，也常泛指「監控指標資料」</p>
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">56</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">監控基礎架構</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">監控基礎架構</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-09-22T00:29:00.000Z" title="Created 2026-09-22 08:29:00">2026-09-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-09-22T00:48:40.494Z" title="Updated 2026-09-22 08:48:40">2026-09-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/Metric/">Metric</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">架構</button><button type="button" class="tab">架構</button><button type="button" class="tab">metric</button><button type="button" class="tab">Prometheus</button><button type="button" class="tab">Loki</button><button type="button" class="tab">Grafana</button></div><div class="tab-contents"><div class="tab-item-content active"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">你的系統</span><br><span class="line">Pod / API / Worker / DB</span><br><span class="line">       │</span><br><span class="line">       ├── 數值型資料 ──→ Prometheus ──┐</span><br><span class="line">       │   CPU、Memory、Request 數     │</span><br><span class="line">       │                              ├──→ Grafana</span><br><span class="line">       └── 文字型 Log ──→ Loki ───────┘</span><br><span class="line">           Error、Exception、訊息</span><br></pre></td></tr></table></figure></div><div class="tab-item-content"></div><div class="tab-item-content"><p>metric：單數，一個指標，例如「CPU 使用率這個 metric」<br>metrics：複數，多個指標，也常泛指「監控指標資料」</p>
 <p>它是用來量化某個系統狀態或行為的數值指標</p>
 <p>例如 Pod 的 Memory：</p>
-<p>container_memory_working_set_bytes = 1,572,864,000</p>
+<p>container_memory_working_set_bytes &#x3D; 1,572,864,000</p>
 <p>已經可以直接當 Metric。你可以把它理解成比較接近 raw measurement</p>
-<p>時間 memory 08:00 1.2 GB 08:01 1.3 GB 08:02 1.5 GB</p>
+<p>時間       memory<br>08:00      1.2 GB<br>08:01      1.3 GB<br>08:02      1.5 GB</p>
 <p>但也可以進一步加工。例如原始 Metric 是：</p>
 <p>http_requests_total</p>
-<p>08:00 → 10000 08:01 → 10600 08:02 → 11500</p>
+<p>08:00 → 10000<br>08:01 → 10600<br>08:02 → 11500</p>
 <p>這是一個持續累加的 Counter。</p>
 <p>你真正關心的可能是：</p>
 <p>「現在每秒有多少 Request？」</p>
 <p>Prometheus 就可以計算：</p>
 <p>rate(http_requests_total[5m])</p>
 <p>得到：</p>
-<p>08:00 → 8 req/s 08:01 → 10 req/s 08:02 → 13 req/s</p>
+<p>08:00 → 8 req&#x2F;s<br>08:01 → 10 req&#x2F;s<br>08:02 → 13 req&#x2F;s</p>
 <p>這就是由 Metric 計算出的衍生指標。</p>
 <p>所以可以把資料流想成：</p>
-<p>真實世界 / 系統 ↓ 原始 measurement ↓ Metric ↓ 計算 / 聚合 ↓ 衍生
-Metric / 查詢結果 ↓ Grafana</p>
+<p>真實世界 &#x2F; 系統<br>        ↓<br>原始 measurement<br>        ↓<br>Metric<br>        ↓<br>計算 &#x2F; 聚合<br>        ↓<br>衍生 Metric &#x2F; 查詢結果<br>        ↓<br>Grafana</p>
 <p>例如：</p>
-<p>Container 實際用了多少記憶體 ↓ container_memory_working_set_bytes ↓
-1,800,000,000 bytes ↓ ÷ 1024³ ↓ 1.68 GiB</p>
+<p>Container 實際用了多少記憶體<br>        ↓<br>container_memory_working_set_bytes<br>        ↓<br>1,800,000,000 bytes<br>        ↓<br>÷ 1024³<br>        ↓<br>1.68 GiB</p>
 <p>甚至：</p>
-<p>Memory Used = 1.68 GiB Memory Limit = 2 GiB</p>
-<pre><code>    ↓ 計算</code></pre>
-<p>Memory Usage = 84%</p>
-<p>1.68 GiB 本身可以是 Metric，84%
-這種加工後的結果也可以作為指標來看。</p></div><div class="tab-item-content"><p>Prometheus 主要負責「定期取得 Metric → 儲存 →
-查詢/計算」。實際量測通常由應用程式、OS、Kubernetes 元件或 Exporter
-完成。</p>
-<p>Pod / Container │ │ 實際使用記憶體 ▼ Linux Kernel / cgroup │ │
-提供原始資訊 ▼ 監控元件 │ │ 暴露成 Metric │ │
-container_memory_working_set_bytes 1.8GB ▼ Prometheus │ ├──
-定期抓取（scrape） ├── 儲存歷史資料 └── 查詢 / 計算 │ ▼ Grafana</p>
+<p>Memory Used &#x3D; 1.68 GiB<br>Memory Limit &#x3D; 2 GiB</p>
+<pre><code>    ↓ 計算
+</code></pre>
+<p>Memory Usage &#x3D; 84%</p>
+<p>1.68 GiB 本身可以是 Metric，84% 這種加工後的結果也可以作為指標來看。</p></div><div class="tab-item-content"><p>Prometheus 主要負責「定期取得 Metric → 儲存 → 查詢&#x2F;計算」。實際量測通常由應用程式、OS、Kubernetes 元件或 Exporter 完成。</p>
+<p>Pod &#x2F; Container<br>     │<br>     │ 實際使用記憶體<br>     ▼<br>Linux Kernel &#x2F; cgroup<br>     │<br>     │ 提供原始資訊<br>     ▼<br>監控元件<br>     │<br>     │ 暴露成 Metric<br>     │<br>     │ container_memory_working_set_bytes 1.8GB<br>     ▼<br>Prometheus<br>     │<br>     ├── 定期抓取（scrape）<br>     ├── 儲存歷史資料<br>     └── 查詢 &#x2F; 計算<br>             │<br>             ▼<br>           Grafana</p>
 <p>Prometheus 本身通常沒有跑進你的 Pod 裡面說：</p>
 <p>「我來檢查你現在用了多少 RAM。」</p>
-<p>底層的 container/cgroup/Kubernetes 相關元件掌握這些資訊，再把它整理成
-Prometheus 能讀的 Metric。</p>
+<p>底層的 container&#x2F;cgroup&#x2F;Kubernetes 相關元件掌握這些資訊，再把它整理成 Prometheus 能讀的 Metric。</p>
 <p>Prometheus 做的事情比較像：</p>
-<p>Prometheus： 「每 15 秒我要來拿一次最新數字。」</p>
-<p>08:00:00 → 1.20 GiB 08:00:15 → 1.25 GiB 08:00:30 → 1.31 GiB 08:00:45
-→ 1.42 GiB</p>
+<p>Prometheus：<br>「每 15 秒我要來拿一次最新數字。」</p>
+<p>08:00:00 → 1.20 GiB<br>08:00:15 → 1.25 GiB<br>08:00:30 → 1.31 GiB<br>08:00:45 → 1.42 GiB</p>
 <p>這個定期取得資料的動作叫做：</p>
 <p>Scrape（抓取）</p></div><div class="tab-item-content"><p>Loki 是專門用來集中儲存、搜尋、分析 Logs 的系統</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Pod / API / Worker</span><br><span class="line">        │</span><br><span class="line">        ├── Metrics ──→ Prometheus</span><br><span class="line">        │</span><br><span class="line">        │   CPU = 80%</span><br><span class="line">        │   Memory = 1.8 GB</span><br><span class="line">        │   Error count = 12</span><br><span class="line">        │</span><br><span class="line">        └── Logs ─────→ Loki</span><br><span class="line">            <span class="string">&quot;Start processing job&quot;</span></span><br><span class="line">            <span class="string">&quot;DynamoDB timeout&quot;</span></span><br><span class="line">            <span class="string">&quot;OutOfMemoryException&quot;</span></span><br></pre></td></tr></table></figure>
+
+
 <p>Loki 收的是什麼？</p>
 <p>假設你的 C# Worker 有：</p>
-<p>_logger.LogInformation(“Start processing ShopId {ShopId}”,
-shopId);</p>
-<p>_logger.LogError( exception, “Failed to process promotion
-{PromotionId}”, promotionId);</p>
+<p>_logger.LogInformation(“Start processing ShopId {ShopId}”, shopId);</p>
+<p>_logger.LogError(<br>    exception,<br>    “Failed to process promotion {PromotionId}”,<br>    promotionId);</p>
 <p>程式實際產生：</p>
-<p>08:30:01 INFO Start processing ShopId 2 08:30:02 INFO Loading
-promotions 08:30:05 ERROR Failed to process promotion 574730 08:30:05
-ERROR System.TimeoutException…</p>
+<p>08:30:01 INFO  Start processing ShopId 2<br>08:30:02 INFO  Loading promotions<br>08:30:05 ERROR Failed to process promotion 574730<br>08:30:05 ERROR System.TimeoutException…</p>
 <p>這些 Log 最後可以被送進 Loki 保存。</p>
 <p>然後你可以用 Loki 的查詢語言 LogQL 搜尋：</p>
-<p>{service=“promotion-worker”} |= “ERROR”</p>
+<p>{service&#x3D;”promotion-worker”} |&#x3D; “ERROR”</p>
 <p>意思大概就是：</p>
 <p>幫我找 promotion-worker 裡包含 ERROR 的 Log。</p>
-<ol type="1">
+<ol>
 <li>C# 程式先產生 Log</li>
 </ol>
 <p>例如 ASP.NET Core：</p>
-<p>_logger.LogInformation( “Start processing ShopId {ShopId}”,
-shopId);</p>
+<p>_logger.LogInformation(<br>    “Start processing ShopId {ShopId}”,<br>    shopId);</p>
 <p>假設：</p>
-<p>shopId = 2</p>
+<p>shopId &#x3D; 2</p>
 <p>執行之後會產生類似：</p>
 <p>2026-09-22 08:30:01 INFO Start processing ShopId 2</p>
 <p>這時候 Loki 還沒有收到任何東西。</p>
 <p>ILogger 只是把 Log 交給設定好的 Logging Provider。</p>
-<p>例如在 Container / Kubernetes 的常見情況，程式把 Log 寫到：</p>
+<p>例如在 Container &#x2F; Kubernetes 的常見情況，程式把 Log 寫到：</p>
 <p>stdout</p>
 <p>也就是標準輸出。</p>
 <p>所以你執行：</p>
 <p>kubectl logs promotion-worker-abc</p>
 <p>可以看到：</p>
-<p>INFO Start processing ShopId 2 INFO Loading promotions ERROR DynamoDB
-timeout</p>
-<p>這代表 Kubernetes / Container runtime 已經能取得這些 stdout/stderr
-Log。</p>
-<ol start="2" type="1">
+<p>INFO Start processing ShopId 2<br>INFO Loading promotions<br>ERROR DynamoDB timeout</p>
+<p>這代表 Kubernetes &#x2F; Container runtime 已經能取得這些 stdout&#x2F;stderr Log。</p>
+<ol start="2">
 <li>Kubernetes Node 上會有這些 Container Logs</li>
 </ol>
 <p>概念上可以想成：</p>
-<p>Pod │ └── Container │ │ stdout ▼ Container Runtime │ ▼ Node 上的
-container log</p>
+<p>Pod<br>│<br>└── Container<br>      │<br>      │ stdout<br>      ▼<br>Container Runtime<br>      │<br>      ▼<br>Node 上的 container log</p>
 <p>例如 Node 上可能存在對應的 container log 檔案。</p>
 <p>所以到這一步：</p>
-<p>Application ↓ stdout ↓ Container Runtime ↓ Node 上的 Log</p>
+<p>Application<br>    ↓<br>stdout<br>    ↓<br>Container Runtime<br>    ↓<br>Node 上的 Log</p>
 <p>依然還沒進 Loki。</p>
-<ol start="3" type="1">
+<ol start="3">
 <li>Log Collector 負責「搬運」</li>
 </ol>
 <p>這時候會有另一個程式專門收集這些 Logs。</p>
-<p>例如現在 Grafana 生態常見的 Grafana Alloy，其他環境也可能使用 Fluent
-Bit；較舊的 Loki 架構教學則常看到 Promtail。</p>
+<p>例如現在 Grafana 生態常見的 Grafana Alloy，其他環境也可能使用 Fluent Bit；較舊的 Loki 架構教學則常看到 Promtail。</p>
 <p>它做的事情可以簡化成：</p>
 <p>「Node 有新的 Log！」</p>
-<pre><code>    ↓</code></pre>
+<pre><code>    ↓
+</code></pre>
 <p>讀取</p>
-<p>2026-09-22 08:30 INFO Start Job 2026-09-22 08:31 ERROR Timeout</p>
-<pre><code>    ↓</code></pre>
-<p>加上一些 metadata / labels</p>
-<p>namespace=“production” pod=“promotion-worker-abc” container=“worker”
-service=“promotion-worker”</p>
-<pre><code>    ↓</code></pre>
+<p>2026-09-22 08:30 INFO Start Job<br>2026-09-22 08:31 ERROR Timeout</p>
+<pre><code>    ↓
+</code></pre>
+<p>加上一些 metadata &#x2F; labels</p>
+<p>namespace&#x3D;”production”<br>pod&#x3D;”promotion-worker-abc”<br>container&#x3D;”worker”<br>service&#x3D;”promotion-worker”</p>
+<pre><code>    ↓
+</code></pre>
 <p>送給 Loki</p>
 <p>所以 Log Collector 很像一個搬運工。</p>
-<ol start="4" type="1">
+<ol start="4">
 <li>Collector 透過網路把 Log Push 給 Loki</li>
 </ol>
 <p>這一步才真的「進 Loki」。</p>
 <p>概念上：</p>
-<p>Log Collector │ │ HTTP │ Push Logs ▼ Loki API</p>
+<p>Log Collector<br>      │<br>      │ HTTP<br>      │ Push Logs<br>      ▼<br>   Loki API</p>
 <p>送過去的內容概念上可能包含：</p>
-<p>timestamp: 2026-09-22 08:30:01</p>
-<p>labels: service=“promotion-worker” pod=“promotion-worker-abc”
-namespace=“production”</p>
-<p>log: “INFO Start processing ShopId 2”</p>
+<p>timestamp:<br>2026-09-22 08:30:01</p>
+<p>labels:<br>service&#x3D;”promotion-worker”<br>pod&#x3D;”promotion-worker-abc”<br>namespace&#x3D;”production”</p>
+<p>log:<br>“INFO Start processing ShopId 2”</p>
 <p>Loki 收到後才負責保存與後續查詢。</p>
-<ol start="5" type="1">
+<ol start="5">
 <li>Grafana 再去查 Loki</li>
 </ol>
 <p>當你在 Grafana 寫：</p>
-<p>{service=“promotion-worker”} |= “ERROR”</p>
+<p>{service&#x3D;”promotion-worker”} |&#x3D; “ERROR”</p>
 <p>資料方向是：</p>
-<p>你 │ ▼ Grafana │ │ LogQL Query ▼ Loki │ │ Query Result ▼ Grafana │ ▼
-你看到 Logs</p>
+<p>你<br> │<br> ▼<br>Grafana<br> │<br> │ LogQL Query<br> ▼<br>Loki<br> │<br> │ Query Result<br> ▼<br>Grafana<br> │<br> ▼<br>你看到 Logs</p>
 <p>所以 Grafana 通常也不是 Log 的儲存位置。</p></div><div class="tab-item-content"><p>它會去查詢像 Prometheus、Loki 這些資料來源，再把結果呈現出來</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">             你的系統</span><br><span class="line">                │</span><br><span class="line">      ┌─────────┴─────────┐</span><br><span class="line">      │                   │</span><br><span class="line">   Metrics               Logs</span><br><span class="line">      │                   │</span><br><span class="line">      ▼                   ▼</span><br><span class="line">Prometheus           Log Collector</span><br><span class="line">收集 + 儲存          Alloy / Fluent Bit</span><br><span class="line">      │                   │</span><br><span class="line">      │                   ▼</span><br><span class="line">      │                 Loki</span><br><span class="line">      │              儲存 + 查詢</span><br><span class="line">      │                   │</span><br><span class="line">      └────────┬──────────┘</span><br><span class="line">               │</span><br><span class="line">               ▼</span><br><span class="line">            Grafana</span><br><span class="line">               │</span><br><span class="line">   ┌───────────┼───────────┐</span><br><span class="line">   ▼           ▼           ▼</span><br><span class="line">Dashboard     Explore      Alert</span><br></pre></td></tr></table></figure>
+
 <p>例如你想看 Pod Memory</p>
 <p>Prometheus 裡已經有：</p>
-<p>08:00 → 1.2 GB 08:01 → 1.4 GB 08:02 → 1.7 GB 08:03 → 1.9 GB</p>
-<p>你可以在 Grafana 建立一個 Panel，讓 Grafana 對 Prometheus 執行
-PromQL：</p>
-<p>container_memory_working_set_bytes{ pod=“promotion-worker” }</p>
+<p>08:00 → 1.2 GB<br>08:01 → 1.4 GB<br>08:02 → 1.7 GB<br>08:03 → 1.9 GB</p>
+<p>你可以在 Grafana 建立一個 Panel，讓 Grafana 對 Prometheus 執行 PromQL：</p>
+<p>container_memory_working_set_bytes{<br>    pod&#x3D;”promotion-worker”<br>}</p>
 <p>Grafana 拿到結果之後畫成：</p>
-<p>Memory 2.0GB │ ╭─ │ ╭──╯ 1.5GB │ ╭──────╯ │ ╭────╯ 1.0GB │────╯
-└───────────────────── 08:00 08:01 08:02</p>
+<p>Memory<br>2.0GB │                   ╭─<br>      │                ╭──╯<br>1.5GB │         ╭──────╯<br>      │    ╭────╯<br>1.0GB │────╯<br>      └─────────────────────<br>       08:00  08:01  08:02</p>
 <p>所以這張漂亮的圖是 Grafana 畫的，底下的資料是 Prometheus 提供的。</p>
 <p>同樣地，你想看 Error Log。</p>
 <p>你在 Grafana Explore 寫：</p>
-<p>{service=“promotion-worker”} |= “ERROR”</p>
+<p>{service&#x3D;”promotion-worker”} |&#x3D; “ERROR”</p>
 <p>這次 Grafana 知道你選的 Data Source 是 Loki，因此：</p>
-<p>Grafana │ │ LogQL ▼ Loki │ │ 查詢結果 ▼ Grafana</p>
-<p>08:31 ERROR DynamoDB timeout 08:35 ERROR OutOfMemoryException</p>
+<p>Grafana<br>   │<br>   │ LogQL<br>   ▼<br> Loki<br>   │<br>   │ 查詢結果<br>   ▼<br>Grafana</p>
+<p>08:31 ERROR DynamoDB timeout<br>08:35 ERROR OutOfMemoryException</p>
 <p>所以你之前在 Grafana 裡面寫的 LogQL，本質上可以理解成：</p>
 <p>你透過 Grafana 這個 UI，對 Loki 下查詢。</p>
 <p>Grafana 還有一個重要功能：Alert</p>
 <p>例如你設定：</p>
-<p>過去 5 分鐘 Dify Error &gt; 5</p>
+<p>過去 5 分鐘<br>Dify Error &gt; 5</p>
 <p>Grafana 定期執行查詢：</p>
-<p>Grafana │ ▼ Loki │ ▼ 過去 5 分鐘 Dify Error = 8 │ ▼ 超過門檻 5 │ ▼
-Alerting │ ▼ Slack / Email / …</p>
+<p>Grafana<br>   │<br>   ▼<br>Loki<br>   │<br>   ▼<br>過去 5 分鐘 Dify Error &#x3D; 8<br>   │<br>   ▼<br>超過門檻 5<br>   │<br>   ▼<br>Alerting<br>   │<br>   ▼<br>Slack &#x2F; Email &#x2F; …</p>
 <p>這就是你之前研究的 Grafana Alert。</p>
 <p>所以可以把 Grafana 的核心功能濃縮成：</p>
-<p>Grafana = 把不同監控資料來源接進來，讓人查詢、視覺化、做 Dashboard 與
-Alert 的平台。</p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/09/22/Metrix-grafana-1/">https://chi-keke.github.io/Mind/2026/09/22/Metrix-grafana-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://i.imgur.com/f2eWUWv.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">worker-pod-cpu-memory</div></div><div class="info-2"><div class="info-item-1">requestslimitHPA 設定worker .kubernetes-helm{--kh-blue:#326de6;--kh-link:#2455b5;--kh-bg:#fff;--kh-ink:#303b4b;--kh-soft:#eef4ff;--kh-line:#d5deed;--kh-muted:#566b88;background:var(--kh-bg);color:var(--kh-ink);padding:24px;font-family:'Segoe UI','Microsoft JhengHei',sans-serif;line-height:1.9;overflow-wrap:anywhere;} .kubernetes-helm *{box-sizing:border-box;} #article-container .kubernetes-helm h2,#article-container .kubernetes-helm h3{color:var(--kh-ink);font-weight:800;line-height:1.45;} ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">56</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/22/Metrix-grafana-1/" title="監控基礎架構"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="監控基礎架構"/></a><div class="content"><a class="title" href="/Mind/2026/09/22/Metrix-grafana-1/" title="監控基礎架構">監控基礎架構</a><time datetime="2026-09-22T00:29:00.000Z" title="Created 2026-09-22 08:29:00">2026-09-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="worker-pod-cpu-memory"/></a><div class="content"><a class="title" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory">worker-pod-cpu-memory</a><time datetime="2026-09-19T07:40:00.000Z" title="Created 2026-09-19 15:40:00">2026-09-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID"><img src="https://i.imgur.com/ltxqyEt.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Taiwan-ID"/></a><div class="content"><a class="title" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID">Taiwan-ID</a><time datetime="2026-09-17T00:28:11.000Z" title="Created 2026-09-17 08:28:11">2026-09-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+<p>Grafana &#x3D; 把不同監控資料來源接進來，讓人查詢、視覺化、做 Dashboard 與 Alert 的平台。</p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/09/22/Metrix-grafana-1/">https://chi-keke.github.io/Mind/2026/09/22/Metrix-grafana-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://i.imgur.com/f2eWUWv.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">worker-pod-cpu-memory</div></div><div class="info-2"><div class="info-item-1">requestslimitHPA 設定worker .kubernetes-helm{--kh-blue:#326de6;--kh-link:#2455b5;--kh-bg:#fff;--kh-ink:#303b4b;--kh-soft:#eef4ff;--kh-line:#d5deed;--kh-muted:#566b88;background:var(--kh-bg);color:var(--kh-ink);padding:24px;font-family:'Segoe UI','Microsoft JhengHei',sans-serif;line-height:1.9;overflow-wrap:anywhere;} .kubernetes-helm *{box-sizing:border-box;} #article-container .kubernetes-helm h2,#article-container .kubernetes-helm h3{color:var(--kh-ink);font-weight:800;line-height:1.45;} .kub...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">56</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/22/Metrix-grafana-1/" title="監控基礎架構"><img src="https://i.imgur.com/f2eWUWv.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="監控基礎架構"/></a><div class="content"><a class="title" href="/Mind/2026/09/22/Metrix-grafana-1/" title="監控基礎架構">監控基礎架構</a><time datetime="2026-09-22T00:29:00.000Z" title="Created 2026-09-22 08:29:00">2026-09-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="worker-pod-cpu-memory"/></a><div class="content"><a class="title" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory">worker-pod-cpu-memory</a><time datetime="2026-09-19T07:40:00.000Z" title="Created 2026-09-19 15:40:00">2026-09-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID"><img src="https://i.imgur.com/ltxqyEt.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Taiwan-ID"/></a><div class="content"><a class="title" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID">Taiwan-ID</a><time datetime="2026-09-17T00:28:11.000Z" title="Created 2026-09-17 08:28:11">2026-09-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/queue.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Bounded Queue"/></a><div class="content"><a class="title" href="/Mind/2026/09/13/CS-bounded-queue/" title="Bounded Queue">Bounded Queue</a><time datetime="2026-09-13T02:40:00.000Z" title="Created 2026-09-13 10:40:00">2026-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/cs/ring-buffer.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Ring Buffer"/></a><div class="content"><a class="title" href="/Mind/2026/09/10/CS-ring-buffer/" title="Ring Buffer">Ring Buffer</a><time datetime="2026-09-10T07:05:03.000Z" title="Created 2026-09-10 15:05:03">2026-09-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://i.imgur.com/f2eWUWv.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
   const parseViewBox = viewBox => {
     if (!viewBox) return null
     const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
