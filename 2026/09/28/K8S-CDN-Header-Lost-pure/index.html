@@ -1,0 +1,995 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CDN-Header-Lost | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="狀況發生! CDN → ALB → EKS Header 遺失排查 呼叫 API 時明明帶了 Header，後端卻讀不到。請求在抵達程式前會經過多層代理，先找出哪一段沒有傳到，再檢查那一層的設定。 本文沿著 CDN、ALB 與 EKS 的請求路徑，整理 Header 轉發規則、路由關係與檢查指令。 目前是排查筆記，尚未確認根因。文中的兩台 EC2 Instance 與 32080 p">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CDN-Header-Lost">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2026/09/28/K8S-CDN-Header-Lost-pure/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="狀況發生! CDN → ALB → EKS Header 遺失排查 呼叫 API 時明明帶了 Header，後端卻讀不到。請求在抵達程式前會經過多層代理，先找出哪一段沒有傳到，再檢查那一層的設定。 本文沿著 CDN、ALB 與 EKS 的請求路徑，整理 Header 轉發規則、路由關係與檢查指令。 目前是排查筆記，尚未確認根因。文中的兩台 EC2 Instance 與 32080 p">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png">
+<meta property="article:published_time" content="2026-09-28T02:03:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T00:40:38.091Z">
+<meta property="article:author" content="Yo-Lin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "CDN-Header-Lost",
+  "url": "https://chi-keke.github.io/Mind/2026/09/28/K8S-CDN-Header-Lost-pure/",
+  "image": "https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png",
+  "datePublished": "2026-09-28T02:03:00.000Z",
+  "dateModified": "2026-09-30T00:40:38.091Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2026/09/28/K8S-CDN-Header-Lost-pure/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CDN-Header-Lost',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">59</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">CDN-Header-Lost</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">CDN-Header-Lost</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-09-28T02:03:00.000Z" title="Created 2026-09-28 10:03:00">2026-09-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-09-30T00:40:38.091Z" title="Updated 2026-09-30 08:40:38">2026-09-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/kubernetes/">kubernetes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="狀況發生">狀況發生!</h2>
+<h3 id="cdn-alb-eks-header-遺失排查">CDN → ALB → EKS Header
+遺失排查</h3>
+<p>呼叫 API 時明明帶了
+Header，後端卻讀不到。請求在抵達程式前會經過多層代理，先找出哪一段沒有傳到，再檢查那一層的設定。</p>
+<p>本文沿著 CDN、ALB 與 EKS 的請求路徑，整理 Header
+轉發規則、路由關係與檢查指令。</p>
+<p>目前是排查筆記，尚未確認根因。文中的兩台 EC2 Instance 與 32080 port
+來自原始觀察紀錄；實際 Service、Ingress Controller 與遺失的 Header
+仍需以現場設定及同一筆請求的紀錄確認。</p>
+<h2 id="架構">架構</h2>
+<h3 id="先辨認請求經過哪些層">先辨認請求經過哪些層</h3>
+<p>CDN → ALB → EKS 可用於部署在 AWS 的 Web／API 服務。CloudFront
+是對外入口，可提供快取並整合 WAF；ALB 負責負載平衡、路由與 TLS；EKS 內的
+Pod 執行 API。</p>
+<h4 id="請求路徑與系統邊界">請求路徑與系統邊界</h4>
+<pre><code class="highlight mermaid">flowchart TB
+Client[&quot;使用者 Browser / App&quot;] --&gt;|HTTP Request + Headers| CDN[&quot;CDN / CloudFront：入口與快取&quot;]
+CDN --&gt;|需要回源時| ALB[&quot;ALB：路由、負載平衡與 TLS&quot;]
+subgraph Cluster[&quot;EKS：應用程式執行環境&quot;]
+Pod[&quot;API Pods&quot;]
+end
+ALB --&gt;|經已設定的叢集入口| Pod</code></pre>
+<p>由上往下閱讀。箭頭代表請求方向；叢集內的實際路由留到 EKS
+分頁展開，這張圖不假設一定存在 NGINX。</p>
+<p>沿途代理可能依各自規則篩選或改寫 Header。EKS
+是執行環境，真正需要檢查的是入口代理與應用程式的處理行為。</p>
+<p>CloudFront 命中快取時，該次讀取可能直接由邊緣回應，沒有新的請求抵達
+Pod。排查時先確認請求確實回源，避免把「未回源」判成「Header
+被刪除」。</p>
+<h2 id="cloudfront-origin-request-policy">CloudFront Origin Request
+Policy</h2>
+<h3 id="回源資料與快取識別分開檢查">回源資料與快取識別分開檢查</h3>
+<p>CloudFront 可以把 S3、ALB 等資源設為 Origin，並與
+IAM、憑證、WAF、Route 53 及監控服務整合。收到 viewer request
+後，CloudFront 不會無條件把所有 Header、query string 與 cookie 原樣送往
+Origin。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>設定</th>
+<th>回答的問題</th>
+<th>與回源的關係</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cache Policy</td>
+<td>哪些值讓回應視為不同快取？</td>
+<td>納入 Cache Key 的 Header、query string 與 cookie 也會送往
+Origin。</td>
+</tr>
+<tr>
+<td>Origin Request Policy</td>
+<td>還有哪些資料需要送到 Origin？</td>
+<td>可額外轉發資料，而不把這些欄位加入 Cache Key。</td>
+</tr>
+</tbody>
+</table>
+<p>兩種 Policy 必須一起看。不能只看 Origin Request Policy
+的白名單，就斷定某個 Header 不會被轉發。<a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/understanding-how-origin-request-policies-and-cache-policies-work-together.html">AWS：兩種
+Policy 如何配合</a></p>
+<h4 id="aws-console-檢查位置">AWS Console 檢查位置</h4>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CloudFront → Distributions → 選 Distribution</span><br><span class="line">→ Behaviors → 選 Path Pattern → Edit</span><br><span class="line">→ Cache key and origin requests</span><br><span class="line">  → Cache policy</span><br><span class="line">  → Origin request policy</span><br></pre></td></tr></table></figure>
+<h3 id="案例相同商品不同語系">案例：相同商品，不同語系</h3>
+<p>假設 API 根據 <code>Accept-Language</code> 回傳不同內容，兩筆
+<code>GET /products/123</code> 就可能需要不同的快取識別。</p>
+<table>
+<thead>
+<tr>
+<th>請求</th>
+<th>Header</th>
+<th>快取識別示意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User A</td>
+<td><code>Accept-Language: zh-TW</code></td>
+<td><code>/products/123 + zh-TW</code></td>
+</tr>
+<tr>
+<td>User B</td>
+<td><code>Accept-Language: en-US</code></td>
+<td><code>/products/123 + en-US</code></td>
+</tr>
+</tbody>
+</table>
+<p>這個案例將語系納入 Cache Policy，才能區分兩份內容。只把語系送往
+Origin，而沒有區分快取，不能保證每次取得正確語系。</p>
+<h3 id="案例request-id-只用來追蹤">案例：Request ID 只用來追蹤</h3>
+<p><code>X-Request-Id: aaa</code>、<code>X-Request-Id: bbb</code>、<code>X-Request-Id: ccc</code>
+代表三筆請求，但不一定代表三份不同內容。後端需要追蹤識別值時，可由
+Origin Request Policy 轉發 <code>X-Request-Id</code>，Cache Policy
+則不包含它。</p>
+<h4 id="回源時的-request-id">回源時的 Request ID</h4>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Browser: X-Request-Id: abc123</span><br><span class="line">CloudFront Cache Key: 不包含 X-Request-Id</span><br><span class="line">CloudFront Origin Request: X-Request-Id: abc123</span><br><span class="line">ALB → EKS: 繼續檢查同一個識別值</span><br></pre></td></tr></table></figure>
+<p>此例描述需要回源時的行為；命中快取時，後端不一定會收到這筆 Request
+ID。</p>
+<h3 id="webhook-與授權-header">Webhook 與授權 Header</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-GitHub-Event</code></td>
+<td>GitHub Webhook 事件類型</td>
+</tr>
+<tr>
+<td><code>X-Hub-Signature-256</code></td>
+<td>GitHub Webhook HMAC 驗證</td>
+</tr>
+<tr>
+<td><code>X-Gitlab-Event</code></td>
+<td>GitLab Webhook 事件類型</td>
+</tr>
+<tr>
+<td><code>X-Gitlab-Token</code></td>
+<td>GitLab Webhook Token 驗證</td>
+</tr>
+<tr>
+<td><code>Authorization</code></td>
+<td>API 授權，需另行檢查 CloudFront 的特殊轉發規則</td>
+</tr>
+</tbody>
+</table>
+<p>一般自訂 Header 可加入自訂 Origin Request Policy，或視需求採用
+<code>Managed-AllViewer</code>。轉發全部 viewer headers 不等於把全部
+Header 加入 Cache Key，不能直接推論會產生更多快取項目。</p>
+<p>Authorization 不能加入 Origin Request Policy 的個別 Header
+白名單。可把它納入 Cache Policy；若停用快取，可使用 AllViewer 或
+AllViewerExceptHostHeader 轉發。後者會改用 Origin 的 Host，必須確認
+ALB／Ingress 的 Host
+路由相容。需要依身分授權的內容，也必須避免不同使用者共用不適當的快取。</p>
+<p><a
+target="_blank" rel="noopener" href="https://repost.aws/knowledge-center/cloudfront-authorization-header">AWS：Authorization
+轉發方式</a>；<a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html">AWS：Managed
+Origin Request Policies</a></p>
+<h3 id="origin-與-behavior-決定送往哪裡">Origin 與 Behavior
+決定送往哪裡</h3>
+<p>建立 ALB 後會取得 DNS Name，例如
+<code>my-alb-123456.ap-northeast-1.elb.amazonaws.com</code>。在
+CloudFront Origin 的 <code>Origin domain</code> 填入此名稱，即可將該 ALB
+設為來源站；HTTPS 回源時仍需確認憑證與使用的主機名稱相符。</p>
+<h4 id="依-path-pattern-選擇-origin">依 Path Pattern 選擇 Origin</h4>
+<pre><code class="highlight mermaid">flowchart TB
+CF[&quot;CloudFront Distribution&quot;] --&gt;|/images/*| S3[&quot;Origin A：S3&quot;]
+CF --&gt;|/api/*| ALB[&quot;Origin B：ALB&quot;]</code></pre>
+<p>箭頭標示 Behavior 的 Path
+Pattern。這是兩條指定規則的示例，未畫出其他規則與 Default
+Behavior；實際排查需確認請求命中哪條規則及其 Policy。</p>
+<h2 id="alb-listener-rules">ALB Listener Rules</h2>
+<h3 id="listener-接收連線rule-決定去向">Listener 接收連線，Rule
+決定去向</h3>
+<p>CloudFront 的 Origin 指向 <code>xxx.elb.amazonaws.com</code>
+時，請求會送到該 ALB。Listener 定義接收連線的 port 與協定，例如
+<code>:80 HTTP</code> 或 <code>:443 HTTPS</code>；Listener Rule
+再依條件決定路由。</p>
+<h4 id="alb-的-path-路由示例">ALB 的 Path 路由示例</h4>
+<pre><code class="highlight mermaid">flowchart TB
+L[&quot;ALB Listener :443&quot;] --&gt;|/api/orders/*| O[&quot;Order Target Group&quot;]
+L --&gt;|/api/members/*| M[&quot;Member Target Group&quot;]
+L --&gt;|/api/products/*| P[&quot;Product Target Group&quot;]</code></pre>
+<p>三條箭頭代表不同 Path
+條件，不是依序呼叫三個服務。未列出的請求由其他規則或 Default Rule
+處理。</p>
+<p>一般情況下，ALB 會繼續轉發收到的 request headers，不需要 CloudFront
+的 Origin Request Policy。不過它仍會新增或處理部分 Header，不能把 ALB
+視為完全不改動 HTTP 的通道。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Header</th>
+<th>示例</th>
+<th>解讀方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-Forwarded-For</code></td>
+<td><code>203.0.113.10</code></td>
+<td>記錄來源／代理鏈；ALB 預設 append，可設 preserve 或 remove。</td>
+</tr>
+<tr>
+<td><code>X-Forwarded-Proto</code></td>
+<td><code>https</code></td>
+<td>連到 ALB 時使用的協定；前面有 CloudFront 時，不能直接當成 viewer
+端協定。</td>
+</tr>
+<tr>
+<td><code>X-Forwarded-Port</code></td>
+<td><code>443</code></td>
+<td>連到 ALB 的目的 port；不一定等於最外層呼叫使用的 port。</td>
+</tr>
+</tbody>
+</table>
+<p>前面有 CloudFront 等代理時，<code>X-Forwarded-For</code> 可能是一串
+IP。ALB 預設追加上一跳來源，後端應依受信任代理鏈解讀，不可把唯一 IP
+或最左側值無條件當成真實 Client IP。<a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/x-forwarded-headers.html">AWS：X-Forwarded
+Headers</a></p>
+<h3 id="檢查-rule-與-header-相關屬性">檢查 Rule 與 Header 相關屬性</h3>
+<h4 id="aws-console-檢查位置-1">AWS Console 檢查位置</h4>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EC2 → Load Balancers → 選 ALB → Listeners → 查 Rules</span><br></pre></td></tr></table></figure>
+<p>先確認命中的 Rule 是否導向預期 Target Group。ALB 沒有通用的
+<code>remove header</code> Listener Rule action，因此不應把尋找此 action
+當成排查步驟。<a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/rule-action-types.html">AWS：Listener
+Rule actions</a></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>檢查項目</th>
+<th>與 Header 的關係</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>routing.http.drop_invalid_header_fields.enabled</code></td>
+<td>啟用時會丟棄不符合 ALB Header 名稱規則的欄位。</td>
+</tr>
+<tr>
+<td><code>routing.http.xff_header_processing.mode</code></td>
+<td>控制 X-Forwarded-For 的 append／preserve／remove。</td>
+</tr>
+<tr>
+<td><code>routing.http.preserve_host_header.enabled</code></td>
+<td>控制是否保留原始 Host，影響後續 Host 路由判讀。</td>
+</tr>
+</tbody>
+</table>
+<p><a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">AWS：ALB
+屬性與 Header 名稱規則</a>；<a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-load-balancer-attributes.html">AWS：Host
+Header preservation</a></p>
+<h2 id="step-3eks-ingress-controller-annotations">Step 3：EKS Ingress
+Controller Annotations</h2>
+<h3 id="先分清-eks-與應用程式的管理責任">先分清 EKS
+與應用程式的管理責任</h3>
+<p>Amazon EKS 是 AWS 提供的受管 Kubernetes 服務。自行架設 Kubernetes
+時，Control Plane 的建置、高可用、版本升級與故障處理都需自行負責；使用
+EKS 後，由 AWS 維運受管 Control
+Plane，應用程式與叢集使用方式仍需規劃。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>範圍</th>
+<th>自行架設 Kubernetes</th>
+<th>使用 Amazon EKS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Control Plane</td>
+<td>管理 kube-apiserver、etcd、scheduler、controller manager。</td>
+<td>AWS 維運受管 Control Plane；仍需規劃版本升級時機與相容性。</td>
+</tr>
+<tr>
+<td>Worker Nodes</td>
+<td>管理 Node A、Node B、Node C 等工作節點。</td>
+<td>EC2 Node Group 仍有節點維護責任；實際責任依運算模式不同。</td>
+</tr>
+<tr>
+<td>應用與容量</td>
+<td>管理 Deployment、Service、Ingress、Pod。</td>
+<td>仍需管理上述資源、CPU／Memory requests &amp; limits、HPA 與
+Container Image。</td>
+</tr>
+<tr>
+<td>權限與觀測</td>
+<td>規劃網路、授權及監控。</td>
+<td>仍需規劃 IAM、Security Group、Monitoring 與 Node Group。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="controller-與-target-type-的差異">Controller 與 Target Type
+的差異</h3>
+<p>AWS Load Balancer Controller 會依 Kubernetes 資源設定協調 AWS
+的負載平衡資源與 targets。它屬於控制層，不是每筆 API 請求都會穿過的 HTTP
+proxy。</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Target Type</th>
+<th>ALB 的直接目標</th>
+<th>Pod 重建時的解讀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ip</code></td>
+<td>Pod IP 等 IP targets。</td>
+<td>若由 Controller 管理 Pod targets，Pod 重建後，10.x.x.x
+等註冊目標可能跟著更新。</td>
+</tr>
+<tr>
+<td><code>instance</code></td>
+<td>EC2 Instance 的 Service NodePort。</td>
+<td>不能把 Target Group 的 Instance targets 當成 Pod IP；Pod
+變化由叢集內 Service 對應處理。</td>
+</tr>
+</tbody>
+</table>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/kubernetes-sigs/aws-load-balancer-controller/blob/main/docs/how-it-works.md">AWS
+Load Balancer Controller：流量模式</a></p>
+<h3 id="觀察紀錄兩台-instance-與-32080">觀察紀錄：兩台 Instance 與
+32080</h3>
+<p>原始紀錄中的 Target Group 使用 <code>Instance</code>，流量送往兩台
+EC2 Instance 的 <code>32080</code> port。這個 port 落在 Kubernetes 預設
+NodePort 範圍 <code>30000–32767</code>，符合 Worker Node／NodePort
+的可能架構，但仍需比對 EC2 身分與 Service 設定。</p>
+<h4 id="待確認的-nodeport-與-ingress-拓撲">待確認的 NodePort 與 Ingress
+拓撲</h4>
+<pre><code class="highlight mermaid">flowchart TB
+CF[&quot;CloudFront&quot;] --&gt; ALB[&quot;ALB :443 / Listener Rule&quot;]
+ALB --&gt; TG[&quot;Target Group：Instance&quot;]
+TG --&gt; A[&quot;EC2 Instance A :32080&quot;]
+TG --&gt; B[&quot;EC2 Instance B :32080&quot;]
+A -.-&gt; S[&quot;Service NodePort：待確認&quot;]
+B -.-&gt; S
+S -.-&gt; IC[&quot;Ingress Controller：待確認&quot;]
+IC -.-&gt; R[&quot;Ingress Rules：待確認&quot;]
+R -.-&gt; Shop[&quot;Shopping Service → Pods&quot;]
+R -.-&gt; Pay[&quot;Payment Service → Pods&quot;]
+R -.-&gt; Member[&quot;Member Service → Pods&quot;]</code></pre>
+<p>實線表示原稿記錄的入口關係，虛線表示尚待查證的叢集內路徑。若 NodePort
+指向應用 Pod，後面就不會有這層 Ingress Controller；Service
+是邏輯路由關係，不是額外 HTTP proxy。</p>
+<p>一種可能是 ALB 將不同 domain 的流量統一交給叢集內 Ingress
+Controller，再分流到 Shopping、Payment、Member 等服務。需先找到
+<code>32080</code> 所屬 Service，再查看 selector、EndpointSlice 與
+IngressClass，才能確定是否符合這個假設。</p>
+<h3 id="annotations-由對應-controller-解讀">Annotations 由對應
+Controller 解讀</h3>
+<p>Kubernetes Resource 的 <code>metadata.annotations</code> 是附加的
+Key-Value 資訊。Ingress 上的 annotations 可供對應 Controller 調整路由或
+AWS 資源，但不同 Controller 的設定不能混為一談。</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>設定示例</th>
+<th>用途與限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alb.ingress.kubernetes.io/target-type: instance</code></td>
+<td>AWS Load Balancer Controller 的目標模式，instance 模式需要適用的
+NodePort／LoadBalancer Service。</td>
+</tr>
+<tr>
+<td><code>alb.ingress.kubernetes.io/actions.*</code></td>
+<td>定義 ALB 自訂 action，需讀取實際 JSON；不是任意刪除 Header
+的設定。</td>
+</tr>
+<tr>
+<td><code>nginx.ingress.kubernetes.io/proxy-read-timeout: "60"</code></td>
+<td>NGINX Ingress 的讀取逾時示例，不表示會刪除 Header，也不適用於 ALB
+Controller。</td>
+</tr>
+</tbody>
+</table>
+<p><a
+target="_blank" rel="noopener" href="https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/">AWS
+Load Balancer Controller：Annotations</a></p>
+<h3 id="從-windows-連線到-eks">從 Windows 連線到 EKS</h3>
+<p>連線順序是 Windows 上以 AWS CLI 驗證 IAM 身分，再透過
+<code>aws eks update-kubeconfig</code> 寫入
+<code>~/.kube/config</code>，最後由 <code>kubectl</code> 連線至 EKS
+Kubernetes API Server。以下是操作範例，佔位符需替換為實際值。</p>
+<h4 id="確認工具與-aws-身分">1. 確認工具與 AWS 身分</h4>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">aws <span class="literal">--version</span></span><br><span class="line">aws sts <span class="built_in">get-caller</span><span class="literal">-identity</span></span><br><span class="line"><span class="comment"># 使用 AWS SSO / IAM Identity Center 時</span></span><br><span class="line">aws sso login <span class="literal">--profile</span> &lt;公司<span class="literal">-profile</span>&gt;</span><br><span class="line">aws sts <span class="built_in">get-caller</span><span class="literal">-identity</span> <span class="literal">--profile</span> &lt;公司<span class="literal">-profile</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>身分查詢成功會回傳 <code>Account</code>、<code>Arn</code>
+等資訊。後續指令應持續使用同一個已確認的 profile。</p>
+<h4 id="查詢叢集與確認-kubectl">2. 查詢叢集與確認 kubectl</h4>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aws eks list<span class="literal">-clusters</span> <span class="literal">--region</span> &lt;region&gt;</span><br><span class="line"><span class="comment"># 使用具名 profile 時</span></span><br><span class="line">aws eks list<span class="literal">-clusters</span> <span class="literal">--region</span> &lt;region&gt; <span class="literal">--profile</span> &lt;profile&gt;</span><br><span class="line">kubectl version <span class="literal">--client</span></span><br></pre></td></tr></table></figure>
+<p>若尚未安裝 kubectl，可依 <a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html">AWS：安裝
+kubectl</a> 處理。</p>
+<h4 id="建立-kubeconfig">3. 建立 kubeconfig</h4>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原稿範例：Cluster = public-eks-hk，Region = ap-east-1</span></span><br><span class="line">aws eks <span class="built_in">update-kubeconfig</span> <span class="literal">--region</span> ap<span class="literal">-east-1</span> <span class="literal">--name</span> public<span class="literal">-eks-hk</span></span><br><span class="line"><span class="comment"># 使用具名 profile 時，改用此指令</span></span><br><span class="line">aws eks <span class="built_in">update-kubeconfig</span> <span class="literal">--region</span> ap<span class="literal">-east-1</span> <span class="literal">--name</span> public<span class="literal">-eks-hk</span> <span class="literal">--profile</span> &lt;profile&gt;</span><br><span class="line">kubectl config current<span class="literal">-context</span></span><br><span class="line">kubectl get nodes</span><br></pre></td></tr></table></figure>
+<p>預設會更新 <code>C:/Users/使用者帳號/.kube/config</code>。如果 EKS
+API Endpoint 是 private-only，電腦必須能連入 VPC，例如透過公司 VPN；IAM
+身分驗證成功也不代表已具備 Kubernetes 資源讀取權限。<a
+target="_blank" rel="noopener" href="https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html">AWS：建立
+kubeconfig</a></p>
+<h4 id="找出-nodeport-對應服務">4. 找出 NodePort 對應服務</h4>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl get svc <span class="literal">-A</span> | <span class="built_in">Select-String</span> <span class="number">32080</span></span><br><span class="line">kubectl get svc &lt;service<span class="literal">-name</span>&gt; <span class="literal">-n</span> &lt;namespace&gt; <span class="literal">-o</span> yaml</span><br><span class="line">kubectl get endpointslices <span class="literal">-n</span> &lt;namespace&gt; <span class="literal">-l</span> kubernetes.io/service<span class="literal">-name</span>=&lt;service<span class="literal">-name</span>&gt; <span class="literal">-o</span> yaml</span><br><span class="line">kubectl get ingressclass</span><br><span class="line">kubectl get ingress <span class="literal">-n</span> &lt;namespace&gt; <span class="literal">-o</span> yaml</span><br></pre></td></tr></table></figure>
+<p>檢查 Service 的
+<code>nodePort</code>、<code>targetPort</code>、<code>selector</code>，再比對
+EndpointSlice 與實際 Pods。Ingress 則查看
+<code>spec.ingressClassName</code>、Host、Path、backend 與
+annotations；如果確認有 NGINX，再檢查該 Controller 的 ConfigMap 及適用的
+Header 設定。</p>
+<h2 id="step-4快速診斷直接看-pod-收到的-header">Step 4：快速診斷：直接看
+Pod 收到的 Header</h2>
+<h3 id="每種方法驗證的範圍不同">每種方法驗證的範圍不同</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>方法</th>
+<th>能確認什麼</th>
+<th>限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.NET API 暫時性 Log</td>
+<td>實際請求到達應用程式後，指定 Header 是否存在。</td>
+<td>只代表紀錄位置收到的內容，需與上游同一筆請求對照。</td>
+</tr>
+<tr>
+<td>kubectl exec + localhost curl</td>
+<td>Pod 內應用是否接收測試 Header。</td>
+<td>繞過 CloudFront、ALB 與外部 Ingress，不能證明完整路徑正常。</td>
+</tr>
+<tr>
+<td>httpbin /headers</td>
+<td>經測試入口送往回顯服務的 Header。</td>
+<td>需先建立 Service
+及適用路由，且測試路徑必須符合要驗證的入口設定。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="方法-1.net-api-加暫時性-log">方法 1：.NET API 加暫時性 Log</h3>
+<p>在 Controller 的入口，或可存取 Request 的診斷位置，記錄待查
+Header。以 Request ID 對照同一筆請求；授權與 Webhook token
+只記錄是否存在，避免把憑證值寫入 Log。</p>
+<h4 id="controller-診斷示例">Controller 診斷示例</h4>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> names = <span class="keyword">new</span>[] &#123; <span class="string">&quot;X-Request-Id&quot;</span>, <span class="string">&quot;X-GitHub-Event&quot;</span>, <span class="string">&quot;X-Gitlab-Event&quot;</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> headers = Request.Headers</span><br><span class="line">    .Where(h =&gt; names.Contains(h.Key, StringComparer.OrdinalIgnoreCase))</span><br><span class="line">    .Select(h =&gt; <span class="string">$&quot;<span class="subst">&#123;h.Key&#125;</span>=<span class="subst">&#123;h.Value&#125;</span>&quot;</span>);</span><br><span class="line">_logger.LogInformation(<span class="string">&quot;Received headers: &#123;Headers&#125;&quot;</span>, <span class="built_in">string</span>.Join(<span class="string">&quot;, &quot;</span>, headers));</span><br><span class="line">_logger.LogInformation(<span class="string">&quot;Authorization present: &#123;Present&#125;&quot;</span>,</span><br><span class="line">    Request.Headers.ContainsKey(<span class="string">&quot;Authorization&quot;</span>));</span><br><span class="line">_logger.LogInformation(<span class="string">&quot;GitLab token present: &#123;Present&#125;&quot;</span>,</span><br><span class="line">    Request.Headers.ContainsKey(<span class="string">&quot;X-Gitlab-Token&quot;</span>));</span><br><span class="line">_logger.LogInformation(<span class="string">&quot;GitHub signature present: &#123;Present&#125;&quot;</span>,</span><br><span class="line">    Request.Headers.ContainsKey(<span class="string">&quot;X-Hub-Signature-256&quot;</span>));</span><br></pre></td></tr></table></figure>
+<p>範例需引用 <code>System</code> 與 <code>System.Linq</code>。在
+Middleware 中改用
+<code>context.Request.Headers</code>；若要定位應用內的改寫，需比較相關
+Middleware 前後的紀錄。</p>
+<h3 id="方法-2kubectl-exec-進-pod-打-localhost">方法 2：kubectl exec 進
+Pod 打 localhost</h3>
+<h4 id="pod-內的局部測試">Pod 內的局部測試</h4>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec <span class="literal">-it</span> &lt;pod<span class="literal">-name</span>&gt; <span class="literal">-n</span> &lt;namespace&gt; <span class="literal">--</span> <span class="built_in">curl</span> <span class="literal">-v</span> http://localhost:&lt;port&gt;/api/ping</span><br><span class="line"><span class="comment"># 加上可辨識的測試值</span></span><br><span class="line">kubectl exec <span class="literal">-it</span> &lt;pod<span class="literal">-name</span>&gt; <span class="literal">-n</span> &lt;namespace&gt; <span class="literal">--</span> <span class="built_in">curl</span> <span class="literal">-v</span> <span class="literal">-H</span> <span class="string">&quot;X-Request-Id: local-check-001&quot;</span> http://localhost:&lt;port&gt;/api/ping</span><br></pre></td></tr></table></figure>
+<p>容器需要已安裝 curl。<code>curl -v</code> 顯示送出的
+Header，仍需搭配應用 Log
+或回顯回應，才能確認接收端看到的值；這個方法不經過 CDN／ALB。</p>
+<h3 id="方法-3部署-httpbin-測試-pod">方法 3：部署 httpbin 測試 Pod</h3>
+<p>以下保留原稿的 httpbin image
+範例，實際使用前需確認環境允許的來源與版本。此處僅提供操作範例，未對叢集執行部署。</p>
+<h4 id="建立-pod-與叢集內-service">建立 Pod 與叢集內 Service</h4>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl run httpbin <span class="literal">--image</span>=kennethreitz/httpbin <span class="literal">--port</span>=<span class="number">80</span> <span class="literal">-n</span> &lt;namespace&gt;</span><br><span class="line">kubectl expose pod httpbin <span class="literal">--name</span>=httpbin <span class="literal">--port</span>=<span class="number">80</span> <span class="literal">--target-port</span>=<span class="number">80</span> <span class="literal">-n</span> &lt;namespace&gt;</span><br></pre></td></tr></table></figure>
+<p>建立 Pod 與 Service 不會自動讓外部 /headers 可用。需依實際
+IngressClass、Host 與既有入口，將測試路徑導向 httpbin Service，並確認
+CloudFront Behavior、ALB Rule
+與快取設定涵蓋該路徑。這些現場資訊尚未提供，因此不預填可能導向錯誤入口的
+Ingress YAML。</p>
+<h4 id="入口路由完成後再從外部測試">入口路由完成後，再從外部測試</h4>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl.exe <span class="literal">-v</span> <span class="literal">-H</span> <span class="string">&quot;X-Request-Id: edge-check-001&quot;</span> https://&lt;your<span class="literal">-domain</span>&gt;/headers</span><br></pre></td></tr></table></figure>
+<p>Windows 使用 <code>curl.exe</code>，避免 Windows PowerShell 的 curl
+alias 改變指令行為；其他 shell 可使用 <code>curl</code>。在回傳 JSON
+檢查
+<code>X-Request-Id</code>，並確認本次請求回源。診斷端點應限制測試存取，不攜帶真實憑證，使用完畢後移除測試路由與資源。</p>
+<p>能在 httpbin 看見 Header，代表該測試路徑有送達，不代表所有 API
+路徑都採用同一組 Policy。仍需對照原本失敗請求的 Host、Path、method 與
+Header，才能縮小遺失位置。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/09/28/K8S-CDN-Header-Lost-pure/">https://chi-keke.github.io/Mind/2026/09/28/K8S-CDN-Header-Lost-pure/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/Mind/2026/09/22/Metrix-grafana-1/" title="監控基礎架構"><img class="cover" src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/metric/grafana.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">監控基礎架構</div></div><div class="info-2"><div class="info-item-1">架構metricPrometheusLokiGrafana .grafana-dusk{--gd-bg:#1b1925;--gd-panel:#252030;--gd-code:#111217;--gd-ink:#cbc8d5;--gd-title:#eeeaf4;--gd-muted:#aaa5b8;--gd-line:#554a62;--gd-link:#91b7ff;background:var(--gd-bg);color:var(--gd-ink);padding:28px;font:16px/1.8 'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;overflow-wrap:anywhere;color-scheme:dark;} .grafana-dusk *{box-sizing:border-box;} #article-container .grafana-dusk h2,#article-container .grafana-dusk h3,.grafana-dusk h2,.grafa...</div></div></div></a><a class="pagination-related" href="/Mind/2026/09/28/K8S-CDN-Header-Lost/" title="CDN-Header-Lost"><img class="cover" src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">CDN-Header-Lost</div></div><div class="info-2"><div class="info-item-1">狀況發生!架構CloudFront Origin Request PolicyALB Listener RulesStep 3：EKS Ingress Controller AnnotationsStep 4：快速診斷：直接看 Pod 收到的 Header .kubernetes-helm{--kh-blue:#326de6;--kh-link:#2455b5;--kh-bg:#fff;--kh-ink:#333;--kh-soft:#eef4ff;--kh-line:#d5deed;--kh-code:#182235;--kh-code-ink:#f3f6fc;background:var(--kh-bg);color:var(--kh-ink);padding:24px;font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;line-height:1.85;overflow-wrap:anywhere;} .kubernetes-helm *{box-sizing:border-box;}...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">59</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8B%80%E6%B3%81%E7%99%BC%E7%94%9F"><span class="toc-number">1.</span> <span class="toc-text">狀況發生!</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cdn-alb-eks-header-%E9%81%BA%E5%A4%B1%E6%8E%92%E6%9F%A5"><span class="toc-number">1.1.</span> <span class="toc-text">CDN → ALB → EKS Header
+遺失排查</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%A7%8B"><span class="toc-number">2.</span> <span class="toc-text">架構</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E8%BE%A8%E8%AA%8D%E8%AB%8B%E6%B1%82%E7%B6%93%E9%81%8E%E5%93%AA%E4%BA%9B%E5%B1%A4"><span class="toc-number">2.1.</span> <span class="toc-text">先辨認請求經過哪些層</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AB%8B%E6%B1%82%E8%B7%AF%E5%BE%91%E8%88%87%E7%B3%BB%E7%B5%B1%E9%82%8A%E7%95%8C"><span class="toc-number">2.1.1.</span> <span class="toc-text">請求路徑與系統邊界</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cloudfront-origin-request-policy"><span class="toc-number">3.</span> <span class="toc-text">CloudFront Origin Request
+Policy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%BA%90%E8%B3%87%E6%96%99%E8%88%87%E5%BF%AB%E5%8F%96%E8%AD%98%E5%88%A5%E5%88%86%E9%96%8B%E6%AA%A2%E6%9F%A5"><span class="toc-number">3.1.</span> <span class="toc-text">回源資料與快取識別分開檢查</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#aws-console-%E6%AA%A2%E6%9F%A5%E4%BD%8D%E7%BD%AE"><span class="toc-number">3.1.1.</span> <span class="toc-text">AWS Console 檢查位置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E7%9B%B8%E5%90%8C%E5%95%86%E5%93%81%E4%B8%8D%E5%90%8C%E8%AA%9E%E7%B3%BB"><span class="toc-number">3.2.</span> <span class="toc-text">案例：相同商品，不同語系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8Brequest-id-%E5%8F%AA%E7%94%A8%E4%BE%86%E8%BF%BD%E8%B9%A4"><span class="toc-number">3.3.</span> <span class="toc-text">案例：Request ID 只用來追蹤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E6%BA%90%E6%99%82%E7%9A%84-request-id"><span class="toc-number">3.3.1.</span> <span class="toc-text">回源時的 Request ID</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#webhook-%E8%88%87%E6%8E%88%E6%AC%8A-header"><span class="toc-number">3.4.</span> <span class="toc-text">Webhook 與授權 Header</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#origin-%E8%88%87-behavior-%E6%B1%BA%E5%AE%9A%E9%80%81%E5%BE%80%E5%93%AA%E8%A3%A1"><span class="toc-number">3.5.</span> <span class="toc-text">Origin 與 Behavior
+決定送往哪裡</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%9D-path-pattern-%E9%81%B8%E6%93%87-origin"><span class="toc-number">3.5.1.</span> <span class="toc-text">依 Path Pattern 選擇 Origin</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#alb-listener-rules"><span class="toc-number">4.</span> <span class="toc-text">ALB Listener Rules</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#listener-%E6%8E%A5%E6%94%B6%E9%80%A3%E7%B7%9Arule-%E6%B1%BA%E5%AE%9A%E5%8E%BB%E5%90%91"><span class="toc-number">4.1.</span> <span class="toc-text">Listener 接收連線，Rule
+決定去向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#alb-%E7%9A%84-path-%E8%B7%AF%E7%94%B1%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.1.1.</span> <span class="toc-text">ALB 的 Path 路由示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AA%A2%E6%9F%A5-rule-%E8%88%87-header-%E7%9B%B8%E9%97%9C%E5%B1%AC%E6%80%A7"><span class="toc-number">4.2.</span> <span class="toc-text">檢查 Rule 與 Header 相關屬性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#aws-console-%E6%AA%A2%E6%9F%A5%E4%BD%8D%E7%BD%AE-1"><span class="toc-number">4.2.1.</span> <span class="toc-text">AWS Console 檢查位置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#step-3eks-ingress-controller-annotations"><span class="toc-number">5.</span> <span class="toc-text">Step 3：EKS Ingress
+Controller Annotations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E5%88%86%E6%B8%85-eks-%E8%88%87%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E7%AE%A1%E7%90%86%E8%B2%AC%E4%BB%BB"><span class="toc-number">5.1.</span> <span class="toc-text">先分清 EKS
+與應用程式的管理責任</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#controller-%E8%88%87-target-type-%E7%9A%84%E5%B7%AE%E7%95%B0"><span class="toc-number">5.2.</span> <span class="toc-text">Controller 與 Target Type
+的差異</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%80%E5%AF%9F%E7%B4%80%E9%8C%84%E5%85%A9%E5%8F%B0-instance-%E8%88%87-32080"><span class="toc-number">5.3.</span> <span class="toc-text">觀察紀錄：兩台 Instance 與
+32080</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BE%85%E7%A2%BA%E8%AA%8D%E7%9A%84-nodeport-%E8%88%87-ingress-%E6%8B%93%E6%92%B2"><span class="toc-number">5.3.1.</span> <span class="toc-text">待確認的 NodePort 與 Ingress
+拓撲</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#annotations-%E7%94%B1%E5%B0%8D%E6%87%89-controller-%E8%A7%A3%E8%AE%80"><span class="toc-number">5.4.</span> <span class="toc-text">Annotations 由對應
+Controller 解讀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%9E-windows-%E9%80%A3%E7%B7%9A%E5%88%B0-eks"><span class="toc-number">5.5.</span> <span class="toc-text">從 Windows 連線到 EKS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A2%BA%E8%AA%8D%E5%B7%A5%E5%85%B7%E8%88%87-aws-%E8%BA%AB%E5%88%86"><span class="toc-number">5.5.1.</span> <span class="toc-text">1. 確認工具與 AWS 身分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%A9%A2%E5%8F%A2%E9%9B%86%E8%88%87%E7%A2%BA%E8%AA%8D-kubectl"><span class="toc-number">5.5.2.</span> <span class="toc-text">2. 查詢叢集與確認 kubectl</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B-kubeconfig"><span class="toc-number">5.5.3.</span> <span class="toc-text">3. 建立 kubeconfig</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%BE%E5%87%BA-nodeport-%E5%B0%8D%E6%87%89%E6%9C%8D%E5%8B%99"><span class="toc-number">5.5.4.</span> <span class="toc-text">4. 找出 NodePort 對應服務</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#step-4%E5%BF%AB%E9%80%9F%E8%A8%BA%E6%96%B7%E7%9B%B4%E6%8E%A5%E7%9C%8B-pod-%E6%94%B6%E5%88%B0%E7%9A%84-header"><span class="toc-number">6.</span> <span class="toc-text">Step 4：快速診斷：直接看
+Pod 收到的 Header</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E7%A8%AE%E6%96%B9%E6%B3%95%E9%A9%97%E8%AD%89%E7%9A%84%E7%AF%84%E5%9C%8D%E4%B8%8D%E5%90%8C"><span class="toc-number">6.1.</span> <span class="toc-text">每種方法驗證的範圍不同</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-1.net-api-%E5%8A%A0%E6%9A%AB%E6%99%82%E6%80%A7-log"><span class="toc-number">6.2.</span> <span class="toc-text">方法 1：.NET API 加暫時性 Log</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#controller-%E8%A8%BA%E6%96%B7%E7%A4%BA%E4%BE%8B"><span class="toc-number">6.2.1.</span> <span class="toc-text">Controller 診斷示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-2kubectl-exec-%E9%80%B2-pod-%E6%89%93-localhost"><span class="toc-number">6.3.</span> <span class="toc-text">方法 2：kubectl exec 進
+Pod 打 localhost</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#pod-%E5%85%A7%E7%9A%84%E5%B1%80%E9%83%A8%E6%B8%AC%E8%A9%A6"><span class="toc-number">6.3.1.</span> <span class="toc-text">Pod 內的局部測試</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95-3%E9%83%A8%E7%BD%B2-httpbin-%E6%B8%AC%E8%A9%A6-pod"><span class="toc-number">6.4.</span> <span class="toc-text">方法 3：部署 httpbin 測試 Pod</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B-pod-%E8%88%87%E5%8F%A2%E9%9B%86%E5%85%A7-service"><span class="toc-number">6.4.1.</span> <span class="toc-text">建立 Pod 與叢集內 Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A5%E5%8F%A3%E8%B7%AF%E7%94%B1%E5%AE%8C%E6%88%90%E5%BE%8C%E5%86%8D%E5%BE%9E%E5%A4%96%E9%83%A8%E6%B8%AC%E8%A9%A6"><span class="toc-number">6.4.2.</span> <span class="toc-text">入口路由完成後，再從外部測試</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/28/K8S-CDN-Header-Lost-pure/" title="CDN-Header-Lost"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="CDN-Header-Lost"/></a><div class="content"><a class="title" href="/Mind/2026/09/28/K8S-CDN-Header-Lost-pure/" title="CDN-Header-Lost">CDN-Header-Lost</a><time datetime="2026-09-28T02:03:00.000Z" title="Created 2026-09-28 10:03:00">2026-09-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/28/K8S-CDN-Header-Lost/" title="CDN-Header-Lost"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="CDN-Header-Lost"/></a><div class="content"><a class="title" href="/Mind/2026/09/28/K8S-CDN-Header-Lost/" title="CDN-Header-Lost">CDN-Header-Lost</a><time datetime="2026-09-28T02:03:00.000Z" title="Created 2026-09-28 10:03:00">2026-09-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/22/Metrix-grafana-1/" title="監控基礎架構"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/metric/grafana.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="監控基礎架構"/></a><div class="content"><a class="title" href="/Mind/2026/09/22/Metrix-grafana-1/" title="監控基礎架構">監控基礎架構</a><time datetime="2026-09-22T00:29:00.000Z" title="Created 2026-09-22 08:29:00">2026-09-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="worker-pod-cpu-memory"/></a><div class="content"><a class="title" href="/Mind/2026/09/19/K8S-worker-pod-cpu-memory/" title="worker-pod-cpu-memory">worker-pod-cpu-memory</a><time datetime="2026-09-19T07:40:00.000Z" title="Created 2026-09-19 15:40:00">2026-09-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID"><img src="https://i.imgur.com/ltxqyEt.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Taiwan-ID"/></a><div class="content"><a class="title" href="/Mind/2026/09/17/Encode-taiwan-id/" title="Taiwan-ID">Taiwan-ID</a><time datetime="2026-09-17T00:28:11.000Z" title="Created 2026-09-17 08:28:11">2026-09-17</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
