@@ -1,0 +1,1297 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>remained-fail-pods | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="事件背景Cronjob,Job,PodImagePullBackOff為什麼 ImagePullBackOff 還算 Active為什麼改 YAML 並重跑 pipeline，仍沒有新的自動 Job如何確認 Job vs Pod 隸屬Pipeline、部署與 Job 的關係Kubernetes Deployment下次發生時的處理方式 .kubernetes-helm{--kh-blue:#32">
+<meta property="og:type" content="article">
+<meta property="og:title" content="remained-fail-pods">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2026/11/01/K8S-remained-fail-pods/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="事件背景Cronjob,Job,PodImagePullBackOff為什麼 ImagePullBackOff 還算 Active為什麼改 YAML 並重跑 pipeline，仍沒有新的自動 Job如何確認 Job vs Pod 隸屬Pipeline、部署與 Job 的關係Kubernetes Deployment下次發生時的處理方式 .kubernetes-helm{--kh-blue:#32">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png">
+<meta property="article:published_time" content="2026-11-01T02:10:00.000Z">
+<meta property="article:modified_time" content="2026-11-01T12:31:35.647Z">
+<meta property="article:author" content="Yo-Lin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "remained-fail-pods",
+  "url": "https://chi-keke.github.io/Mind/2026/11/01/K8S-remained-fail-pods/",
+  "image": "https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png",
+  "datePublished": "2026-11-01T02:10:00.000Z",
+  "dateModified": "2026-11-01T12:31:35.647Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2026/11/01/K8S-remained-fail-pods/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'remained-fail-pods',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">65</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">12</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">remained-fail-pods</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">remained-fail-pods</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-11-01T02:10:00.000Z" title="Created 2026-11-01 10:10:00">2026-11-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-11-01T12:31:35.647Z" title="Updated 2026-11-01 20:31:35">2026-11-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/kubernetes/">kubernetes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">事件背景</button><button type="button" class="tab">Cronjob,Job,Pod</button><button type="button" class="tab">ImagePullBackOff</button><button type="button" class="tab">為什麼 ImagePullBackOff 還算 Active</button><button type="button" class="tab">為什麼改 YAML 並重跑 pipeline，仍沒有新的自動 Job</button><button type="button" class="tab">如何確認 Job vs Pod 隸屬</button><button type="button" class="tab">Pipeline、部署與 Job 的關係</button><button type="button" class="tab">Kubernetes Deployment</button><button type="button" class="tab">下次發生時的處理方式</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
+.kubernetes-helm{--kh-blue:#326de6;--kh-link:#2455b5;--kh-bg:#fff;--kh-ink:#333;--kh-soft:#eef4ff;--kh-line:#d5deed;--kh-code:#182235;--kh-code-ink:#f3f6fc;--kh-red:#b74745;--kh-red-soft:#fff1ef;--kh-amber:#a36a19;--kh-amber-soft:#fff6e7;--kh-green:#287558;--kh-green-soft:#edf8f0;background:var(--kh-bg);color:var(--kh-ink);padding:24px;font-family:'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif;line-height:1.8;overflow-wrap:anywhere}
+.kubernetes-helm *{box-sizing:border-box}
+.kubernetes-helm h2,.kubernetes-helm h3{color:var(--kh-ink);line-height:1.38;margin:0 0 15px;font-weight:800}
+.kubernetes-helm h2{font-size:clamp(1.55rem,3.5vw,2.3rem)}
+.kubernetes-helm h3{font-size:1.16rem}
+.kubernetes-helm p{max-width:47em;margin:10px 0 18px}
+.kubernetes-helm a{color:var(--kh-link);text-decoration:underline;text-underline-offset:3px}
+.kubernetes-helm code{font-family:Consolas,monospace;background:var(--kh-soft);color:var(--kh-ink);padding:2px 5px;border-radius:3px;overflow-wrap:anywhere}
+.kubernetes-helm .kh-hero{padding:8px 0 24px;margin-bottom:30px;border-bottom:3px solid var(--kh-blue)}
+.kubernetes-helm .kh-emblem{display:block;width:55px;height:55px;margin-bottom:17px;background:var(--kh-blue);clip-path:polygon(50% 0,89% 19%,99% 61%,72% 96%,28% 96%,1% 61%,11% 19%)}
+.kubernetes-helm .kh-eyebrow{display:block;color:var(--kh-blue);font-size:.79rem;font-weight:800;letter-spacing:.08em;margin-bottom:8px}
+.kubernetes-helm .kh-section{padding-left:13px;border-left:5px solid var(--kh-blue);margin:27px 0 18px}
+.kubernetes-helm .kh-note{padding:15px 18px;margin:22px 0;background:var(--kh-soft);border-left:4px solid var(--kh-blue);border-radius:4px;max-width:52em}
+.kubernetes-helm .kh-note p{margin:0}
+.kubernetes-helm .kh-note.red{background:var(--kh-red-soft);border-color:var(--kh-red)}
+.kubernetes-helm .kh-note.green{background:var(--kh-green-soft);border-color:var(--kh-green)}
+.kubernetes-helm .kh-source{font-size:.86rem;opacity:.82;margin-top:20px;border-top:1px solid var(--kh-line);padding-top:12px}
+.kubernetes-helm .kh-timeline{margin:20px 0 30px;max-width:53em}
+.kubernetes-helm .kh-timeline-row{display:grid;grid-template-columns:9em 1fr;gap:20px}
+.kubernetes-helm .kh-timeline-time{font-size:.86rem;font-weight:800;color:var(--kh-blue);padding-top:2px;text-align:right}
+.kubernetes-helm .kh-timeline-body{padding:0 0 23px 20px;border-left:2px solid var(--kh-line);position:relative}
+.kubernetes-helm .kh-timeline-body:before{content:'';position:absolute;left:-6px;top:4px;width:10px;height:10px;background:var(--kh-blue);border-radius:50%}
+.kubernetes-helm .kh-timeline-row.red .kh-timeline-body:before{background:var(--kh-red)}
+.kubernetes-helm .kh-timeline-row.amber .kh-timeline-body:before{background:var(--kh-amber)}
+.kubernetes-helm .kh-timeline-row.green .kh-timeline-body:before{background:var(--kh-green)}
+.kubernetes-helm .kh-timeline-body strong{display:block;line-height:1.35}
+.kubernetes-helm .kh-timeline-body p{margin:5px 0 0}
+.kubernetes-helm .kh-table-scroll{max-width:100%;overflow-x:auto;margin:18px 0 24px}
+#article-container .kubernetes-helm table.kh-table,.kubernetes-helm table.kh-table{width:auto;max-width:100%;margin:0;border-collapse:collapse;background:var(--kh-bg);color:var(--kh-ink)}
+.kubernetes-helm .kh-table th,.kubernetes-helm .kh-table td{padding:10px 14px;border:1px solid var(--kh-line);text-align:left;vertical-align:top;background:var(--kh-bg);color:var(--kh-ink)}
+.kubernetes-helm .kh-table th{background:var(--kh-soft);font-weight:750}
+.kubernetes-helm .kh-code{margin:20px 0 26px;background:var(--kh-code);color:var(--kh-code-ink);border-radius:4px;overflow:hidden}
+.kubernetes-helm .kh-code-label{padding:8px 15px;border-bottom:1px solid #43516a;font-size:.82rem;letter-spacing:.04em}
+#article-container .kubernetes-helm pre.kh-pre,.kubernetes-helm pre.kh-pre{margin:0!important;padding:16px!important;background:var(--kh-code)!important;color:var(--kh-code-ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important;text-shadow:none!important;white-space:pre!important;overflow-x:auto!important;font:13px/1.7 Consolas,monospace!important}
+.kubernetes-helm .kh-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:22px 0 27px}
+.kubernetes-helm .kh-flow-item{border-top:4px solid var(--kh-blue);padding:14px 0 0;min-width:0}
+.kubernetes-helm .kh-flow-item.red{border-color:var(--kh-red)}
+.kubernetes-helm .kh-flow-item.amber{border-color:var(--kh-amber)}
+.kubernetes-helm .kh-flow-item.green{border-color:var(--kh-green)}
+.kubernetes-helm .kh-flow-item b{display:block;margin-bottom:5px}
+.kubernetes-helm .kh-flow-item p{margin:0;font-size:.94rem}
+.kubernetes-helm .kh-flow-index{font-family:Consolas,monospace;color:var(--kh-blue);font-weight:800;font-size:.82rem;display:block;margin-bottom:8px}
+.kubernetes-helm .kh-compare{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:22px 0 26px}
+.kubernetes-helm .kh-compare-col{border-top:4px solid var(--kh-line);padding-top:14px;min-width:0}
+.kubernetes-helm .kh-compare-col.red{border-color:var(--kh-red)}
+.kubernetes-helm .kh-compare-col.green{border-color:var(--kh-green)}
+.kubernetes-helm .kh-compare-col p{margin:8px 0}
+.kubernetes-helm .kh-loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:24px 0 10px}
+.kubernetes-helm .kh-loop-step{padding:13px 0;border-top:3px solid var(--kh-blue);position:relative;font-weight:750}
+.kubernetes-helm .kh-loop-step.red{border-color:var(--kh-red)}
+.kubernetes-helm .kh-loop-step.amber{border-color:var(--kh-amber)}
+.kubernetes-helm .kh-loop-step:not(:last-child):after{content:'→';position:absolute;right:-13px;top:10px;color:var(--kh-blue)}
+.kubernetes-helm .kh-loop-step small{display:block;font-size:.83rem;font-weight:400;margin-top:4px}
+.kubernetes-helm .kh-rail{margin:20px 0 25px;border-left:3px solid var(--kh-line)}
+.kubernetes-helm .kh-rail-row{display:grid;grid-template-columns:10em 1fr;gap:16px;padding:11px 14px;border-bottom:1px solid var(--kh-line)}
+.kubernetes-helm .kh-rail-row b{color:var(--kh-blue)}
+.kubernetes-helm .kh-rail-row.amber b{color:var(--kh-amber)}
+.kubernetes-helm .kh-rail-row.red b{color:var(--kh-red)}
+.kubernetes-helm .kh-gate{max-width:50em;margin:22px 0 26px}
+.kubernetes-helm .kh-gate-head{border:2px solid var(--kh-blue);padding:12px 16px;font-weight:800;text-align:center;border-radius:4px}
+.kubernetes-helm .kh-gate-branches{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:16px}
+.kubernetes-helm .kh-gate-branch{padding:12px 0;border-top:4px solid var(--kh-green)}
+.kubernetes-helm .kh-gate-branch.red{border-color:var(--kh-red)}
+.kubernetes-helm .kh-gate-branch b{display:block}
+.kubernetes-helm .kh-gate-branch p{margin:5px 0}
+.kubernetes-helm .kh-mini-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 26px}
+.kubernetes-helm .kh-mini-line span{padding:7px 10px;background:var(--kh-soft);border-left:3px solid var(--kh-blue);font-weight:700}
+.kubernetes-helm .kh-mini-line .green{background:var(--kh-green-soft);border-color:var(--kh-green)}
+.kubernetes-helm .kh-mini-line em{font-style:normal;color:var(--kh-blue);font-weight:800}
+.kubernetes-helm .kh-plain-list{max-width:48em;margin:18px 0 28px;padding:0;list-style:none;counter-reset:kh}
+.kubernetes-helm .kh-plain-list li{counter-increment:kh;position:relative;padding:0 0 20px 42px;border-left:2px solid var(--kh-line);margin-left:13px}
+.kubernetes-helm .kh-plain-list li:last-child{border-left:0}
+.kubernetes-helm .kh-plain-list li:before{content:counter(kh);position:absolute;left:-15px;top:0;width:28px;height:28px;border-radius:50%;background:var(--kh-blue);color:#fff;text-align:center;line-height:28px;font-weight:800}
+.kubernetes-helm .kh-plain-list li b{display:block;margin-bottom:3px}
+.kubernetes-helm .kh-plain-list li p{margin:0}
+[data-theme='dark'] .kubernetes-helm{--kh-blue:#7fa9ff;--kh-link:#a4c2ff;--kh-bg:#17202e;--kh-ink:#eef2f8;--kh-soft:#23334e;--kh-line:#52647f;--kh-red:#ff9993;--kh-red-soft:#382627;--kh-amber:#f0c079;--kh-amber-soft:#3b3021;--kh-green:#8fdbaf;--kh-green-soft:#1d352c}
+@media(max-width:660px){.kubernetes-helm{padding:14px}.kubernetes-helm .kh-timeline-row{grid-template-columns:1fr;gap:0}.kubernetes-helm .kh-timeline-time{text-align:left;padding:0 0 5px 18px}.kubernetes-helm .kh-timeline-body{margin-left:5px;padding-left:13px}.kubernetes-helm .kh-flow,.kubernetes-helm .kh-compare,.kubernetes-helm .kh-gate-branches{grid-template-columns:1fr}.kubernetes-helm .kh-loop{grid-template-columns:1fr 1fr}.kubernetes-helm .kh-loop-step:not(:last-child):after{display:none}.kubernetes-helm .kh-rail-row{grid-template-columns:1fr;gap:2px}.kubernetes-helm .kh-table{min-width:680px}.kubernetes-helm .kh-table th,.kubernetes-helm .kh-table td{padding:8px 10px}}
+</style>
+<div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-emblem" aria-hidden="true"></span><span
+class="kh-eyebrow">Kubernetes / Incident</span>
+<h2>
+五分鐘的排程，為什麼停了？
+</h2>
+<p>
+排程表沒有寫錯，新的設定也部署成功，通知重試卻沒有持續執行。卡住的是前一次工作留下的
+Job。
+</p>
+</div>
+<h3 class="kh-section">
+事件如何發生
+</h3>
+<div class="kh-timeline">
+<div class="kh-timeline-row">
+<div class="kh-timeline-time">
+10/26 至 10/29
+</div>
+<div class="kh-timeline-body">
+<strong>三個 QA 環境留下舊 Job</strong>
+<p>
+twqa、hkqa、myqa 各有舊 Job 未完成，仍引用舊映像與
+<code>91app-build-site</code>。
+</p>
+</div>
+</div>
+<div class="kh-timeline-row red">
+<div class="kh-timeline-time">
+Pod 啟動時
+</div>
+<div class="kh-timeline-body">
+<strong>映像拉取失敗</strong>
+<p>
+事件顯示 <code>authorization failed: no basic auth
+credentials</code>；容器未啟動，Pod 停在 <code>ImagePullBackOff</code>。
+</p>
+</div>
+</div>
+<div class="kh-timeline-row amber">
+<div class="kh-timeline-time">
+重新部署後
+</div>
+<div class="kh-timeline-body">
+<strong>新範本沒有替換舊 Job</strong>
+<p>
+Pipeline 更新了 CronJob 的未來範本；已建立的 Job 與 Pod 仍保存舊設定。
+</p>
+</div>
+</div>
+<div class="kh-timeline-row red">
+<div class="kh-timeline-time">
+每五分鐘
+</div>
+<div class="kh-timeline-body">
+<strong>新一輪排程被略過</strong>
+<p>
+舊 Job 持續 Active，<code>concurrencyPolicy: Forbid</code> 讓控制器記錄
+<code>JobAlreadyActive</code>，不建立新的自動 Job。
+</p>
+</div>
+</div>
+<div class="kh-timeline-row green">
+<div class="kh-timeline-time">
+10/29 16:15 起
+</div>
+<div class="kh-timeline-body">
+<strong>連續自動執行恢復</strong>
+<p>
+16:15、16:20、16:25 三個環境都出現成功的自動 Job。舊 Job
+如何被清理，現有證據無法歸因。
+</p>
+</div>
+</div>
+</div>
+<div class="kh-note red">
+<p>
+這次的核心影響是自動 Job 沒有建立。通知 Queue
+是否因此積壓，沒有業務資料可供確認。
+</p>
+</div>
+<h3 class="kh-section">
+三個環境當時停在哪裡
+</h3>
+<div class="kh-table-scroll" role="region"
+aria-label="環境與最後一次舊 Job 排程" tabindex="0">
+<table class="kh-table">
+<thead>
+<tr>
+<th>
+環境
+</th>
+<th>
+舊 Job
+</th>
+<th>
+排程時間，台北時間
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+twqa
+</td>
+<td>
+<code>notify-queue-retry-job-29882520</code>
+</td>
+<td>
+10/26 02:00
+</td>
+</tr>
+<tr>
+<td>
+hkqa
+</td>
+<td>
+<code>notify-queue-retry-job-29886840</code>
+</td>
+<td>
+10/29 02:00
+</td>
+</tr>
+<tr>
+<td>
+myqa
+</td>
+<td>
+<code>notify-queue-retry-job-29884210</code>
+</td>
+<td>
+10/27 06:10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="kh-code">
+<div class="kh-code-label">
+Pod 事件中的關鍵訊息
+</div>
+<pre class="kh-pre">Failed to pull image: pull access denied
+authorization failed: no basic auth credentials</pre>
+</div>
+<p class="kh-source">
+證據範圍：2026-10-29 的 CronJob、Job、Pod
+與事件查詢。認證失敗已確認，Secret 內容與實際清理操作者未取得。
+</p>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">01 / 資源關係</span>
+<h2>
+鬧鐘、工作單、執行者
+</h2>
+<p>
+三層資源各做一件事。先知道誰建立誰，才能看懂為什麼修改排程設定沒有換掉舊
+Pod。
+</p>
+</div>
+<div class="kh-flow" aria-label="CronJob 到 Pod 的建立順序">
+<div class="kh-flow-item">
+<span class="kh-flow-index">01 / 排程</span><b>CronJob</b>
+<p>
+像鬧鐘，按 <code><em>/5 </em> * * *</code> 決定何時開出一次工作。
+</p>
+</div>
+<div class="kh-flow-item">
+<span class="kh-flow-index">02 / 單次工作</span><b>Job</b>
+<p>
+保存該次執行要用的映像、認證與 Pod 範本。
+</p>
+</div>
+<div class="kh-flow-item">
+<span class="kh-flow-index">03 / 執行</span><b>Pod</b>
+<p>
+所在節點拉映像，啟動容器，實際執行程式。
+</p>
+</div>
+</div>
+<h3 class="kh-section">
+部署改的是哪一份設定
+</h3>
+<div class="kh-compare">
+<div class="kh-compare-col red">
+<h3>
+已建立的舊 Job
+</h3>
+<p>
+仍引用 <code>91app-build-site</code>
+和舊映像。重新部署不會改寫它，也不會替它換 Pod。
+</p>
+</div>
+<div class="kh-compare-col green">
+<h3>
+CronJob 的新範本
+</h3>
+<p>
+已改用 <code>91app-build-site-dev</code> 和新映像，只交給往後新建立的
+Job。
+</p>
+</div>
+</div>
+<div class="kh-note">
+<p>
+舊 Job
+一旦保存了舊範本，就像已印出的工作單。更新工作單模板，不會把已印出的那一張收回重印。
+</p>
+</div>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">02 / 啟動失敗</span>
+<h2>
+<code>ImagePullBackOff</code> 是什麼？
+</h2>
+<p>
+容器尚未開始執行。節點拉不到映像，先等待一段時間，之後再次嘗試。
+</p>
+</div>
+<div class="kh-loop" aria-label="映像拉取失敗後的重試循環">
+<div class="kh-loop-step">
+Pod 已建立<small>容器尚未啟動</small>
+</div>
+<div class="kh-loop-step red">
+拉取映像失敗<small>例如私有倉庫認證不足</small>
+</div>
+<div class="kh-loop-step amber">
+等待退避<small>間隔逐漸增加</small>
+</div>
+<div class="kh-loop-step">
+再次拉取<small>仍是同一個 Pod</small>
+</div>
+</div>
+<div class="kh-note">
+<p>
+<code>ImagePull</code> 指從映像倉庫取得映像；<code>BackOff</code>
+指失敗後延後重試。等待間隔上限約 300
+秒，不表示已放棄。若拉取條件一直沒改善，也沒有期限或外部清理，同一個 Pod
+可能長時間留著反覆重試。
+</p>
+</div>
+<h3 class="kh-section">
+畫面上的狀態要分兩層看
+</h3>
+<div class="kh-table-scroll" role="region"
+aria-label="Pod 與容器狀態區別" tabindex="0">
+<table class="kh-table">
+<thead>
+<tr>
+<th>
+觀察層級
+</th>
+<th>
+當時看到
+</th>
+<th>
+意義
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+容器等待原因
+</td>
+<td>
+<code>ImagePullBackOff</code>
+</td>
+<td>
+映像還沒拉到，容器尚未啟動。
+</td>
+</tr>
+<tr>
+<td>
+Pod phase
+</td>
+<td>
+<code>Pending</code>
+</td>
+<td>
+Pod 已存在，但尚未進入完成或失敗的終態。
+</td>
+</tr>
+<tr>
+<td>
+與 <code>CrashLoopBackOff</code> 比較
+</td>
+<td>
+不是本案狀態
+</td>
+<td>
+後者通常是容器啟動後反覆退出；本案連容器都未啟動。
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+映像名稱、tag、倉庫權限或網路都可能造成拉取失敗。本案的 Pod
+事件只能證實沒有可用的基本認證；無法進一步判定舊 Secret
+是不存在、過期或權限不足。
+</p>
+<p class="kh-source">
+<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/containers/images/#imagepullbackoff">Kubernetes：ImagePullBackOff</a>；<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase">Kubernetes：Pod
+階段</a>
+</p>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">03 / 狀態拆解</span>
+<h2>
+拉取失敗，為什麼仍是 Active？
+</h2>
+<p>
+<code>ImagePullBackOff</code> 說的是容器等待原因。Job 的 Active
+說的是它仍有尚未終止的 Pod。
+</p>
+</div>
+<div class="kh-rail" aria-label="容器到排程的狀態連鎖">
+<div class="kh-rail-row red">
+<b>容器</b><span>等待映像，狀態原因是
+<code>ImagePullBackOff</code>。</span>
+</div>
+<div class="kh-rail-row amber">
+<b>Pod</b><span>仍在 <code>Pending</code>，沒有進入
+<code>Failed</code>。</span>
+</div>
+<div class="kh-rail-row amber">
+<b>Job</b><span>還有一個未終止 Pod，顯示 <code>status.active:
+1</code>。</span>
+</div>
+<div class="kh-rail-row red">
+<b>CronJob</b><span><code>Forbid</code> 發現舊 Job 仍
+Active，略過下一次建立。</span>
+</div>
+</div>
+<div class="kh-note red">
+<p>
+<code>backoffLimit: 6</code> 不等於「拉映像失敗六次就結束」。這裡的 Pod
+一直是 Pending，不能把映像拉取次數當成已失敗 Pod 次數。本案也沒有設定
+<code>activeDeadlineSeconds</code> 來限制 Job 的執行時間。
+</p>
+</div>
+<div class="kh-mini-line">
+<span>拉取失敗</span><em>→</em><span>Pod
+Pending</span><em>→</em><span>Job
+Active</span><em>→</em><span>排程略過</span>
+</div>
+<p class="kh-source">
+<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/kubernetes-api/batch/job-v1/#JobStatus">Kubernetes：Job
+status.active</a>；<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy">Kubernetes：Job
+backoffLimit</a>
+</p>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">04 / 排程分支</span>
+<h2>
+Pipeline 成功，為什麼沒產生新 Job？
+</h2>
+<p>
+部署成功代表 CronJob 已拿到新範本。能不能建立下一次 Job，仍要看舊 Job
+是否結束。
+</p>
+</div>
+<div class="kh-compare">
+<div class="kh-compare-col red">
+<h3>
+舊 Job 的設定
+</h3>
+<p>
+映像：<code>vLATEST-p-7c2be9b0-dev-b20261010-0122</code>
+</p>
+<p>
+拉映像認證：<code>91app-build-site</code>
+</p>
+</div>
+<div class="kh-compare-col green">
+<h3>
+更新後的 CronJob 範本
+</h3>
+<p>
+映像：<code>vLATEST-p-9c1c0217-dev-b20261029-0647</code>
+</p>
+<p>
+拉映像認證：<code>91app-build-site-dev</code>
+</p>
+</div>
+</div>
+<div class="kh-gate" aria-label="Forbid 排程判斷">
+<div class="kh-gate-head">
+五分鐘到點：舊 Job 是否仍 Active？
+</div>
+<div class="kh-gate-branches">
+<div class="kh-gate-branch red">
+<b>是：略過這次</b>
+<p>
+<code>Forbid</code> 記錄 <code>JobAlreadyActive</code>，新 Job 與新 Pod
+都不會建立。
+</p>
+</div>
+<div class="kh-gate-branch">
+<b>否：建立新 Job</b>
+<p>
+以更新後的 CronJob 範本建立 Job，再由 Job 建立 Pod。
+</p>
+</div>
+</div>
+</div>
+<p>
+另外直接建立的新 Job 曾成功完成，證明新範本可執行；它不會替舊 Active Job
+解套。排程恢復須看連續的自動排程 Job，而非單次手動 Job。
+</p>
+<div class="kh-mini-line">
+<span class="green">16:15 完成</span><em>→</em><span class="green">16:20
+完成</span><em>→</em><span class="green">16:25 完成</span>
+</div>
+<p class="kh-source">
+以上時間為 2026-10-29 台北時間，三個環境均觀察到這三次自動排程成功。
+</p>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">05 / 追蹤歸屬</span>
+<h2>
+眼前的 Pod 是哪次 Job 建的？
+</h2>
+<p>
+Pod 名稱可以快速辨識；要正式確認，查看 Pod YAML 的
+<code>metadata.ownerReferences</code>。
+</p>
+</div>
+<div class="kh-code">
+<div class="kh-code-label">
+twqa 當時的資源樹
+</div>
+<pre class="kh-pre">CronJob  notify-queue-retry-job
+  └─ Job  notify-queue-retry-job-29882520
+       └─ Pod  notify-queue-retry-job-29882520-8brlg</pre>
+</div>
+<div class="kh-rail">
+<div class="kh-rail-row">
+<b>Pod 名稱</b><span>前段通常沿用 Job 名稱；最後的 <code>8brlg</code>
+是當次產生的後綴，不是 Job UID。</span>
+</div>
+<div class="kh-rail-row">
+<b>Pod ownerReferences</b><span><code>kind: Job</code> 與
+<code>name</code> 指出真正所屬的 Job。</span>
+</div>
+<div class="kh-rail-row">
+<b>Job ownerReferences</b><span>再往上一層可查到它屬於哪個
+CronJob。</span>
+</div>
+</div>
+<p>
+這次後綴剛好是五碼，不能把固定五碼當成普遍規則。若同一 Job 重建
+Pod，後綴也可能改變；ownerReferences 才是歸屬依據。
+</p>
+<h3 class="kh-section">
+從 Rancher UI 查證
+</h3>
+<ol class="kh-plain-list">
+<li>
+<b>找到 Pod</b>
+<p>
+選擇對應叢集與 <code>qa-regular-purchase-service</code> namespace，在
+Workloads 的 Pods 清單點進該 Pod。
+</p>
+</li>
+<li>
+<b>看擁有者</b>
+<p>
+在詳情頁找 Owner／Controlled By；若介面沒有顯示，開啟 Pod YAML，查看
+<code>metadata.ownerReferences</code> 的 <code>kind: Job</code> 與
+<code>name</code>。
+</p>
+</li>
+<li>
+<b>回查 Job</b>
+<p>
+到 Jobs 清單搜尋該 <code>name</code>，再看 Job 的
+ownerReferences，確認上層 CronJob。介面欄位名稱可能因 Rancher 版本而異。
+</p>
+</li>
+</ol>
+<div class="kh-note">
+<p>
+上面的名稱是 10/29 的歷史例子。舊 Job
+已不在後續查詢清單，現在搜尋可能得到 <code>NotFound</code>。
+</p>
+</div>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">06 / 交接位置</span>
+<h2>
+Pipeline 到哪裡為止？
+</h2>
+<p>
+Pipeline 負責部署排程資源。之後每五分鐘建立 Job 的工作，交給 Kubernetes
+的 CronJob 控制器。
+</p>
+</div>
+<div class="kh-flow" aria-label="部署到執行的三階段">
+<div class="kh-flow-item">
+<span class="kh-flow-index">部署階段</span><b>GitLab pipeline</b>
+<p>
+依 QA 部署設定與 Helm values 更新叢集裡的 CronJob。
+</p>
+</div>
+<div class="kh-flow-item">
+<span class="kh-flow-index">排程階段</span><b>CronJob 控制器</b>
+<p>
+到點時檢查 <code>Forbid</code>，再決定是否建立一次 Job。
+</p>
+</div>
+<div class="kh-flow-item">
+<span class="kh-flow-index">執行階段</span><b>Job 與 Pod</b>
+<p>
+Job 建立 Pod；節點拉映像並啟動程式。
+</p>
+</div>
+</div>
+<div class="kh-note">
+<p>
+此專案的 <code>.gitlab-ci.yml</code> 引用 Nine1
+共用模板。<code>nine1-devops-deployments.QA.json</code> 將三個環境的
+<code>notify-queue-retry-job</code> 指定為 CronJob role。
+</p>
+</div>
+<div class="kh-mini-line">
+<span>Pipeline 更新 CronJob</span><em>→</em><span>控制器定時建立
+Job</span><em>→</em><span>Job 建立 Pod</span>
+</div>
+<p>
+設定檔中的 <code>kind: deployment</code> 屬於 Nine1 DevOps
+的部署格式，<code>apiVersion</code> 是
+<code>nine1-devops/v1</code>；它不是 Kubernetes 的 Deployment 資源。
+</p>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">07 / 資源對照</span>
+<h2>
+CronJob 不會先經過 Deployment
+</h2>
+<p>
+Kubernetes Deployment 與 CronJob 是並列資源。前者維持常駐
+Pod，後者定時建立一次性 Job。
+</p>
+</div>
+<div class="kh-compare">
+<div class="kh-compare-col">
+<h3>
+常駐工作負載
+</h3>
+<div class="kh-mini-line">
+<span>Deployment</span><em>→</em><span>ReplicaSet</span><em>→</em><span>Pod</span>
+</div>
+<p>
+例如需持續提供服務的 API。更新 Pod 範本時，通常透過 rollout 逐步替換舊
+Pod。
+</p>
+</div>
+<div class="kh-compare-col green">
+<h3>
+本案的定時工作
+</h3>
+<div class="kh-mini-line">
+<span>CronJob</span><em>→</em><span>Job</span><em>→</em><span>Pod</span>
+</div>
+<p>
+每五分鐘嘗試開出一次 Job。更新範本只影響之後建立的 Job，不會替換舊 Job。
+</p>
+</div>
+</div>
+<div class="kh-note">
+<p>
+這個 CronJob 的 Job 與 Pod 不由 Kubernetes Deployment 管理。不能套用
+Deployment 更新後替換舊 Pod 的行為。
+</p>
+</div>
+<p class="kh-source">
+<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">Kubernetes：Deployment</a>；<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#modifying-a-cronjob">Kubernetes：CronJob
+更新範本</a>
+</p>
+</div></div><div class="tab-item-content"><div class="kubernetes-helm">
+<div class="kh-hero">
+<span class="kh-eyebrow">08 / 排查路徑</span>
+<h2>
+再遇到排程停住，從哪裡查？
+</h2>
+<p>
+先確認 CronJob 與目前 Active Job，再查 Pod 事件。歷史 Job
+名稱不可直接拿來刪除當下資源。
+</p>
+</div>
+<ol class="kh-plain-list">
+<li>
+<b>看 CronJob</b>
+<p>
+核對
+<code>spec.schedule</code>、<code>spec.suspend</code>、<code>spec.concurrencyPolicy</code>、<code>status.active</code>
+與 <code>lastScheduleTime</code>。
+</p>
+</li>
+<li>
+<b>追 Active Job</b>
+<p>
+查看 Job 的完整條件與 Pod。若 Pod 是 <code>ImagePullBackOff</code>，到
+Events 找實際拉取錯誤。
+</p>
+</li>
+<li>
+<b>確認範本差異</b>
+<p>
+比對舊 Job 保存的 image、imagePullSecrets 與 CronJob
+現行範本，分清新舊設定。
+</p>
+</li>
+<li>
+<b>處理並驗證</b>
+<p>
+確認舊 Job 無法完成且不需要保留執行後，清理舊
+Job。觀察後續至少三個排程時點是否自動建立並完成 Job。
+</p>
+</li>
+</ol>
+<div class="kh-code">
+<div class="kh-code-label">
+twqa 查詢示例
+</div>
+<pre class="kh-pre">kubectl --context eks-ap-northeast-1-tw-91dev-tw-v2 -n qa-regular-purchase-service get cronjob notify-queue-retry-job -o yaml
+kubectl --context eks-ap-northeast-1-tw-91dev-tw-v2 -n qa-regular-purchase-service describe cronjob notify-queue-retry-job
+kubectl --context eks-ap-northeast-1-tw-91dev-tw-v2 -n qa-regular-purchase-service get jobs,pods -l app.kubernetes.io/instance=notify-queue-retry-job -o wide</pre>
+</div>
+<h3 class="kh-section">
+當時的舊 Job，僅供事件對照
+</h3>
+<div class="kh-table-scroll" role="region" aria-label="歷史舊 Job 名稱"
+tabindex="0">
+<table class="kh-table">
+<thead>
+<tr>
+<th>
+環境
+</th>
+<th>
+當時卡住的 Job
+</th>
+<th>
+觀察
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+twqa
+</td>
+<td>
+<code>notify-queue-retry-job-29882520</code><br><code>notify-queue-retry-job-1793256241585</code>
+</td>
+<td>
+舊映像與拉取設定；後者為額外殘留 Active Job。
+</td>
+</tr>
+<tr>
+<td>
+hkqa
+</td>
+<td>
+<code>notify-queue-retry-job-29886840</code>
+</td>
+<td>
+Pod 拉取失敗。
+</td>
+</tr>
+<tr>
+<td>
+myqa
+</td>
+<td>
+<code>notify-queue-retry-job-29884210</code>
+</td>
+<td>
+Pod 拉取失敗。
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="kh-note green">
+<p>
+驗證恢復要看自動排程的 Job 連續完成，以及 <code>lastScheduleTime</code>
+持續向前更新；一次直接建立的 Job 成功不足以證明排程恢復。
+</p>
+</div>
+</div></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/11/01/K8S-remained-fail-pods/">https://chi-keke.github.io/Mind/2026/11/01/K8S-remained-fail-pods/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/Mind/2026/10/29/Git-sync-dev-to-feat/" title="sync-dev-to-feat"><img class="cover" src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/style/git.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">sync-dev-to-feat</div></div><div class="info-2"><div class="info-item-1">背景HEADGit 如何儲存 Commit開新的 Branch 意義StashMerge 和 Rebase一般多人協作為什麼更適合 mergerebase 具體來說好處 :root{--gg-orange:#f05133;--gg-coral:#f25d3b;--gg-light:#f46640;--gg-paper:#fff8f4;--gg-white:#fff;--gg-ink:#2d2928;--gg-muted:#746761;--gg-line:#e8d8d1;--gg-code:#2d2928;--gg-code-ink:#fff8f4;--gg-blue:#366a91;--gg-green:#2d7a57;--gg-red:#b33a32;} .gg-hero,.gg-grid,.gg-card,.gg-note,.gg-flow,.gg-graph-card,.gg-table-scroll,.gg-code,.gg-decision,.gg-before-after,.gg-steps,.gg-tree{box-sizing:border-box;font...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">65</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">12</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">
+五分鐘的排程，為什麼停了？
+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">
+事件如何發生
+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">
+三個環境當時停在哪裡
+</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">
+鬧鐘、工作單、執行者
+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">
+部署改的是哪一份設定
+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">
+已建立的舊 Job
+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">
+CronJob 的新範本
+</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">
+ImagePullBackOff 是什麼？
+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">
+畫面上的狀態要分兩層看
+</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">
+拉取失敗，為什麼仍是 Active？
+</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">
+Pipeline 成功，為什麼沒產生新 Job？
+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">
+舊 Job 的設定
+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">
+更新後的 CronJob 範本
+</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">
+眼前的 Pod 是哪次 Job 建的？
+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">
+從 Rancher UI 查證
+</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">
+Pipeline 到哪裡為止？
+</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">
+CronJob 不會先經過 Deployment
+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">
+常駐工作負載
+</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">
+本案的定時工作
+</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">
+再遇到排程停住，從哪裡查？
+</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">
+當時的舊 Job，僅供事件對照
+</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/11/01/K8S-remained-fail-pods/" title="remained-fail-pods"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="remained-fail-pods"/></a><div class="content"><a class="title" href="/Mind/2026/11/01/K8S-remained-fail-pods/" title="remained-fail-pods">remained-fail-pods</a><time datetime="2026-11-01T02:10:00.000Z" title="Created 2026-11-01 10:10:00">2026-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/10/29/Git-sync-dev-to-feat/" title="sync-dev-to-feat"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/style/git.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="sync-dev-to-feat"/></a><div class="content"><a class="title" href="/Mind/2026/10/29/Git-sync-dev-to-feat/" title="sync-dev-to-feat">sync-dev-to-feat</a><time datetime="2026-10-29T00:23:00.000Z" title="Created 2026-10-29 08:23:00">2026-10-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/10/22/Network-Safty-translation-network/" title="Translation API 網路與授權排查"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Translation API 網路與授權排查"/></a><div class="content"><a class="title" href="/Mind/2026/10/22/Network-Safty-translation-network/" title="Translation API 網路與授權排查">Translation API 網路與授權排查</a><time datetime="2026-10-22T00:37:00.000Z" title="Created 2026-10-22 08:37:00">2026-10-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/10/13/K8S-throttled/" title="Throttled"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Throttled"/></a><div class="content"><a class="title" href="/Mind/2026/10/13/K8S-throttled/" title="Throttled">Throttled</a><time datetime="2026-10-13T00:39:00.000Z" title="Created 2026-10-13 08:39:00">2026-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/10/11/Git-back-to-commit/" title="撤回最後一次 Commit：git reset 與 git commit --amend"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/style/git.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="撤回最後一次 Commit：git reset 與 git commit --amend"/></a><div class="content"><a class="title" href="/Mind/2026/10/11/Git-back-to-commit/" title="撤回最後一次 Commit：git reset 與 git commit --amend">撤回最後一次 Commit：git reset 與 git commit --amend</a><time datetime="2026-10-11T11:32:00.000Z" title="Created 2026-10-11 19:32:00">2026-10-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
