@@ -1,0 +1,1557 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>.NET 的建置與發佈 | 平屋慢本質</title><meta name="author" content="Yo-Lin"><meta name="copyright" content="Yo-Lin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="從專案 SDK、目標框架與 Runtime 的責任分工開始，逐步拆解 Restore、Build、Run、Test、Publish，以及現代 .NET 與傳統 ASP.NET 的建置部署流程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content=".NET 的建置與發佈">
+<meta property="og:url" content="https://chi-keke.github.io/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88/">
+<meta property="og:site_name" content="平屋慢本質">
+<meta property="og:description" content="從專案 SDK、目標框架與 Runtime 的責任分工開始，逐步拆解 Restore、Build、Run、Test、Publish，以及現代 .NET 與傳統 ASP.NET 的建置部署流程。">
+<meta property="og:locale">
+<meta property="og:image" content="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png">
+<meta property="article:published_time" content="2026-11-05T09:20:00.000Z">
+<meta property="article:modified_time" content="2026-11-08T02:14:36.401Z">
+<meta property="article:author" content="Yo-Lin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": ".NET 的建置與發佈",
+  "url": "https://chi-keke.github.io/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88/",
+  "image": "https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png",
+  "datePublished": "2026-11-05T09:20:00.000Z",
+  "dateModified": "2026-11-08T02:14:36.401Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Yo-Lin",
+      "url": "https://chi-keke.github.io/Mind"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/Mind/img/kiwibird.png"><link rel="canonical" href="https://chi-keke.github.io/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/Mind/css/index.css?v=5.5.5-b1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/Mind/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '.NET 的建置與發佈',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-color: #fcf8e8;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">67</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/Mind/"><span class="site-name">平屋慢本質</span></a><a class="nav-page-title" href="/Mind/"><span class="site-name">.NET 的建置與發佈</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/Mind/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/Mind/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/Mind/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/Mind/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/Mind/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">.NET 的建置與發佈</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-11-05T09:20:00.000Z" title="Created 2026-11-05 17:20:00">2026-11-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-11-08T02:14:36.401Z" title="Updated 2026-11-08 10:14:36">2026-11-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Mind/categories/NET/">.NET</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="tabs"><div class="nav-tabs"><button type="button" class="tab active">`Microsoft.NET.Sdk` 是什麼</button><button type="button" class="tab">`.NET Framework` 與 `.NET Core` 具體差在哪裡？</button><button type="button" class="tab">為什麼 .NET Core／現代 .NET 專案多用 SDK 格式？</button><button type="button" class="tab">舊版 dotnet 專案用 SDK 格式 能跑嗎</button><button type="button" class="tab">整體流程</button><button type="button" class="tab">專案檔</button><button type="button" class="tab">MSBuild</button><button type="button" class="tab">Restore</button><button type="button" class="tab">Build</button><button type="button" class="tab">Run</button><button type="button" class="tab">Test</button><button type="button" class="tab">Publish</button><button type="button" class="tab">新版專案指令</button><button type="button" class="tab">舊版專案指令</button></div><div class="tab-contents"><div class="tab-item-content active"><style>
+:root {
+--dn-purple:#68217a;
+--dn-purple-deep:#42134f;
+--dn-purple-soft:#f4ecf7;
+--dn-cyan:#35c7e8;
+--dn-ink:#121216;
+--dn-paper:#fbfafc;
+--dn-line:#d9c8df;
+--dn-muted:#665f69;
+}
+#article-container .dn-hero{position:relative;overflow:hidden;margin:4px 0 30px;background:var(--dn-purple);color:#fff;min-height:300px;padding:54px 7%;display:flex;align-items:center;gap:46px;border-radius:4px;box-shadow:none}
+#article-container .dn-hero:before,#article-container .dn-hero:after{content:"";position:absolute;left:0;right:0;height:24px;background:var(--dn-ink)}
+#article-container .dn-hero:before{top:0}
+#article-container .dn-hero:after{bottom:0}
+#article-container .dn-hero-mark{position:relative;flex:0 0 210px;font:300 64px/1 "Segoe UI",Arial,sans-serif;letter-spacing:-4px;white-space:nowrap}
+#article-container .dn-hero-mark:after{content:"";display:inline-block;width:34px;height:34px;margin-left:10px;border-radius:50%;background:var(--dn-cyan)}
+#article-container .dn-hero-copy{position:relative;z-index:1;max-width:560px}
+#article-container .dn-hero-copy .dn-eyebrow{font:700 12px/1.3 "Segoe UI",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#bcefff;margin:0 0 12px}
+#article-container .dn-hero-copy h2{margin:0 0 14px!important;color:#fff!important;font:700 34px/1.25 "Segoe UI",sans-serif!important;border:0!important}
+#article-container .dn-hero-copy p{margin:0;color:#f4eefa;font-size:16px;line-height:1.85}
+#article-container .dn-section{margin:8px 0 24px;padding:0 0 14px;border-bottom:2px solid var(--dn-purple)}
+#article-container .dn-section .dn-eyebrow{display:block;margin-bottom:7px;color:var(--dn-purple);font:700 12px/1.3 "Segoe UI",sans-serif;letter-spacing:.14em;text-transform:uppercase}
+#article-container .dn-section h2{margin:0!important;padding:0!important;border:0!important;color:var(--dn-ink)!important;font:700 29px/1.3 "Segoe UI",sans-serif!important}
+#article-container .dn-section p{max-width:760px;margin:8px 0 0;color:var(--dn-muted);line-height:1.75}
+#article-container .dn-diagram{margin:22px 0 28px;padding:26px;background:var(--dn-ink);color:#fff;border:1px solid #28242b;border-radius:4px;overflow-x:auto;box-shadow:none}
+#article-container .dn-diagram *{box-sizing:border-box}
+#article-container .dn-diagram code{color:#bcefff;background:rgba(53,199,232,.12);border:1px solid rgba(53,199,232,.26);padding:2px 6px;border-radius:3px;overflow-wrap:anywhere}
+#article-container .dn-diagram-title{margin:0 0 20px;color:#fff;font:700 16px/1.5 "Segoe UI",sans-serif;letter-spacing:.02em}
+#article-container .dn-caption{margin:14px 0 0;color:#c7becb;font-size:13px;line-height:1.7}
+#article-container .dn-node{min-width:130px;padding:14px 16px;border:1px solid #6d6172;background:transparent;color:#fff;text-align:center;line-height:1.55}
+#article-container .dn-node strong{display:block;color:#fff;font-size:15px}
+#article-container .dn-node small{display:block;margin-top:4px;color:#c7becb;font-size:12px;line-height:1.55}
+#article-container .dn-node.purple{border-color:#9e5eb0;background:rgba(104,33,122,.34)}
+#article-container .dn-node.cyan{border-color:var(--dn-cyan);background:rgba(53,199,232,.08)}
+#article-container .dn-node.round{border-radius:999px}
+#article-container .dn-arrow{flex:0 0 42px;position:relative;height:2px;background:var(--dn-cyan)}
+#article-container .dn-arrow:after{content:"";position:absolute;right:-1px;top:-5px;border-left:8px solid var(--dn-cyan);border-top:6px solid transparent;border-bottom:6px solid transparent}
+#article-container .dn-arrow.down{width:2px;height:34px;flex:none;margin:auto}
+#article-container .dn-arrow.down:after{right:-5px;top:auto;bottom:-1px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--dn-cyan);border-bottom:0}
+#article-container .dn-flow-row{display:flex;align-items:center;justify-content:center;gap:0;min-width:640px}
+#article-container .dn-stack{max-width:620px;margin:0 auto;display:grid;gap:0}
+#article-container .dn-layer{display:grid;grid-template-columns:145px 1fr;align-items:stretch;border:1px solid #6d6172;border-bottom:0}
+#article-container .dn-layer:last-child{border-bottom:1px solid #6d6172}
+#article-container .dn-layer-label{display:flex;align-items:center;padding:14px;background:var(--dn-purple);font-weight:700}
+#article-container .dn-layer-body{padding:14px 18px;color:#e8e1eb;line-height:1.65}
+#article-container .dn-branch{display:grid;grid-template-columns:1fr 58px 1fr;align-items:center;min-width:650px}
+#article-container .dn-branch-mid{height:100%;position:relative}
+#article-container .dn-branch-mid:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--dn-cyan)}
+#article-container .dn-branch-side{display:grid;gap:12px}
+#article-container .dn-rail{display:grid;grid-template-columns:132px 1fr;gap:18px;align-items:start;margin:14px 0}
+#article-container .dn-rail-name{padding:11px 14px;border:1px solid #9e5eb0;color:#fff;text-align:center;font-weight:700}
+#article-container .dn-rail-track{display:flex;align-items:center;min-width:520px;padding-top:5px}
+#article-container .dn-stop{position:relative;flex:1;padding:26px 8px 0;text-align:center;color:#d8cfdc;font-size:12px}
+#article-container .dn-stop:before{content:"";position:absolute;left:50%;top:0;width:13px;height:13px;border:3px solid var(--dn-cyan);border-radius:50%;background:var(--dn-ink);transform:translateX(-50%);z-index:2}
+#article-container .dn-stop:after{content:"";position:absolute;left:0;right:0;top:6px;height:2px;background:#716676}
+#article-container .dn-stop:first-child:after{left:50%}
+#article-container .dn-stop:last-child:after{right:50%}
+#article-container .dn-gates{display:grid;gap:0;max-width:720px;margin:auto}
+#article-container .dn-gate{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid #453e48}
+#article-container .dn-gate:last-child{border-bottom:0}
+#article-container .dn-gate-dot{width:34px;height:34px;border:2px solid var(--dn-cyan);border-radius:50%;display:grid;place-items:center;color:var(--dn-cyan);font-weight:700}
+#article-container .dn-gate strong{color:#fff}
+#article-container .dn-gate small{display:block;margin-top:4px;color:#c7becb;line-height:1.6}
+#article-container .dn-gate-result{color:#bcefff;font-size:12px;text-align:right}
+#article-container .dn-filemap{display:grid;grid-template-columns:1fr 54px 1.4fr 54px 1fr;align-items:center;min-width:760px}
+#article-container .dn-filebox{padding:20px;border:1px solid #6d6172;min-height:150px}
+#article-container .dn-filebox strong{display:block;color:#fff;margin-bottom:10px}
+#article-container .dn-filebox ul{margin:0;padding-left:18px;color:#c7becb}
+#article-container .dn-filebox li{margin:7px 0}
+#article-container .dn-engine{display:grid;grid-template-columns:1fr 60px 1.2fr 60px 1fr;align-items:center;min-width:760px}
+#article-container .dn-engine-core{position:relative;display:grid;place-items:center;min-height:180px;border:2px solid var(--dn-purple);border-radius:50%;text-align:center;padding:32px}
+#article-container .dn-engine-core:after{content:"";position:absolute;width:34px;height:34px;border-radius:50%;background:var(--dn-cyan);right:18px;top:22px}
+#article-container .dn-mini-list{display:grid;gap:9px}
+#article-container .dn-mini-list div{padding:9px 12px;border-left:3px solid var(--dn-cyan);background:rgba(255,255,255,.03);color:#ded6e1}
+#article-container .dn-lanes{display:grid;gap:14px;min-width:720px}
+#article-container .dn-lane{display:grid;grid-template-columns:150px 1fr;border:1px solid #524a56}
+#article-container .dn-lane-name{display:flex;align-items:center;padding:16px;background:var(--dn-purple);font-weight:700}
+#article-container .dn-lane-flow{display:flex;align-items:center;padding:14px 18px;min-width:520px}
+#article-container .dn-step{position:relative;flex:1;padding:30px 8px 6px;text-align:center;color:#e6dfe9;font-size:12px;line-height:1.45}
+#article-container .dn-step:before{content:"";position:absolute;left:50%;top:5px;width:14px;height:14px;border-radius:50%;background:var(--dn-cyan);transform:translateX(-50%);z-index:2}
+#article-container .dn-step:after{content:"";position:absolute;left:0;right:0;top:11px;height:2px;background:#6d6172}
+#article-container .dn-step:first-child:after{left:50%}
+#article-container .dn-step:last-child:after{right:50%}
+#article-container .dn-timeline{max-width:760px;margin:auto;position:relative}
+#article-container .dn-timeline:before{content:"";position:absolute;left:17px;top:10px;bottom:10px;width:2px;background:var(--dn-purple)}
+#article-container .dn-time{position:relative;padding:0 0 20px 54px}
+#article-container .dn-time:last-child{padding-bottom:0}
+#article-container .dn-time:before{content:"";position:absolute;left:8px;top:2px;width:20px;height:20px;border:3px solid var(--dn-cyan);border-radius:50%;background:var(--dn-ink)}
+#article-container .dn-time strong{display:block;color:#fff;margin-bottom:4px}
+#article-container .dn-time p{margin:0;color:#c7becb;line-height:1.65}
+#article-container .dn-compiler{display:flex;align-items:center;min-width:760px}
+#article-container .dn-compiler .dn-node{flex:1;min-width:120px}
+#article-container .dn-sequence{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;min-width:740px;position:relative;padding-bottom:10px}
+#article-container .dn-participant{position:relative;text-align:center;padding:12px 8px;border-top:2px solid var(--dn-cyan);color:#fff;font-weight:700;min-height:230px}
+#article-container .dn-participant:after{content:"";position:absolute;left:50%;top:48px;bottom:0;border-left:1px dashed #716676}
+#article-container .dn-message{grid-column:1/-1;position:absolute;height:28px;border-top:1px solid #bcefff;color:#bcefff;font-size:11px;padding-top:4px}
+#article-container .dn-message:after{content:"";position:absolute;right:-1px;top:-5px;border-left:7px solid #bcefff;border-top:5px solid transparent;border-bottom:5px solid transparent}
+#article-container .dn-funnel{max-width:680px;margin:auto;display:grid;gap:9px;justify-items:center}
+#article-container .dn-funnel div{padding:11px 18px;text-align:center;border:1px solid #6d6172;color:#fff}
+#article-container .dn-funnel div:nth-child(1){width:100%}
+#article-container .dn-funnel div:nth-child(2){width:82%}
+#article-container .dn-funnel div:nth-child(3){width:62%;border-color:var(--dn-cyan)}
+#article-container .dn-decision{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;min-width:690px}
+#article-container .dn-diamond{width:140px;height:140px;margin:auto;transform:rotate(45deg);border:2px solid var(--dn-cyan);display:grid;place-items:center}
+#article-container .dn-diamond strong{transform:rotate(-45deg);display:block;text-align:center;width:105px;color:#fff;font-size:13px}
+#article-container .dn-command-map{display:grid;grid-template-columns:190px 1fr;gap:0;min-width:650px}
+#article-container .dn-command-label{padding:13px 16px;border-bottom:1px solid #4d4550;color:#bcefff;font-weight:700}
+#article-container .dn-command-code{padding:13px 16px;border-bottom:1px solid #4d4550;color:#fff;font-family:Consolas,monospace;overflow-wrap:anywhere}
+#article-container .dn-command-label:last-of-type,#article-container .dn-command-code:last-child{border-bottom:0}
+#article-container table{width:auto;max-width:100%}
+#article-container .highlight,#article-container .highlight .code{background:#15131a!important}
+#article-container .highlight table,#article-container .highlight pre{background:transparent!important}
+#article-container .highlight .gutter{background:#241b29!important}
+#article-container .highlight,#article-container figure.highlight{border:1px solid #3f3544;border-radius:4px;box-shadow:none}
+[data-theme="dark"] #article-container .dn-section h2{color:#fff!important}
+[data-theme="dark"] #article-container .dn-section p{color:#cfc6d2}
+[data-theme="dark"] #article-container .dn-section{border-bottom-color:#9e5eb0}
+@media (max-width:760px){
+#article-container .dn-hero{min-height:0;padding:48px 24px;display:block}
+#article-container .dn-hero-mark{font-size:50px;margin-bottom:30px}
+#article-container .dn-hero-copy h2{font-size:27px!important}
+#article-container .dn-diagram{padding:20px 16px}
+#article-container .dn-section h2{font-size:24px!important}
+#article-container .dn-layer{grid-template-columns:1fr}
+#article-container .dn-layer-label{justify-content:center}
+#article-container .tab-item-content .table-wrap{max-width:100%;overflow-x:auto}
+#article-container .tab-item-content .table-wrap table{min-width:560px}
+}
+</style>
+
+<div class="dn-hero">
+<div class="dn-hero-mark">.NET</div>
+<div class="dn-hero-copy">
+<p class="dn-eyebrow">BUILD · RUN · PUBLISH</p>
+<h2>.NET 的建置與發佈</h2>
+<p>專案檔描述建置需求，SDK 與 MSBuild 把原始碼整理成產物，Runtime 與網站宿主則負責讓產物真正運行。本文把這些容易混在一起的責任逐層拆開。</p>
+</div>
+</div>
+
+<div class="dn-section">
+<span class="dn-eyebrow">01 · PROJECT SDK</span>
+<h2><code>Microsoft.NET.Sdk</code> 是建置規則，不是執行環境</h2>
+<p>同一套專案 SDK 可以服務不同目標框架。要判斷產物由誰執行，還要繼續看目標框架與 Runtime。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">三個責任層次</p>
+<div class="dn-stack">
+<div class="dn-layer">
+<div class="dn-layer-label">建置 SDK</div>
+<div class="dn-layer-body"><code>Microsoft.NET.Sdk</code> 提供 MSBuild 預設屬性、檔案納入規則與建置目標。</div>
+</div>
+<div class="dn-layer">
+<div class="dn-layer-label">目標框架</div>
+<div class="dn-layer-body"><code>net462</code> 或 <code>net8.0</code> 決定編譯時可用的 API 與相容邊界。</div>
+</div>
+<div class="dn-layer">
+<div class="dn-layer-label">執行 Runtime</div>
+<div class="dn-layer-body">產物部署後，由相容的 .NET Framework 或現代 .NET Runtime 載入執行。</div>
+</div>
+</div>
+<p class="dn-caption">閱讀方向由上往下。SDK 負責怎麼建，目標框架決定建給誰，Runtime 負責實際執行。</p>
+</div>
+
+
+<p><code>&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;</code> 裡的 <code>Microsoft.NET.Sdk</code> 是<strong>專案建置 SDK</strong>：它提供 MSBuild 的預設屬性、檔案納入規則與 restore／build／publish 等建置目標。MSBuild 評估專案時會隱含載入這套 SDK 的設定。它在<strong>開發或建置機器</strong>上發揮作用，不是部署到目標機器後用來執行程式的 Runtime；也不代表產物必定使用 .NET Core。</p>
+<p>同一個 <code>Microsoft.NET.Sdk</code> 專案，可以用 <code>&lt;TargetFramework&gt;net462&lt;/TargetFramework&gt;</code> 指定編譯給 .NET Framework 4.6.2，也可以用 <code>net8.0</code> 指定編譯給 .NET 8。能否建置還取決於所需的參考組件、套件及專案專屬 targets 是否齊全。這也說明<strong>建置用 SDK</strong>、<strong>編譯目標框架</strong>、<strong>執行用 Runtime</strong> 是三個不同層次。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview">Microsoft：.NET 專案 SDK</a></p>
+<table>
+<thead>
+<tr>
+<th>專案設定</th>
+<th>建置時使用</th>
+<th>產物的執行目標</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Sdk=&quot;Microsoft.NET.Sdk&quot;</code> + <code>TargetFramework=net462</code></td>
+<td>專案 SDK 的建置規則</td>
+<td>.NET Framework 4.6.2</td>
+</tr>
+<tr>
+<td><code>Sdk=&quot;Microsoft.NET.Sdk&quot;</code> + <code>TargetFramework=net8.0</code></td>
+<td>專案 SDK 的建置規則</td>
+<td>.NET 8</td>
+</tr>
+</tbody></table></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">02 · PLATFORM LINES</span>
+<h2>.NET Framework 與現代 .NET 是兩條產品線</h2>
+<p>版本數字不能跨產品線直接比較。兩者的 Runtime、基礎函式庫、應用程式模型、作業系統與部署方式都不同。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">產品線演進關係</p>
+<div class="dn-rail">
+<div class="dn-rail-name">.NET Framework</div>
+<div class="dn-rail-track">
+<div class="dn-stop">4.6.2</div>
+<div class="dn-stop">4.7</div>
+<div class="dn-stop">4.8</div>
+<div class="dn-stop">Windows 平台持續維護</div>
+</div>
+</div>
+<div class="dn-rail">
+<div class="dn-rail-name">現代 .NET</div>
+<div class="dn-rail-track">
+<div class="dn-stop">Core 1</div>
+<div class="dn-stop">Core 3.1</div>
+<div class="dn-stop">.NET 5</div>
+<div class="dn-stop">.NET 8+</div>
+</div>
+</div>
+<p class="dn-caption">兩條橫線代表不同實作。名稱從 .NET 5 起拿掉 Core，不表示 .NET Framework 併入同一條升級路徑。</p>
+</div>
+
+<p>「.NET Framework」說的是程式<strong>要以哪套 .NET 平台執行</strong></p>
+<p>它們是<strong>不同的 .NET 實作與執行平台</strong>，不只是 Runtime 版本號不同。除了各自的執行環境，還有不同的基礎函式庫與可用 API、應用程式模型、作業系統支援和部署方式。<code>.NET Framework 4.8</code> 不會因為數字大於 <code>.NET Core 3.1</code>，就成為後者的升級版。Microsoft 從 <strong>.NET 5</strong> 起拿掉名稱中的「Core」；本文的「現代 .NET」指 .NET Core 及後續的 .NET 5+，而 .NET Framework 仍是另一條產品線。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/core/porting/framework-overview">Microsoft：移轉概覽</a></p>
+<table>
+<thead>
+<tr>
+<th>面向</th>
+<th>.NET Framework</th>
+<th>.NET Core／現代 .NET</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>執行環境</td>
+<td>Windows 上的 .NET Framework CLR 與函式庫</td>
+<td>.NET Core／現代 .NET Runtime 與其函式庫</td>
+</tr>
+<tr>
+<td>作業系統</td>
+<td>Windows</td>
+<td>平台支援 Windows、Linux、macOS；若程式使用 Windows 專屬 API，仍只能在 Windows 執行</td>
+</tr>
+<tr>
+<td>目標框架代號</td>
+<td><code>net48</code>、<code>net462</code> 等</td>
+<td>.NET Core 常見 <code>netcoreapp3.1</code>；.NET 5+ 常見 <code>net8.0</code> 等</td>
+</tr>
+<tr>
+<td>Web 應用程式</td>
+<td>傳統 ASP.NET 使用 <code>System.Web</code>、<code>Global.asax</code>，常由 IIS／IIS Express 承載</td>
+<td>ASP.NET Core 使用自己的要求處理管線與宿主；不是把傳統 ASP.NET 專案換個 TFM 就能取得</td>
+</tr>
+<tr>
+<td>部署方式</td>
+<td>目標 Windows 機器需具備相容的 .NET Framework</td>
+<td>可依賴已安裝 Runtime，或將 Runtime 一起發布為 self-contained 產物</td>
+</tr>
+</tbody></table>
+<p>例如 SCM ApiV2 的網站使用 <code>System.Web</code>，目標是 .NET Framework 4.6.2。即使把它的 <code>.csproj</code> 轉成 SDK 格式並保留 <code>net462</code>，網站依舊需要原本的 ASP.NET／IIS 執行環境；如果改成 <code>net8.0</code>，還要移轉不相容的 API、套件與網站宿主。<strong>專案格式決定「怎麼建」，目標框架與應用程式模型決定「建給誰跑、怎麼啟動」。</strong></p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">03 · SDK STYLE</span>
+<h2>SDK 格式把通用規則移出專案檔</h2>
+<p>專案檔變短，是因為常見檔案納入與建置規則由 SDK 提供。套件、專案參考與特殊行為仍然存在。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">舊式專案檔與 SDK 格式的資訊分工</p>
+<div class="dn-filemap">
+<div class="dn-filebox">
+<strong>舊式 <code>.csproj</code></strong>
+<ul>
+<li>逐一列出原始碼</li>
+<li>明列 imports 與參考</li>
+<li>建置樣板重複出現</li>
+</ul>
+</div>
+<div class="dn-arrow"></div>
+<div class="dn-filebox">
+<strong>SDK 提供預設規則</strong>
+<ul>
+<li>遞迴納入一般 <code>.cs</code></li>
+<li>處理常見資源檔</li>
+<li>排除 <code>bin</code> 與 <code>obj</code></li>
+</ul>
+</div>
+<div class="dn-arrow"></div>
+<div class="dn-filebox">
+<strong>精簡後的 <code>.csproj</code></strong>
+<ul>
+<li>目標框架</li>
+<li>套件與專案參考</li>
+<li>專案特有設定</li>
+</ul>
+</div>
+</div>
+<p class="dn-caption">箭頭表示責任移轉，不表示依賴消失。SDK 格式仍須明確描述專案特有需求。</p>
+</div>
+
+<p>SDK 省掉的是重複的檔案清單與通用建置樣板，<strong>沒有取消依賴關係</strong>。需要特殊納入或排除規則時，仍可在 <code>.csproj</code> 明確設定。</p>
+<p>「SDK 格式」說的是 <code>.csproj</code> <strong>如何描述建置工作</strong><br>SDK 格式專案也可以指定 <code>net48</code>，編譯給 .NET Framework 4.8 使用。</p>
+<p>舊式 <code>.csproj</code> 常把每個原始碼檔案逐一列出，例如 <code>&lt;Compile Include=&quot;Program.cs&quot; /&gt;</code>。新增或搬移檔案時，專案檔也可能要跟著更新。SDK 格式把<strong>常見規則交給 SDK</strong>：<code>&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;</code> 讓 MSBuild 自動載入 SDK 的建置設定；預設以遞迴規則納入專案目錄下的 <code>.cs</code> 檔，也處理常見資源檔，並排除 <code>bin</code>、<code>obj</code> 等輸出目錄。於是 <code>.csproj</code> 主要留下目標框架、套件參考、專案參考及特殊設定。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Project</span> <span class="attr">Sdk</span>=<span class="string">&quot;Microsoft.NET.Sdk&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">TargetFramework</span>&gt;</span>net8.0<span class="tag">&lt;/<span class="name">TargetFramework</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ItemGroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ProjectReference</span> <span class="attr">Include</span>=<span class="string">&quot;..\Shared\Shared.csproj&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;Some.Package&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.2.3&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">ItemGroup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th>比較面向</th>
+<th>SDK 格式專案</th>
+<th>常見的舊式 .NET Framework 專案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.csproj</code> 寫法</td>
+<td>常以 <code>&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;</code> 開頭，由 SDK 提供預設建置規則，檔案較精簡</td>
+<td>常明列檔案、參考、建置設定與 MSBuild imports，檔案通常較長</td>
+</tr>
+<tr>
+<td>目標框架寫法</td>
+<td>常用 <code>&lt;TargetFramework&gt;net8.0&lt;/TargetFramework&gt;</code>；也可寫 <code>net48</code></td>
+<td>常用 <code>&lt;TargetFrameworkVersion&gt;v4.8&lt;/TargetFrameworkVersion&gt;</code></td>
+</tr>
+<tr>
+<td>常見工具入口</td>
+<td><code>dotnet restore</code>、<code>dotnet build</code>、<code>dotnet publish</code></td>
+<td>Visual Studio 的 <code>MSBuild.exe</code>；套件還原須看 <code>PackageReference</code> 或 <code>packages.config</code></td>
+</tr>
+<tr>
+<td>執行平台</td>
+<td><strong>由 TargetFramework 決定</strong>，不能只看專案格式</td>
+<td>.NET Framework 執行環境限 Windows</td>
+</tr>
+</tbody></table>
+<p>例如下面仍是 <strong>SDK 格式</strong>，但目標平台是 <strong>.NET Framework 4.8</strong>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Project</span> <span class="attr">Sdk</span>=<span class="string">&quot;Microsoft.NET.Sdk&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">TargetFramework</span>&gt;</span>net48<span class="tag">&lt;/<span class="name">TargetFramework</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>相反地，若看到 <code>&lt;TargetFrameworkVersion&gt;v4.8&lt;/TargetFrameworkVersion&gt;</code>，通常代表舊式專案檔。實際能否使用 <code>dotnet build</code>，還要看專案使用的 targets、工作負載及開發機是否具備所需元件。<strong>先辨認專案格式，再辨認目標框架，最後確認工具鏈</strong>，才能解釋為何同是 <code>.csproj</code>，建置指令卻不同。</p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">04 · MIGRATION GATES</span>
+<h2>刪除檔案清單只是轉換的第一步</h2>
+<p>傳統 ASP.NET 網站還有內容檔、輸出路徑、Web targets 與設定轉換。每一項都必須通過驗證，才能判斷轉換是否保持原有行為。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">舊專案轉成 SDK 格式的驗證閘門</p>
+<div class="dn-gates">
+<div class="dn-gate">
+<div class="dn-gate-dot">1</div>
+<div><strong>目標框架</strong><small><code>v4.6.2</code> 改寫為 <code>net462</code>，執行平台仍是 .NET Framework。</small></div>
+<div class="dn-gate-result">保持相容邊界</div>
+</div>
+<div class="dn-gate">
+<div class="dn-gate-dot">2</div>
+<div><strong>內容與資源</strong><small>檢查預設納入是否重複，發布用途是否完整保留。</small></div>
+<div class="dn-gate-result">核對交付內容</div>
+</div>
+<div class="dn-gate">
+<div class="dn-gate-dot">3</div>
+<div><strong>輸出路徑</strong><small>確認 IIS 仍能從預期的 <code>bin</code> 位置載入網站組件。</small></div>
+<div class="dn-gate-result">核對宿主讀取位置</div>
+</div>
+<div class="dn-gate">
+<div class="dn-gate-dot">4</div>
+<div><strong>網站專屬 targets</strong><small>保留或替代 <code>Microsoft.WebApplication.targets</code> 與 SlowCheetah 行為。</small></div>
+<div class="dn-gate-result">核對建置與轉換</div>
+</div>
+<div class="dn-gate">
+<div class="dn-gate-dot">5</div>
+<div><strong>啟動與請求</strong><small>用 IIS 或 IIS Express 啟動網站，檢查請求與發布產物。</small></div>
+<div class="dn-gate-result">證明可以運行</div>
+</div>
+</div>
+</div>
+
+
+<p><code>.csproj</code> 的 SDK 格式可以視為「建置規則的預設套件」。它可以自動找出專案目錄裡一般的 <code>.cs</code> 檔，省去逐筆寫 <code>&lt;Compile Include=&quot;...&quot;&gt;</code>。然而，它不知道舊版框架專案原本如何處理 IIS、內容檔、設定轉換與發布，因此「不用列出每個 <code>.cs</code>」和「其他建置行為完全相同」是兩件事。</p>
+<table>
+<thead>
+<tr>
+<th>SCM ApiV2 原本的設定</th>
+<th>只加 <code>Sdk</code>、刪 <code>.cs</code> 清單之後還要確認什麼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;TargetFrameworkVersion&gt;v4.6.2&lt;/TargetFrameworkVersion&gt;</code></td>
+<td>改用 SDK 格式的 <code>&lt;TargetFramework&gt;net462&lt;/TargetFramework&gt;</code>，執行目標仍是 .NET Framework 4.6.2</td>
+</tr>
+<tr>
+<td>專案明列內容檔、資源檔與 <code>packages.config</code></td>
+<td>SDK 也會預設納入部分檔案；要檢查是否重複、是否保留原本的發布用途</td>
+</tr>
+<tr>
+<td>網站組件輸出到 <code>bin\</code></td>
+<td>SDK 可能在輸出路徑附加 <code>net462</code>；要確認 IIS 讀到的仍是預期的網站組件</td>
+</tr>
+<tr>
+<td>匯入 <code>Microsoft.WebApplication.targets</code>，另有 SlowCheetah 設定轉換</td>
+<td>要驗證這些原有建置目標和 SDK 預設目標能否共同運作，且轉換後的設定檔正確</td>
+</tr>
+</tbody></table>
+<p><strong>所以合理的預期是一般 <code>.cs</code> 檔案清單可以刪，但網站專屬設定仍須逐項比對。</strong> 即使編譯成功，也要再用 IIS／IIS Express 啟動網站，檢查實際請求與發布產物，才能說「轉換後照常運作」</p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">05 · COMMAND FLOW</span>
+<h2>Restore 準備材料，Build 產生組件，後續工作再分流</h2>
+<p>Run、Test 與 Publish 都可能觸發所需的前置建置。跳過前置步驟時，目標框架、組態與 RID 必須保持一致。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">SDK 專案的概念流程</p>
+<div class="dn-lanes">
+<div class="dn-lane">
+<div class="dn-lane-name">共同主線</div>
+<div class="dn-lane-flow">
+<div class="dn-step">專案與原始碼</div>
+<div class="dn-step">Restore</div>
+<div class="dn-step">Build</div>
+<div class="dn-step">組件與中間產物</div>
+</div>
+</div>
+<div class="dn-lane">
+<div class="dn-lane-name">建置後分流</div>
+<div class="dn-lane-flow">
+<div class="dn-step">Run<br>啟動程式</div>
+<div class="dn-step">Test<br>執行測試</div>
+<div class="dn-step">Publish<br>整理交付物</div>
+<div class="dn-step">部署或開發使用</div>
+</div>
+</div>
+</div>
+<p class="dn-caption">第二條線表示三種不同目的，不代表 Run、Test、Publish 必須依序執行。</p>
+</div>
+
+
+<p>這是概念順序，一般 SDK 專案的 <code>dotnet build</code> 預設會 restore，而 <code>dotnet run</code>、<code>dotnet test</code>、<code>dotnet publish</code> 也會執行各自需要的前置步驟。若前置步驟已完成，可視情況使用 <code>--no-restore</code>、<code>--no-build</code>，但目標框架、組態、Runtime Identifier（RID）等條件須一致</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>核心問題</th>
+<th>主要行為</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>restore</code></td>
+<td>建置需要哪些套件？</td>
+<td>解析 NuGet 相依關係，取得缺少的套件</td>
+</tr>
+<tr>
+<td><code>build</code></td>
+<td>程式能否編譯？</td>
+<td>建置專案及其參考，產生組件</td>
+</tr>
+<tr>
+<td><code>run</code></td>
+<td>程式能否啟動？</td>
+<td>必要時建置，再啟動應用程式</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>測試是否通過？</td>
+<td>必要時建置，再執行測試</td>
+</tr>
+<tr>
+<td><code>publish</code></td>
+<td>要交付哪些檔案？</td>
+<td>必要時建置，整理部署目錄</td>
+</tr>
+</tbody></table></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">06 · PROJECT MAP</span>
+<h2>Solution 組織專案，專案檔描述每個建置單位</h2>
+<p><code>.sln</code> 管理多個專案的集合與組態，<code>.csproj</code> 則記錄單一專案的目標框架、參考與輸出。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">Solution 與專案檔的責任關係</p>
+<div class="dn-filemap">
+<div class="dn-filebox">
+<strong><code>.sln</code></strong>
+<ul><li>專案集合</li><li>solution 組態</li><li>建置範圍</li></ul>
+</div>
+<div class="dn-arrow"></div>
+<div class="dn-filebox">
+<strong><code>.csproj</code></strong>
+<ul><li>TargetFramework</li><li>PackageReference</li><li>ProjectReference</li><li>OutputType</li></ul>
+</div>
+<div class="dn-arrow"></div>
+<div class="dn-filebox">
+<strong>建置輸入</strong>
+<ul><li>原始碼</li><li>套件與其他專案</li><li>資源與內容檔</li></ul>
+</div>
+</div>
+</div>
+
+
+
+<p><code>.csproj</code> 指定目標框架、套件參考、專案參考、輸出類型等建置屬性；<code>.sln</code> 組織多個專案</p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">07 · BUILD ENGINE</span>
+<h2>MSBuild 評估設定，再執行 targets</h2>
+<p>命令列參數會改變本次建置屬性。SDK 提供規則，目標框架限定 API，Runtime 則在部署後執行產物。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">MSBuild 的輸入、引擎與輸出</p>
+<div class="dn-engine">
+<div class="dn-mini-list">
+<div><code>.sln</code> 與 <code>.csproj</code></div>
+<div>SDK 與 imports</div>
+<div><code>-c</code>、<code>-r</code>、<code>-p</code></div>
+</div>
+<div class="dn-arrow"></div>
+<div class="dn-engine-core"><strong>MSBuild<br>評估屬性<br>安排 targets</strong></div>
+<div class="dn-arrow"></div>
+<div class="dn-mini-list">
+<div>還原與建置工作</div>
+<div>編譯器輸入</div>
+<div>組件與內容輸出</div>
+</div>
+</div>
+<p class="dn-caption">圓形代表建置引擎。左右兩側是輸入與輸出，Runtime 不在這個建置引擎內。</p>
+</div>
+
+
+<p>MSBuild 評估這些設定，並執行對應的 targets。對 SDK 專案，<code>dotnet build</code> 使用 .NET SDK 內的 MSBuild，大致相當於 <code>dotnet msbuild -restore</code>。<code>-c Release</code>、<code>-r win-x64</code>、<code>-p:Name=Value</code> 等參數會改變這次建置的屬性。</p>
+<p><strong>SDK</strong> 提供開發建置工具</p>
+<p><strong>目標框架</strong>（如 <code>net8.0</code>、<code>net48</code>）決定編譯時可用的 API</p>
+<p><strong>Runtime</strong> 是目標機器執行程式所需的環境。裝有 Runtime 不等於能建置，裝有 SDK 也不代表舊式專案所需的 Visual Studio 元件都齊全</p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">08 · RESTORE</span>
+<h2>Restore 解析依賴，讓後續 Build 知道材料在哪裡</h2>
+<p>還原不會替專案新增或升級套件。它讀取既有需求、解析完整依賴、尋找檔案，再寫下可供建置使用的結果。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">Restore 的四個資料處理階段</p>
+<div class="dn-compiler">
+<div class="dn-node"><strong>讀需求</strong><small>專案、目標框架、來源設定</small></div>
+<div class="dn-arrow"></div>
+<div class="dn-node"><strong>算依賴</strong><small>版本、相容性、依賴圖</small></div>
+<div class="dn-arrow"></div>
+<div class="dn-node"><strong>找檔案</strong><small>先查快取，缺少才連來源</small></div>
+<div class="dn-arrow"></div>
+<div class="dn-node cyan"><strong>記結果</strong><small>快取與 <code>project.assets.json</code></small></div>
+</div>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">兩種套件參考格式對應不同還原路徑</p>
+<div class="dn-lanes">
+<div class="dn-lane">
+<div class="dn-lane-name">PackageReference</div>
+<div class="dn-lane-flow">
+<div class="dn-step"><code>.csproj</code></div>
+<div class="dn-step"><code>dotnet restore</code></div>
+<div class="dn-step">全域套件快取</div>
+<div class="dn-step"><code>project.assets.json</code></div>
+</div>
+</div>
+<div class="dn-lane">
+<div class="dn-lane-name">packages.config</div>
+<div class="dn-lane-flow">
+<div class="dn-step"><code>packages.config</code></div>
+<div class="dn-step"><code>nuget restore</code></div>
+<div class="dn-step">solution 的 packages</div>
+<div class="dn-step"><code>HintPath</code> 找到 DLL</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet restore .\WindowsTaskManager.csproj</span><br></pre></td></tr></table></figure>
+
+<p>Restore 的意思是<strong>依照專案已記錄的套件需求，把建置材料備齊</strong>，流程依序是</p>
+<ol>
+<li><strong>讀需求</strong>：評估 <code>.csproj</code>、<code>ProjectReference</code>、目標框架與 NuGet 來源設定（<code>nuget.config</code>），找出直接依賴的套件</li>
+<li><strong>算完整依賴</strong>：解析套件彼此需要的其他套件、版本與目標框架相容性，得到可供建置的依賴圖</li>
+<li><strong>找檔案</strong>：檢查本機快取，缺少時才向設定的 NuGet 來源取得，因此可能需要網路、內網連線或認證</li>
+<li><strong>記結果</strong>：<code>PackageReference</code> 專案通常將套件放在全域套件快取，並產生 <code>obj\project.assets.json</code>，讓後續 build 知道實際使用哪些套件組件。Restore 不會新增或升級專案檔裡的套件參考</li>
+</ol>
+<h2 id="為什麼新版專案用-dotnet-restore，舊版專案用-nuget-restore？"><a href="#為什麼新版專案用-dotnet-restore，舊版專案用-nuget-restore？" class="headerlink" title="為什麼新版專案用 dotnet restore，舊版專案用 nuget restore？"></a>為什麼新版專案用 <code>dotnet restore</code>，舊版專案用 <code>nuget restore</code>？</h2><p>關鍵是<strong>套件參考格式</strong>，不是「.NET Core 可以、.NET Framework 不可以」，例如 Livebuy API 是 <code>Microsoft.NET.Sdk.Web</code>、目標 <code>net8.0</code>，在 <code>.csproj</code> 用 <code>PackageReference</code> 記錄套件，而 SCM ApiV2 網站則用 <code>packages.config</code> 記錄套件，例如 <code>Autofac</code> 4.1.1，並在 <code>.csproj</code> 用 <code>HintPath</code> 指向 solution 的 <code>packages\Autofac.4.1.1\...</code> DLL</p>
+<table>
+<thead>
+<tr>
+<th>專案</th>
+<th>套件需求寫在哪裡</th>
+<th>合適的還原入口</th>
+<th>還原後要看到什麼</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Livebuy API</td>
+<td><code>.csproj</code> 的 <code>PackageReference</code></td>
+<td><code>dotnet restore</code>；或讓 <code>dotnet build</code> 隱含還原</td>
+<td>全域套件快取有套件，專案產生 <code>obj\project.assets.json</code></td>
+</tr>
+<tr>
+<td>SCM ApiV2</td>
+<td>各專案的 <code>packages.config</code>，搭配 <code>.csproj</code> 的 <code>HintPath</code></td>
+<td><code>nuget restore</code> 或支援版本的 Visual Studio MSBuild 明確啟用 <code>RestorePackagesConfig=true</code></td>
+<td>solution 的 <code>packages</code> 目錄有對應版本，<code>HintPath</code> 找得到 DLL</td>
+</tr>
+</tbody></table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Livebuy：在其 src 目錄，明確還原 solution</span></span><br><span class="line">dotnet restore .\Nine1.Livebuy.Web.Api.sln</span><br><span class="line"></span><br><span class="line"><span class="comment"># SCM ApiV2：在其 solution 目錄，依 packages.config 還原</span></span><br><span class="line">nuget restore .\NineYi.Scm.ApiV2.sln</span><br></pre></td></tr></table></figure>
+
+<p><code>dotnet restore</code> 主要處理 <code>.csproj</code> 裡的 <code>PackageReference</code>，<strong>不會替舊專案還原 <code>packages.config</code> 所列的套件</strong>，因此對專案例如 SCM ApiV2 執行這個指令，可能在評估舊式專案時失敗，也可能結束卻沒有補齊 <code>packages</code> 目錄，無法只看指令執行結束，就認定原建置依賴已備齊</p>
+<p>另外 <code>nuget restore</code> <strong>不是只能處理</strong> <code>packages.config</code>，也能處理部分 <code>PackageReference</code> 專案，只是對 SCM ApiV2 的現況，它是合適的選擇</p>
+<p>若本機已有全部套件，還原可能不需重新下載，若缺少套件新舊專案都可能從網路拉取，如果來源無法存取，<strong>都可能因網路或認證失敗</strong></p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">09 · BUILD</span>
+<h2>Build 是協調工程，編譯只是其中一道工序</h2>
+<p>MSBuild 先評估專案與相依順序，再執行還原、資源處理、設定轉換、編譯與輸出複製。成功只代表指定條件下完成建置。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">Build 的工作邊界</p>
+<div class="dn-lane">
+<div class="dn-lane-name">MSBuild 協調</div>
+<div class="dn-lane-flow">
+<div class="dn-step">評估專案</div>
+<div class="dn-step">安排相依順序</div>
+<div class="dn-step">執行 targets</div>
+<div class="dn-step">整理輸出</div>
+</div>
+</div>
+<div class="dn-lane">
+<div class="dn-lane-name">其中的編譯工序</div>
+<div class="dn-lane-flow">
+<div class="dn-step">原始碼與參考</div>
+<div class="dn-step">語法與型別檢查</div>
+<div class="dn-step">產生 IL</div>
+<div class="dn-step">DLL 與 PDB</div>
+</div>
+</div>
+<p class="dn-caption">兩條泳道是包含關係。編譯位於 Build 內部，並不涵蓋所有建置工作。</p>
+</div>
+
+
+<p>Build 的核心是 <strong>MSBuild 讀取 <code>.sln</code> &#x2F; <code>.csproj</code>，找出專案間的先後順序，載入專案指定的建置規則，再編譯、複製輸出。</strong> 規則也可能包含產生程式碼、處理資源檔及執行自訂工作。Build 成功表示指定條件下能編譯</p>
+<h2 id="Build-與「編譯」的差異：C-到-DLL-中間發生什麼？"><a href="#Build-與「編譯」的差異：C-到-DLL-中間發生什麼？" class="headerlink" title="Build 與「編譯」的差異：C# 到 DLL 中間發生什麼？"></a>Build 與「編譯」的差異：C# 到 DLL 中間發生什麼？</h2><div class="dn-diagram">
+<p class="dn-diagram-title">C# 原始碼到執行時機器碼</p>
+<div class="dn-compiler">
+<div class="dn-node"><strong>C# 原始碼</strong><small>類別、方法、運算式</small></div>
+<div class="dn-arrow"></div>
+<div class="dn-node"><strong>語法與語意</strong><small>名稱、型別、參數、參考</small></div>
+<div class="dn-arrow"></div>
+<div class="dn-node purple"><strong>IL 組件</strong><small>DLL、metadata、可能的 PDB</small></div>
+<div class="dn-arrow"></div>
+<div class="dn-node cyan"><strong>Runtime 與 JIT</strong><small>程式啟動後才轉成機器碼</small></div>
+</div>
+<p class="dn-caption"><code>app.Run()</code> 與 <code>Application_Start()</code> 在 Build 階段只會被編譯，不會真正執行。</p>
+</div>
+
+
+<p><strong>Build 是總工程；編譯是其中把原始碼轉成組件的一道工序。</strong> </p>
+<p>前述 restore、決定建置順序、處理資源與內容檔、設定轉換、複製輸出，都屬於 build，並非 C# 編譯器本身負責。MSBuild 在需要編譯時，把 <code>.cs</code> 檔、目標框架的參考組件、NuGet 和其他專案的參考，交給 C# 編譯器</p>
+<table>
+<thead>
+<tr>
+<th>編譯階段</th>
+<th>具體在做什麼</th>
+<th>用兩個專案理解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>讀取與解析</td>
+<td>將 <code>.cs</code> 內容辨識成類別、方法、運算式等語法結構</td>
+<td>讀到 Livebuy 的 <code>WebApplication.CreateBuilder(args)</code>；讀到 SCM 的 <code>WebApiApplication : System.Web.HttpApplication</code></td>
+</tr>
+<tr>
+<td>語意與型別檢查</td>
+<td>確認名稱、型別、方法、參數和參考組件能對上；錯誤會在此報出</td>
+<td>Livebuy 要找得到 ASP.NET Core 的 <code>WebApplication</code>；SCM 要找得到 .NET Framework 的 <code>System.Web.HttpApplication</code></td>
+</tr>
+<tr>
+<td>產生組件</td>
+<td>將程式碼轉成 IL（中介語言），連同類別、方法與參考的中繼資料寫進 DLL；視設定產生 PDB 供除錯</td>
+<td>兩者都可得到 DLL，但各自針對不同目標框架，不能只看副檔名判斷可否互換</td>
+</tr>
+</tbody></table>
+<p><strong>DLL 裡的一般受控程式碼主要是 IL，並非按下 build 時就全部變成目標 CPU 的機器碼。</strong> 等程式真的啟動、Runtime 載入組件並執行方法時，通常由 JIT 將需要的 IL 轉成機器碼。因此 Livebuy 的 <code>app.Run()</code>、SCM 的 <code>Application_Start()</code> 在 build 階段都只是被編譯，沒有真的執行。特定發布方式可能另做預先編譯；此處描述兩個專案的一般 build 流程。</p>
+<h2 id="dotnet-build-與-Visual-Studio-MSBuild-exe-是什麼關係？"><a href="#dotnet-build-與-Visual-Studio-MSBuild-exe-是什麼關係？" class="headerlink" title="dotnet build 與 Visual Studio MSBuild.exe 是什麼關係？"></a><code>dotnet build</code> 與 Visual Studio <code>MSBuild.exe</code> 是什麼關係？</h2><div class="dn-diagram">
+<p class="dn-diagram-title">同一種建置技術，兩套啟動環境</p>
+<div class="dn-branch">
+<div class="dn-branch-side">
+<div class="dn-node cyan"><strong><code>dotnet build</code></strong><small>.NET SDK 內的 MSBuild</small></div>
+<div class="dn-node"><strong>適合目前案例</strong><small>Livebuy 的 <code>Microsoft.NET.Sdk.Web</code></small></div>
+</div>
+<div class="dn-branch-mid"></div>
+<div class="dn-branch-side">
+<div class="dn-node purple"><strong><code>MSBuild.exe</code></strong><small>Visual Studio 與已安裝建置元件</small></div>
+<div class="dn-node"><strong>適合目前案例</strong><small>SCM 傳統 ASP.NET Web Application</small></div>
+</div>
+</div>
+<p class="dn-caption">分支依據是專案需要的 SDK、targets 與建置元件，不是單看 DLL、IIS 或 Framework 名稱。</p>
+</div>
+
+
+<p>兩者都使用 <strong>MSBuild 建置技術</strong>，不是兩套毫無關係的語言編譯器；差別是<strong>由哪個執行環境啟動，以及該環境具備哪些建置元件</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指令入口</th>
+<th>使用的建置環境</th>
+<th>對這兩個專案的意義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dotnet build</code></td>
+<td>.NET SDK 內的 MSBuild；一般 SDK 專案預設先 restore</td>
+<td>可載入 Livebuy 指定的 <code>Microsoft.NET.Sdk.Web</code> 規則</td>
+</tr>
+<tr>
+<td>Visual Studio 的 <code>MSBuild.exe</code></td>
+<td>Visual Studio 提供的 .NET Framework 版 MSBuild 與安裝的建置元件</td>
+<td>可使用 SCM ApiV2 傳統 ASP.NET Web Application 所依賴的網站編譯工具</td>
+</tr>
+</tbody></table>
+<h2 id="新版專案建置"><a href="#新版專案建置" class="headerlink" title="新版專案建置"></a>新版專案建置</h2><div class="dn-diagram">
+<p class="dn-diagram-title">Livebuy 與 SCM ApiV2 的建置責任鏈</p>
+<div class="dn-lanes">
+<div class="dn-lane">
+<div class="dn-lane-name">Livebuy API</div>
+<div class="dn-lane-flow">
+<div class="dn-step"><code>Sdk.Web</code><br><code>net8.0</code></div>
+<div class="dn-step"><code>dotnet build</code></div>
+<div class="dn-step">SDK MSBuild</div>
+<div class="dn-step">API 組件</div>
+</div>
+</div>
+<div class="dn-lane">
+<div class="dn-lane-name">SCM ApiV2</div>
+<div class="dn-lane-flow">
+<div class="dn-step">Web Application<br><code>v4.6.2</code></div>
+<div class="dn-step"><code>MSBuild.exe</code></div>
+<div class="dn-step">Web targets</div>
+<div class="dn-step"><code>bin</code> 網站組件</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<p><code>Microsoft.NET.Sdk.Web</code> 是<strong>專案 SDK，不是一般 NuGet 套件，也不是 Web Server</strong>。Livebuy API 的 <code>.csproj</code> 第一行指定它，目標框架是 <code>net8.0</code>；<code>dotnet build</code> 啟動 SDK 內的 MSBuild，MSBuild 再載入該 SDK 的屬性與 targets，依 <code>ProjectReference</code> 建置相依專案，最後產生 API 的組件。<code>dotnet build</code> 大致相當於 <code>dotnet msbuild -restore</code>，所以還原通常包含在這次操作中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Livebuy .csproj：Sdk=<span class="string">&quot;Microsoft.NET.Sdk.Web&quot;</span> + TargetFramework=net8.0</span><br><span class="line">    → dotnet build</span><br><span class="line">    → .NET SDK 內的 MSBuild 載入 Web SDK 規則</span><br><span class="line">    → restore（需要時）→ 建置相依專案 → 編譯 API</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="舊版專案建置"><a href="#舊版專案建置" class="headerlink" title="舊版專案建置"></a>舊版專案建置</h2><p>SCM ApiV2 的 Web 入口則是舊式 <code>.csproj</code>，目標 <code>v4.6.2</code>，匯入 <code>Microsoft.WebApplication.targets</code>，並使用 <code>System.Web</code>、<code>Global.asax</code>。這個網站模型<strong>執行時</strong>由 IIS／IIS Express 承載；它選擇 Visual Studio <code>MSBuild.exe</code> 的直接原因，則是<strong>建置時</strong>需要傳統 ASP.NET 的 Web Application targets 與 .NET Framework 版 ASP.NET 編譯工具，並非「凡是用 IIS 就必須用 <code>MSBuild.exe</code>」。Microsoft 對用 <code>dotnet</code> 建置這類網站的 <code>MSB4249</code> 錯誤有明確說明。</p>
+<p>這裡要分清<strong>專案型態</strong>與<strong>直接的工具限制</strong>。採用傳統 ASP.NET Web Application 是上游原因：它需要網站專屬的編譯、內容處理等行為；<code>.csproj</code> 因此匯入 <code>Microsoft.WebApplication.targets</code> 等規則。這些規則及其使用的 .NET Framework 版 ASP.NET 編譯工具，才是目前不能直接用 <code>dotnet build</code> 取代的技術原因。專案檔沒有一個單純寫著「只能用 VS MSBuild」的開關。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">傳統 ASP.NET Web Application（專案型態）</span><br><span class="line">    → 需要網站專屬建置行為</span><br><span class="line">    → .csproj 匯入 WebApplication.targets 等規則</span><br><span class="line">    → 規則需要 Visual Studio／.NET Framework 版建置工具</span><br></pre></td></tr></table></figure>
+
+<p>所以<strong>刪掉 <code>WebApplication.targets</code> 的匯入，不等於完成工具轉換</strong>：如果原本的網站編譯或內容處理行為隨之消失，即使某次編譯成功，也不能據此認定網站能照常啟動與發布。要改用另一套建置入口，必須先找出並保留或替代這些行為，再實際驗證。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SCM ApiV2 .csproj：傳統 ASP.NET Web Application + TargetFrameworkVersion=v4.6.2</span><br><span class="line">    → Visual Studio MSBuild.exe 載入 Microsoft.WebApplication.targets 等規則</span><br><span class="line">    → 建置相依專案 → 編譯網站組件與處理網站內容</span><br><span class="line">    → 網站另由 IIS／IIS Express 載入；build 本身不會啟動 IIS</span><br></pre></td></tr></table></figure>
+
+
+<p>因此，對<strong>目前包含 Web 入口的整個 SCM ApiV2 solution</strong>，不能把 <code>dotnet build</code> 當成 Visual Studio <code>MSBuild.exe</code> 的直接替代：前面還有 <code>packages.config</code> 還原差異，後面有傳統 ASP.NET 網站編譯差異。它可能先在還原或專案評估階段失敗；即使套件已備齊，也可能在網站建置階段失敗。這不表示 .NET Framework 類別庫一律不能用 <code>dotnet build</code>，也不表示 Visual Studio <code>MSBuild.exe</code> 不能建置 SDK 格式專案；要看<strong>具體專案需要的 targets 與建置元件</strong>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Livebuy：在 C:\91APP\AI_Devs\liveby\nine1.live.buy\src</span></span><br><span class="line">dotnet build .\Nine1.Livebuy.Web.Api.sln</span><br><span class="line">dotnet build .\Nine1.Livebuy.Web.Api.sln -c Release</span><br><span class="line"></span><br><span class="line"><span class="comment"># SCM ApiV2：在 C:\91APP\SCMAPIV2\nineyi.scm.apiv2</span></span><br><span class="line">nuget restore .\NineYi.Scm.ApiV2.sln</span><br><span class="line"><span class="variable">$msbuild</span> = <span class="string">&quot;C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe&quot;</span></span><br><span class="line">&amp; <span class="variable">$msbuild</span> .\NineYi.Scm.ApiV2.sln -p:Configuration=Debug</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># PackageReference 專案：還原後建置</span></span><br><span class="line">&amp; <span class="variable">$msbuild</span> .\nineyi.scm.apiv2.sln -t:Restore</span><br><span class="line">&amp; <span class="variable">$msbuild</span> .\nineyi.scm.apiv2.sln -p:Configuration=Debug</span><br><span class="line"></span><br><span class="line"><span class="comment"># packages.config：支援的 MSBuild 版本可明確啟用還原</span></span><br><span class="line">&amp; <span class="variable">$msbuild</span> .\nineyi.scm.apiv2.sln -t:Restore -p:RestorePackagesConfig=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>常見編譯產物在 <code>bin\&lt;Configuration&gt;\&lt;TargetFramework&gt;\</code>，包含 DLL、可能的 EXE、PDB、<code>.deps.json</code>、<code>.runtimeconfig.json</code> 等，<code>obj\</code> 放中間產物與還原資訊。<strong>這是 SDK 專案的常見版面</strong>，而 SCM ApiV2 Web 專案明定輸出到 <code>bin\</code>。實際檔案與路徑以專案設定為準</p>
+<p><code>Debug</code> &#x2F; <code>Release</code> 是建置組態，<code>Release</code> 常用於發布</p>
+<h2 id="新版專案模擬一次-build"><a href="#新版專案模擬一次-build" class="headerlink" title="新版專案模擬一次 build"></a>新版專案模擬一次 build</h2><div class="dn-diagram">
+<p class="dn-diagram-title">Livebuy 模擬建置時間軸</p>
+<div class="dn-timeline">
+<div class="dn-time"><strong>讀取 solution</strong><p>找到 Web API、類別庫與測試專案，建置測試專案不等於執行測試。</p></div>
+<div class="dn-time"><strong>評估 SDK 專案</strong><p>載入 <code>Microsoft.NET.Sdk.Web</code>、<code>net8.0</code>、套件、專案參考與內容設定。</p></div>
+<div class="dn-time"><strong>準備依賴</strong><p>依需要 restore，後續編譯使用 <code>project.assets.json</code> 的解析結果。</p></div>
+<div class="dn-time"><strong>安排並執行建置</strong><p>取得相依專案輸出，準備原始碼與參考組件，增量建置可略過最新工作。</p></div>
+<div class="dn-time"><strong>編譯與整理輸出</strong><p>產生組件、XML 文件，並依設定複製前端內容。</p></div>
+<div class="dn-time"><strong>回報結果</strong><p>成功表示建置完成，API 尚未開始接受請求。</p></div>
+</div>
+</div>
+
+
+<p>假設在 <code>src</code> 執行 <code>dotnet build .\Nine1.Livebuy.Web.Api.sln</code>。</p>
+<ol>
+<li><strong>讀指令與 solution</strong>：<code>dotnet</code> 啟動 .NET SDK 內的 MSBuild，因為輸入是 <code>.sln</code>，它看見 Web API、類別庫和 solution 中的測試專案，建置測試專案不等於執行測試</li>
+<li><strong>評估專案</strong>：Web API 的 <code>.csproj</code> 指定 <code>Microsoft.NET.Sdk.Web</code> 和 <code>net8.0</code>。MSBuild 載入 Web SDK 規則，讀取 <code>PackageReference</code>、<code>ProjectReference</code>、文件檔與內容檔設定</li>
+<li><strong>準備依賴</strong>：<code>dotnet build</code> 預設執行需要的 restore。例如 <code>AWSSDK.S3</code> 所需套件若本機缺少，可能連線至 NuGet 來源，而正式編譯時依 <code>obj\project.assets.json</code> 使用解析結果</li>
+<li><strong>安排與執行建置</strong>：先取得 API 所參考的 <code>BL.Services</code>、<code>DA.Repositories</code> 等專案輸出，並為每個專案準備要編譯的原始碼和參考組件。增量建置可能略過已是最新狀態的工作。</li>
+<li><strong>編譯並整理輸出</strong>：C# 編譯器檢查程式碼並產生組件，專案還設定產生 XML 文件，並將指定的前端 <code>dist</code> 內容複製到輸出的 <code>wwwroot</code>。是否有內容可複製及實際路徑，以這次建置結果為準</li>
+<li><strong>回報成功或錯誤</strong>：缺套件、參考或程式碼錯誤會使相關階段失敗。成功只表示建置完成，<code>Program.cs</code> 的 <code>app.Run()</code> 尚未執行，API 也尚未開始接受請求</li>
+</ol>
+<h2 id="舊版專案模擬一次-build"><a href="#舊版專案模擬一次-build" class="headerlink" title="舊版專案模擬一次 build"></a>舊版專案模擬一次 build</h2><div class="dn-diagram">
+<p class="dn-diagram-title">SCM ApiV2 模擬建置時間軸</p>
+<div class="dn-timeline">
+<div class="dn-time"><strong>讀取 solution 與 Debug 組態</strong><p>確認 WebSite、BusinessLogic、DataAccess 與測試專案的建置範圍。</p></div>
+<div class="dn-time"><strong>評估舊式專案</strong><p>讀取 <code>v4.6.2</code>、<code>OutputPath=bin&#92;</code>、檔案清單、參考與 Web targets。</p></div>
+<div class="dn-time"><strong>檢查套件與相依專案</strong><p>透過 <code>HintPath</code> 找 DLL，缺少 NuGet build imports 時直接報錯。</p></div>
+<div class="dn-time"><strong>編譯網站組件</strong><p>使用 .NET Framework 參考組件產生 WebSite DLL，但不呼叫 <code>Application_Start()</code>。</p></div>
+<div class="dn-time"><strong>執行網站專屬工作</strong><p>依條件執行 Web Application targets、SlowCheetah 與設定轉換。</p></div>
+<div class="dn-time"><strong>回報結果</strong><p>成功只取得建置產物，之後仍要由 IIS 或 IIS Express 載入。</p></div>
+</div>
+</div>
+
+
+<p><strong>假設先完成 <code>nuget restore</code>，再執行 Visual Studio <code>MSBuild.exe .\NineYi.Scm.ApiV2.sln -p:Configuration=Debug</code></strong></p>
+<ol>
+<li><strong>讀指令與 solution</strong>：Visual Studio 的 MSBuild 讀取 WebSite、BusinessLogic、DataAccess、測試等專案，以及 Debug 組態下要建置的項目，這一步同樣不會執行測試</li>
+<li><strong>評估舊式專案</strong>：WebSite <code>.csproj</code> 指定 <code>v4.6.2</code>、<code>OutputPath=bin\</code>，明列原始碼、DLL 參考、內容檔與 <code>ProjectReference</code>，並匯入 <code>Microsoft.WebApplication.targets</code> 等建置規則</li>
+<li><strong>檢查材料與建置相依專案</strong>：專案以 <code>HintPath</code> 到 solution 的 <code>packages</code> 目錄找 DLL，若必要的 NuGet build imports 不存在，原專案的 <code>EnsureNuGetPackageBuildImports</code> target 會報錯，MSBuild 依專案參考取得其他類別庫的輸出</li>
+<li><strong>編譯網站組件</strong>：以 .NET Framework 4.6.2 的參考組件及專案列出的 <code>.cs</code> 為輸入，編譯出 WebSite DLL，放到設定的 <code>bin\</code>。這一步不會呼叫 <code>Global.asax</code> 的 <code>Application_Start()</code></li>
+<li><strong>處理網站專屬工作</strong>：此專案有 Web Application targets、SlowCheetah，以及條件成立時執行的 <code>AfterBuild</code> 設定檔轉換；實際存在 <code>Web.Debug.config</code>、<code>AppSettings.Debug.config</code>、<code>ConnectionStrings.Debug.config</code>。轉換是否執行及輸出是否正確，要看實際組態與建置日誌。專案的 <code>MvcBuildViews=false</code>，不能把這次 build 理解成已驗證所有 MVC View</li>
+<li><strong>回報成功或錯誤</strong>：build 成功後只是取得網站建置產物；之後 IIS／IIS Express 載入網站時，ASP.NET 才會進入 <code>Global.asax</code> 的啟動流程</li>
+</ol></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">10 · RUN</span>
+<h2>啟動入口與網站宿主是兩個不同問題</h2>
+<p>Livebuy 由應用程式自己的入口建立宿主；SCM ApiV2 則先由 IIS Express 或 IIS 接收流量，再讓 ASP.NET 載入網站組件。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">兩種 Web 應用程式的執行拓撲</p>
+<div class="dn-branch">
+<div class="dn-branch-side">
+<div class="dn-node cyan"><strong>Livebuy API</strong><small><code>dotnet run</code></small></div>
+<div class="dn-node"><strong><code>Program.cs</code></strong><small>建立 <code>WebApplication</code></small></div>
+<div class="dn-node purple"><strong><code>app.Run()</code></strong><small>程序內 Web Server 開始監聽</small></div>
+</div>
+<div class="dn-branch-mid"></div>
+<div class="dn-branch-side">
+<div class="dn-node cyan"><strong>SCM ApiV2</strong><small>Visual Studio 啟動網站</small></div>
+<div class="dn-node"><strong>IIS Express／IIS</strong><small>先接收 HTTP 流量</small></div>
+<div class="dn-node purple"><strong>ASP.NET 網站</strong><small>載入 DLL 並呼叫初始化回呼</small></div>
+</div>
+</div>
+<p class="dn-caption">中線只區隔兩種宿主模型，不代表兩邊彼此呼叫。</p>
+</div>
+
+
+<h2 id="誰提供啟動入口、誰承載網站"><a href="#誰提供啟動入口、誰承載網站" class="headerlink" title="誰提供啟動入口、誰承載網站"></a>誰提供啟動入口、誰承載網站</h2><p><strong>啟動入口</strong>是「程式從哪段程式碼開始執行」<br><strong>網站宿主</strong>是「哪個持續運行的程序接收 HTTP 請求，並讓網站程式處理它」。DLL 只是組件的檔案形式，不能只看副檔名判斷能否 <code>dotnet run</code></p>
+<table>
+<thead>
+<tr>
+<th>問題</th>
+<th>Livebuy API</th>
+<th>SCM ApiV2 WebSite</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>程式從哪裡開始？</td>
+<td><code>Program.cs</code> 建立 <code>WebApplication</code>，最後呼叫 <code>app.Run()</code></td>
+<td>由 IIS／ASP.NET 載入網站；網站初始化時呼叫 <code>Global.asax.cs</code> 的 <code>Application_Start()</code></td>
+</tr>
+<tr>
+<td>誰接收 HTTP 請求？</td>
+<td><code>dotnet run</code> 啟動應用程式後，ASP.NET Core 的 Web Server（一般為 Kestrel）在程序內監聽</td>
+<td>IIS Express（本機開發）或 IIS（部署環境）先接收，再交給傳統 ASP.NET 管線</td>
+</tr>
+<tr>
+<td>可以直接用 <code>dotnet run</code> 嗎？</td>
+<td>可以，指定 Web API 的 <code>.csproj</code></td>
+<td>目前的 WebSite 是 <code>OutputType=Library</code>，不能把它當成可直接啟動的程式</td>
+</tr>
+</tbody></table>
+<p>注意：<code>dotnet run</code> <strong>針對單一可執行專案</strong>，不會像 <code>dotnet build</code> 一樣把 <code>.sln</code> 當成要執行的程式。<code>dotnet run</code> 是開發時的啟動方式；正式部署應使用 publish 產物與適合的宿主設定。</p>
+<h2 id="IIS-Express-是什麼？它是一個-App-嗎"><a href="#IIS-Express-是什麼？它是一個-App-嗎" class="headerlink" title="IIS Express 是什麼？它是一個 App 嗎"></a>IIS Express 是什麼？它是一個 App 嗎</h2><p><strong>沒錯，IIS Express 是會實際運行的 Web Server 程序（<code>iisexpress.exe</code>）</strong>，可把它理解成偏向本機開發與測試的輕量版 IIS。Visual Studio 可啟動它並指定網站目錄與監聽位址。它負責<strong>接收 HTTP 流量、依網站設定選擇處理管線、將請求交給 ASP.NET 網站程式並送回回應</strong></p>
+<p>SCM ApiV2 Web 專案記錄了 <code>UseIISExpress=true</code> 與 <code>http://localhost:2558/</code>。這是專案中的本機設定，實際位址可能被本機 Visual Studio 設定覆蓋。正式環境通常由 IIS 承載，兩者都是網站宿主，但 <strong>IIS Express 主要用於開發與測試</strong></p>
+<h2 id="模擬新版專案"><a href="#模擬新版專案" class="headerlink" title="模擬新版專案"></a>模擬新版專案</h2><div class="dn-diagram">
+<p class="dn-diagram-title">Livebuy 從命令到開始監聽</p>
+<div class="dn-lane">
+<div class="dn-lane-name">應用程式程序</div>
+<div class="dn-lane-flow">
+<div class="dn-step"><code>dotnet run</code></div>
+<div class="dn-step">restore 與 build</div>
+<div class="dn-step">讀 launch profile</div>
+<div class="dn-step"><code>Program.cs</code></div>
+<div class="dn-step"><code>app.Run()</code></div>
+</div>
+</div>
+<p class="dn-caption">開始監聽之後，HTTP 請求才會進入中介軟體與 Controller。</p>
+</div>
+
+
+<p>假設目前在 <code>C:\91APP\AI_Devs\liveby\nine1.live.buy\src</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet run --project .\Web\Nine1.Livebuy.Web.Api\Nine1.Livebuy.Web.Api.csproj --launch-profile Nine1.Livebuy.Web.Api</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>dotnet run</code> 找到指定的 <strong>Web API 專案</strong>，必要時執行 restore、build，並取得其專案參考的輸出</li>
+<li>讀取 <code>Properties\launchSettings.json</code> 的 <code>Nine1.Livebuy.Web.Api</code> profile，其中指定 <code>http://localhost:5566</code>、<code>ASPNETCORE_ENVIRONMENT=Development</code>、<code>N1_MARKET=HK</code> 等開發環境設定</li>
+<li>啟動編譯後的應用程式，進入 <code>Program.cs</code>。<code>WebApplication.CreateBuilder(args)</code> 建立宿主與設定，程式接著註冊服務，<code>builder.Build()</code> 建立應用程式，設定中介軟體與路由</li>
+<li>執行 <code>app.Run()</code>，Web Server 開始監聽 HTTP 請求，程序保持運行。請求進來後才走中介軟體與 Controller。<strong>Build 時只把 <code>app.Run()</code> 編譯進組件，不會執行它。</strong></li>
+<li>即使 build 成功，啟動仍可能因設定、埠號或外部服務等執行時條件失敗；兩者的成功條件不同</li>
+</ol>
+<h2 id="模擬舊版專案"><a href="#模擬舊版專案" class="headerlink" title="模擬舊版專案"></a>模擬舊版專案</h2><div class="dn-diagram">
+<p class="dn-diagram-title">SCM ApiV2 的網站啟動與單次健康檢查</p>
+<div class="dn-timeline">
+<div class="dn-time"><strong>備妥網站</strong><p>還原套件並建置 WebSite，組件輸出到 <code>bin</code>。</p></div>
+<div class="dn-time"><strong>啟動 IIS Express</strong><p><code>iisexpress.exe</code> 指向網站目錄並等待 HTTP 流量。</p></div>
+<div class="dn-time"><strong>初始化網站</strong><p>ASP.NET 載入組件，網站啟動時執行一次 <code>Application_Start()</code>。</p></div>
+<div class="dn-time"><strong>登記共用設定與處理規則</strong><p>建立依賴注入、路由、Handler、Filter、bundles 與條件式功能。</p></div>
+<div class="dn-time"><strong>處理這次請求</strong><p><code>Application_BeginRequest()</code> 與已登記的管線處理 <code>/Health/Check</code>。</p></div>
+<div class="dn-time"><strong>送回回應</strong><p>Controller 產生結果，再由 Handler 與 IIS Express 回傳給呼叫端。</p></div>
+</div>
+</div>
+
+
+<p>以下假設在 Visual Studio 啟動 SCM ApiV2 WebSite，然後送出 <code>GET http://localhost:2558/Health/Check</code>。這是<strong>根據程式碼推演，沒有實際啟動或送出請求</strong>。</p>
+<ol>
+<li><strong>先備妥網站</strong>：還原 <code>packages.config</code> 套件，再由 Visual Studio MSBuild 建置 WebSite 與相依專案，網站組件輸出到 <code>bin\</code>。建置本身不會呼叫 <code>Application_Start()</code></li>
+<li><strong>啟動 IIS Express</strong>：Visual Studio 啟動 <code>iisexpress.exe</code>，指向 WebSite 目錄並監聽本機位址。此時是 Web Server 程序在等待流量，並不是直接執行 WebSite DLL。</li>
+<li><strong>第一個請求促使 ASP.NET 初始化網站</strong>：IIS Express 讀取網站設定，ASP.NET 載入 <code>bin\</code> 的組件。一般本機情境中，網站首次收到請求時執行 <code>Global.asax.cs</code> 的 <code>Application_Start()</code>，這是<strong>每次網站啟動一次</strong>，不是每個請求都執行</li>
+<li><strong>依程式碼順序準備共用設定</strong>：<code>ConfigSetting.Load(...)</code> 依 <code>Execmode</code> 載入設定，<code>CurrencySetting.Initialize()</code> 建立國別與幣別對應，<code>AutofacConfig.Register(...)</code> 建立依賴注入容器，登記 Controller 與服務，接著登記 FluentValidation 與 JSON 轉換設定。現有 <code>AppSettings.config</code> 的 <code>Execmode</code> 是 <code>Dev</code>，因此會走相應的開發模式分支</li>
+<li><strong>登記處理規則</strong>：註冊 Areas、Web API 路由與 Handler、MVC Filter／路由、前端 bundles，並依設定處理 Application Insights 與 Bulk Insert 授權。這些動作是在<strong>準備處理請求的規則</strong>，尚未執行 <code>HealthController.Check()</code></li>
+<li><strong>進入這次請求</strong>：<code>Application_BeginRequest()</code> 設定 NLog request ID 與 UI 語系，這個方法是<strong>每個請求</strong>都會執行，Web API 的 Attribute Routing 將 <code>/Health/Check</code> 對應到 <code>HealthController.Check()</code>，請求也會經過已登記的 handlers 與 filters</li>
+<li><strong>產生回應</strong>：<code>Check()</code> 回傳 <code>Ok(&quot;Healthy&quot;)</code>；回應再經相關 Handler 交給 IIS Express 送回呼叫端。最終回應格式可能受 <code>UnifiedResultHandler</code> 影響，不能只憑 Controller 的字串推定。</li>
+</ol>
+<p><strong>Livebuy 是 <code>dotnet run → Program.cs → app.Run() → Web Server 監聽</code>；SCM ApiV2 是 <code>Visual Studio → IIS Express → ASP.NET 載入網站 → Application_Start() → 接受請求</code>。</strong> 後者的 <code>Application_Start()</code> 是網站初始化回呼，不是可供 <code>dotnet run</code> 啟動的獨立程序入口。</p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">11 · TEST</span>
+<h2>測試範圍由執行位置、目標與篩選條件共同決定</h2>
+<p><code>dotnet test</code> 會先完成必要建置，再由測試執行器尋找符合條件的測試。包含式篩選可能命中多個方法。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">從執行範圍縮小到符合條件的測試</p>
+<div class="dn-funnel">
+<div>Solution 或指定的測試專案</div>
+<div>建置後可被測試執行器發現的測試</div>
+<div><code>FullyQualifiedName~...</code> 的所有匹配項目</div>
+</div>
+<p class="dn-caption"><code>~</code> 表示包含，不保證漏斗底部只剩一個測試方法。</p>
+</div>
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在測試專案目錄，或明確指定測試 .csproj</span></span><br><span class="line">dotnet <span class="built_in">test</span> --filter <span class="string">&quot;FullyQualifiedName~GetShoppingCartSalePageGiftProcessorTest&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>test</code> 必要時建置，再交給測試執行器， <code>~</code> 表示「包含」，因此可能匹配多個測試，不保證只執行一個方法。在 solution 目錄與單一測試專案目錄執行，測試範圍也可能不同</p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">12 · PUBLISH</span>
+<h2>Publish 整理可交付內容，部署與開始服務仍是後續階段</h2>
+<p>發布模式決定是否把 Runtime 一起放入產物。發布成功不代表檔案已部署，也不代表網站已由容器或 IIS 載入。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">發布模式的選擇條件</p>
+<div class="dn-decision">
+<div class="dn-node purple"><strong>目標機器已有相容 Runtime</strong><small><code>--self-contained false</code><br>產物較小，依賴外部 Runtime</small></div>
+<div class="dn-diamond"><strong>Runtime 是否隨產物交付？</strong></div>
+<div class="dn-node cyan"><strong>Runtime 跟著產物交付</strong><small><code>-r win-x64</code><br><code>--self-contained true</code></small></div>
+</div>
+<p class="dn-caption">RID 與 self-contained 是兩個不同選擇。圖中左右是結果分支，不是執行順序。</p>
+</div>
+
+
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet publish .\WindowsTaskManager.csproj -c Release -o C:\91APP\AI_Devs\taskmanager\deploy-ui</span><br></pre></td></tr></table></figure>
+
+<p>Publish 會編譯並整理應用程式、相依套件及執行設定，供複製到目標機器或交給部署流程。常見檔案包括應用程式 DLL、<code>.deps.json</code>、<code>.runtimeconfig.json</code>、相依 DLL 及設定為發布內容的檔案。是否有 EXE、<code>appsettings.json</code>、<code>user-roles.json</code>，取決於專案設定，不能只憑指令保證。<code>-o</code> 指定輸出目錄；未指定時使用 SDK 的預設 publish 目錄。</p>
+<p>有些專案的 build 輸出也能啟動，但 publish 是準備<strong>可交付內容</strong>的標準操作。發布成功不等於部署完成：目標環境仍須有正確設定、權限、Runtime 等條件。</p>
+<table>
+<thead>
+<tr>
+<th>發布方式</th>
+<th>指令重點</th>
+<th>目標機器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>依賴框架（framework-dependent）</td>
+<td><code>--self-contained false</code></td>
+<td>需安裝相容 Runtime；仍可能產生啟動 EXE</td>
+</tr>
+<tr>
+<td>獨立部署（self-contained）</td>
+<td><code>-r win-x64 --self-contained true</code></td>
+<td>產物包含指定平台所需的 .NET Runtime，檔案較大</td>
+</tr>
+</tbody></table>
+<p><code>-r win-x64</code> 指定 Windows x64 RID，<strong>指定 RID 與是否獨立部署是兩個不同選擇</strong>，建議以 <code>--self-contained true/false</code> 明確表達。獨立部署仍需考慮作業系統及其他原生依賴</p>
+<h2 id="新版專案從-Pipeline-發動到容器啟動"><a href="#新版專案從-Pipeline-發動到容器啟動" class="headerlink" title="新版專案從 Pipeline 發動到容器啟動"></a>新版專案從 Pipeline 發動到容器啟動</h2><div class="dn-diagram">
+<p class="dn-diagram-title">Livebuy 從 GitLab CI 到容器啟動</p>
+<div class="dn-lanes">
+<div class="dn-lane">
+<div class="dn-lane-name">CI 與建置容器</div>
+<div class="dn-lane-flow">
+<div class="dn-step">GitLab CI<br>共用範本</div>
+<div class="dn-step">Docker 多階段建置</div>
+<div class="dn-step"><code>dotnet publish</code><br>到 <code>/out</code></div>
+<div class="dn-step">補入前端與 metadata</div>
+</div>
+</div>
+<div class="dn-lane">
+<div class="dn-lane-name">Runtime 映像與部署</div>
+<div class="dn-lane-flow">
+<div class="dn-step">複製到 <code>/app</code></div>
+<div class="dn-step">建立 Runtime 映像</div>
+<div class="dn-step">外部範本部署容器</div>
+<div class="dn-step"><code>CMD dotnet ...dll</code></div>
+</div>
+</div>
+</div>
+<p class="dn-caption">外部共用範本的映像推送、Kubernetes 部署與健康驗證未在目前 repo 完整展開。</p>
+</div>
+
+
+
+<p>這裡以 repo 目前的 <code>.gitlab-ci.yml</code>、<code>pipeline/build-config.sh</code>、<code>Dockerfile</code> 為依據，按檔案描述的流程走一次；<strong>這是靜態分析，沒有實際執行發佈或部署</strong>。</p>
+<ol>
+<li><strong>發動：</strong> GitLab CI 讀取 <code>.gitlab-ci.yml</code>。這個檔案引用 <code>nine1.devops.gitlab</code> 的共用 Pipeline 範本，並設定站台識別為 <code>Nine1.Livebuy.Web.Api</code>。因此 CI 工作的完整觸發條件、映像推送及叢集部署細節，還要看外部範本；不能只靠此 repo 宣稱它們每次都會發生。</li>
+<li><strong>選擇建置方式：</strong> <code>pipeline/build-config.sh</code> 指定 repo 根目錄的 <code>Dockerfile</code>，並提供 .NET 8 SDK 建置映像、ASP.NET 8 Runtime 映像等設定。Docker 進入多階段建置：先用 Node 建置前端，也用另一個階段處理翻譯檔。</li>
+<li><strong>真正執行 .NET Publish：</strong> Dockerfile 的 .NET 建置階段在 <code>/src</code> 執行 <code>dotnet restore</code>，接著執行 <code>dotnet publish -c ${DOTNET_BUILD_CONFIG} -o /out</code>。此時會還原相依、建置程式，並將發佈檔案整理到<strong>建置容器內的</strong> <code>/out</code>；<code>DOTNET_BUILD_CONFIG</code> 是建置時傳入的組態。這一步不會讓 API 開始接收流量。</li>
+<li><strong>補齊容器需要的檔案：</strong> Dockerfile 再把 <code>.manifest</code>、<code>releng.json</code> 放進 <code>/out/.manifest</code>，把前端的 <code>dist</code> 放到 <code>/out/wwwroot</code>。因此最後交付的內容不只有 <code>dotnet publish</code> 的原始輸出，還包含後續複製進去的檔案。</li>
+<li><strong>製作可執行映像：</strong> 最後一階段改用 ASP.NET Runtime 映像，把 <code>/out</code> 複製到 <code>/app</code>，並設定 <code>CMD dotnet /app/${NYS_FQDN}.dll</code>。Docker 映像建置完成，表示程式與執行環境已封裝；<strong>容器真正被啟動時</strong>，這條 <code>CMD</code> 才會執行，Livebuy 的 <code>Program.cs</code> 才會建立並啟動網站。</li>
+<li><strong>交給部署流程：</strong> 映像之後是否推送到 registry、由哪個工作部署到 Kubernetes、如何驗證站台可用，取決於引入的共用 Pipeline 範本與部署設定；這些步驟不在目前檢視到的 repo 內完整展開。因此要把「<code>dotnet publish</code> 成功」、「Docker 映像建置完成」和「站台已對外服務」視為三個不同完成點。</li>
+</ol>
+<p><code>GitLab CI → 共用範本選擇 Docker 建置 → dotnet restore → dotnet publish 到 /out → 補入前端／中繼資料 → 封裝 Runtime 映像 → 部署並啟動容器（外部範本決定）</code></p>
+<h2 id="舊版專案從-Jenkins-發動到-IIS-網站"><a href="#舊版專案從-Jenkins-發動到-IIS-網站" class="headerlink" title="舊版專案從 Jenkins 發動到 IIS 網站"></a>舊版專案從 Jenkins 發動到 IIS 網站</h2><div class="dn-diagram">
+<p class="dn-diagram-title">SCM ApiV2 從 Jenkins 到 IIS 網站</p>
+<div class="dn-lanes">
+<div class="dn-lane">
+<div class="dn-lane-name">Jenkins 與 Cake</div>
+<div class="dn-lane-flow">
+<div class="dn-step">Jenkinsfile</div>
+<div class="dn-step"><code>build.ps1</code></div>
+<div class="dn-step">NuGet Restore</div>
+<div class="dn-step">VS MSBuild</div>
+</div>
+</div>
+<div class="dn-lane">
+<div class="dn-lane-name">發布與部署</div>
+<div class="dn-lane-flow">
+<div class="dn-step">FileSystem 發布</div>
+<div class="dn-step">環境檔與 artifact</div>
+<div class="dn-step">部署到機器</div>
+<div class="dn-step">IIS 載入網站</div>
+</div>
+</div>
+</div>
+<p class="dn-caption">Artifact 產生與 <code>Deploy(...)</code> 的細節依賴外部串接，圖中只呈現目前檔案可以證明的責任交接。</p>
+</div>
+
+
+<p>SCM ApiV2 是 .NET Framework 4.6.2 的傳統 ASP.NET Web Application，<code>Microsoft.WebApplication.targets</code> 提供 Web 專案建置／發佈流程，<code>.pubxml</code> 提供本次發佈的參數。<strong><code>.pubxml</code> 不是發佈引擎，發佈也不需要開啟 Visual Studio IDE；執行它的是具備 Web 建置元件的 Visual Studio 系列 <code>MSBuild.exe</code>。</strong> 以下依 <code>Jenkinsfile</code>、<code>JenkinsfileDeploy</code>、<code>build.ps1</code>、<code>build.cake</code> 和 QA 發佈設定檔說明，同樣沒有實際執行。</p>
+<ol>
+<li><strong>發動：</strong> <code>Jenkinsfile</code> 指定在標記為 <code>msbuild</code> 的節點執行。符合條件時，Build 階段呼叫 <code>./build.ps1 -Target Build</code>；<code>JenkinsfileDeploy</code> 也提供另一條帶市場、部署批次等參數的路徑。<code>build.ps1</code> 是 Cake 啟動器，最後交由 <code>build.cake</code> 執行指定任務。</li>
+<li><strong>還原與建置：</strong> Cake 的 <code>Build</code> 任務先依賴 <code>Nuget Restore</code>，對 solution 執行 <code>NuGetRestore(...)</code>後執行 <code>Msbuild</code> 任務。這也對應網站專案的 <code>packages.config</code> 與傳統 NuGet 套件還原方式</li>
+<li><strong>建置時同時發佈：</strong> <code>Msbuild</code> 任務對 <code>NineYi.Scm.ApiV2.sln</code> 呼叫 MSBuild，設定 <code>DeployOnBuild=true</code>、<code>PublishProfile=NineYi.Scm.ApiV2.QA.Deploy.pubxml</code>、建置組態，以及 <code>publishUrl</code>，MSBuild 編譯各專案後，依 Web Application targets 啟動網站發佈流程，QA profile 指定 <code>WebPublishMethod=FileSystem</code>，也有額外納入 <code>bin/*.xml</code> 的規則，<code>publishUrl</code> 由 Cake 依環境組成，通常落在 <code>D:\Archives\&lt;MachineKey&gt;\NineYi.Scm.ApiV2</code>，因此此階段的「發佈完成」是<strong>網站檔案已整理到指定目錄</strong></li>
+<li><strong>準備環境檔與交付物：</strong> <code>build.cake</code> 另外定義 <code>Copy Config</code>，可將基底 <code>AppSettings</code> 複製並套用環境／市場轉換；<code>Deploy Artifact</code> 任務會接著封存網站目錄並上傳 artifact。<strong>但目前看到的兩份 Jenkinsfile 只明確呼叫 Build、Test、Deploy，沒有直接呼叫 <code>Deploy Artifact</code>。</strong> 因此 artifact 由哪個外部工作產生、是否會在每次流程執行，不能只由這些檔案確認</li>
+<li><strong>部署到機器：</strong> Jenkins 的 Deploy 階段呼叫 Cake 的 <code>Deploy</code> 任務。<code>Deploy to machines</code> 會依環境與市場下載 artifact、解壓縮，再對符合市場的目標機器呼叫 <code>Deploy(...)</code>，目標是該機器的網站共享路徑。這個 <code>Deploy</code> 函式來自外部 Cake 函式庫，備份、複製及 IIS 操作的更細節，需要追該函式庫或執行紀錄才能確認</li>
+<li><strong>網站開始服務：</strong> 當檔案已部署、IIS 網站與應用程式集區設定正確，IIS 的工作行程才會載入網站組件，ASP.NET 才會在網站啟動／請求到來時執行 <code>Global.asax</code> 的初始化流程。<strong>MSBuild 發佈成功不代表 IIS 已載入新版，也不代表健康檢查已通過。</strong></li>
+</ol>
+<p>速記：<code>Jenkins → build.ps1／Cake → NuGet restore → VS MSBuild 建置＋FileSystem 發佈 → artifact／環境設定（需核對外部串接）→ 部署到 IIS 機器 → IIS 載入網站並接收請求</code>。</p>
+<p>這兩條流程最重要的差別：<strong>Livebuy 把 <code>dotnet publish</code> 產物放入 ASP.NET Runtime 容器映像，由容器啟動程式；SCM ApiV2 用 VS MSBuild 的 Web 發佈流程整理網站檔案，再由 IIS 承載網站。</strong></p></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">13 · MODERN .NET COMMANDS</span>
+<h2>先辨認工作目的，再選擇對應指令</h2>
+<p>Build、Run、Test 與 Publish 各自回答不同問題。指令可以隱含前置步驟，但輸入範圍與發布模式仍要明確。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">現代 .NET 指令索引</p>
+<div class="dn-command-map">
+<div class="dn-command-label">驗證 solution 能否建置</div><div class="dn-command-code">dotnet build .\Nine1.Livebuy.Web.Api.sln</div>
+<div class="dn-command-label">啟動單一 Web 專案</div><div class="dn-command-code">dotnet run --project .\Web\Nine1.Livebuy.Web.Api\Nine1.Livebuy.Web.Api.csproj</div>
+<div class="dn-command-label">執行符合條件的測試</div><div class="dn-command-code">dotnet test --filter "FullyQualifiedName~..."</div>
+<div class="dn-command-label">整理 framework-dependent 產物</div><div class="dn-command-code">dotnet publish -c Release --self-contained false</div>
+<div class="dn-command-label">整理 Windows x64 獨立產物</div><div class="dn-command-code">dotnet publish -c Release -r win-x64 --self-contained true</div>
+</div>
+</div>
+
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在 C:\91APP\AI_Devs\liveby\nine1.live.buy\src</span></span><br><span class="line">dotnet build .\Nine1.Livebuy.Web.Api.sln</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 C:\91APP\AI_Devs\liveby\nine1.live.buy\src\Web\Nine1.Livebuy.Web.Api</span></span><br><span class="line">dotnet run</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在對應測試專案目錄，或明確指定測試 .csproj</span></span><br><span class="line">dotnet test <span class="literal">--filter</span> <span class="string">&quot;FullyQualifiedName~GetShoppingCartSalePageGiftProcessorTest&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>只顯示包含 <code>error</code> 的輸出：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet build <span class="number">2</span>&gt;&amp;<span class="number">1</span> | <span class="built_in">Select-String</span> <span class="literal">-Pattern</span> <span class="string">&quot;\s*error\s&quot;</span> <span class="operator">-CaseSensitive</span>:<span class="variable">$false</span></span><br></pre></td></tr></table></figure>
+
+<p>這只是<strong>顯示過濾</strong>，可能漏掉未包含 <code>error</code> 的失敗資訊。排錯時應檢查完整輸出及建置結束狀態。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$project</span> = <span class="string">&#x27;C:\91APP\AI_Devs\taskmanager\nine1.tools.windows-task-manager\src\WindowsTaskManager\WindowsTaskManager.csproj&#x27;</span></span><br><span class="line"><span class="variable">$output</span> = <span class="string">&#x27;C:\91APP\AI_Devs\taskmanager\deploy-ui&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># publish 預設執行必要的 restore 與 build</span></span><br><span class="line">dotnet publish <span class="variable">$project</span> <span class="literal">-c</span> Release <span class="literal">-o</span> <span class="variable">$output</span> <span class="literal">--self-contained</span> false</span><br><span class="line"><span class="built_in">Get-ChildItem</span> <span class="literal">-LiteralPath</span> <span class="variable">$output</span></span><br></pre></td></tr></table></figure>
+
+<p>若目標機器沒有安裝相容的 .NET Runtime，改用明確指定平台的獨立部署：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dotnet publish <span class="variable">$project</span> <span class="literal">-c</span> Release <span class="literal">-r</span> win<span class="literal">-x64</span> <span class="literal">--self-contained</span> true <span class="literal">-o</span> <span class="variable">$output</span></span><br><span class="line"><span class="built_in">Get-ChildItem</span> <span class="literal">-LiteralPath</span> <span class="variable">$output</span></span><br></pre></td></tr></table></figure></div><div class="tab-item-content"><div class="dn-section">
+<span class="dn-eyebrow">14 · LEGACY .NET COMMANDS</span>
+<h2>傳統 ASP.NET 專案先確認工具鏈，再呼叫 MSBuild</h2>
+<p>Solution 名稱、Visual Studio 建置元件、套件還原方式與 MSBuild 路徑都會影響結果，不能只複製最後一行指令。</p>
+</div>
+
+<div class="dn-diagram">
+<p class="dn-diagram-title">執行舊版建置前的檢查順序</p>
+<div class="dn-gates">
+<div class="dn-gate"><div class="dn-gate-dot">1</div><div><strong>確認 solution</strong><small>核對實際檔名與所在目錄。</small></div><div class="dn-gate-result">輸入正確</div></div>
+<div class="dn-gate"><div class="dn-gate-dot">2</div><div><strong>確認套件格式</strong><small><code>packages.config</code> 專案先用合適入口還原。</small></div><div class="dn-gate-result">DLL 可被 HintPath 找到</div></div>
+<div class="dn-gate"><div class="dn-gate-dot">3</div><div><strong>確認建置元件</strong><small>Visual Studio 已安裝 Web Application 所需工具。</small></div><div class="dn-gate-result">targets 可載入</div></div>
+<div class="dn-gate"><div class="dn-gate-dot">4</div><div><strong>呼叫 <code>MSBuild.exe</code></strong><small>指定 Configuration，並檢查完整輸出與結束狀態。</small></div><div class="dn-gate-result">取得建置結果</div></div>
+</div>
+</div>
+
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$msbuild</span> = <span class="string">&quot;C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe&quot;</span></span><br><span class="line">&amp; <span class="variable">$msbuild</span> <span class="string">&quot;C:\91APP\SCMAPIV2\nineyi.scm.apiv2\NineYi.Scm.ApiV2.sln&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 已在 solution 所在目錄時</span></span><br><span class="line">&amp; <span class="variable">$msbuild</span> .\nineyi.scm.apiv2.sln <span class="literal">-p</span>:Configuration=Debug</span><br></pre></td></tr></table></figure>
+
+<p>執行前應確認 solution 檔名、MSBuild 路徑、Visual Studio 元件與是否需要先 restore。上面兩個 solution 路徑沿用舊筆記，未驗證是否指向同一檔案。</p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind">Yo-Lin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://chi-keke.github.io/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88/">https://chi-keke.github.io/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88-pure/" title=".NET 的建置與發佈"><img class="cover" src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png" onerror="onerror=null;src='/Mind/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">.NET 的建置與發佈</div></div><div class="info-2"><div class="info-item-1">從專案 SDK、目標框架與 Runtime 的責任分工開始，逐步拆解 Restore、Build、Run、Test、Publish，以及現代 .NET 與傳統 ASP.NET 的建置部署流程。</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.imgur.com/q4xr50n.png" onerror="this.onerror=null;this.src='/Mind/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yo-Lin</div><div class="author-info-description"></div><div class="site-data"><a href="/Mind/archives/"><div class="headline">Articles</div><div class="length-num">67</div></a><a href="/Mind/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/Mind/categories/"><div class="headline">Categories</div><div class="length-num">13</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CHI-KEKE"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/CHI-KEKE" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:chilly37647@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">世界上總會有一些溫暖的小角落</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">.NET 的建置與發佈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Microsoft.NET.Sdk 是建置規則，不是執行環境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">.NET Framework 與現代 .NET 是兩條產品線</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">SDK 格式把通用規則移出專案檔</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">刪除檔案清單只是轉換的第一步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Restore 準備材料，Build 產生組件，後續工作再分流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Solution 組織專案，專案檔描述每個建置單位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">MSBuild 評估設定，再執行 targets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Restore 解析依賴，讓後續 Build 知道材料在哪裡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%96%B0%E7%89%88%E5%B0%88%E6%A1%88%E7%94%A8-dotnet-restore%EF%BC%8C%E8%88%8A%E7%89%88%E5%B0%88%E6%A1%88%E7%94%A8-nuget-restore%EF%BC%9F"><span class="toc-number">10.</span> <span class="toc-text">為什麼新版專案用 dotnet restore，舊版專案用 nuget restore？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Build 是協調工程，編譯只是其中一道工序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Build-%E8%88%87%E3%80%8C%E7%B7%A8%E8%AD%AF%E3%80%8D%E7%9A%84%E5%B7%AE%E7%95%B0%EF%BC%9AC-%E5%88%B0-DLL-%E4%B8%AD%E9%96%93%E7%99%BC%E7%94%9F%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="toc-number">12.</span> <span class="toc-text">Build 與「編譯」的差異：C# 到 DLL 中間發生什麼？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dotnet-build-%E8%88%87-Visual-Studio-MSBuild-exe-%E6%98%AF%E4%BB%80%E9%BA%BC%E9%97%9C%E4%BF%82%EF%BC%9F"><span class="toc-number">13.</span> <span class="toc-text">dotnet build 與 Visual Studio MSBuild.exe 是什麼關係？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E7%89%88%E5%B0%88%E6%A1%88%E5%BB%BA%E7%BD%AE"><span class="toc-number">14.</span> <span class="toc-text">新版專案建置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%88%8A%E7%89%88%E5%B0%88%E6%A1%88%E5%BB%BA%E7%BD%AE"><span class="toc-number">15.</span> <span class="toc-text">舊版專案建置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E7%89%88%E5%B0%88%E6%A1%88%E6%A8%A1%E6%93%AC%E4%B8%80%E6%AC%A1-build"><span class="toc-number">16.</span> <span class="toc-text">新版專案模擬一次 build</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%88%8A%E7%89%88%E5%B0%88%E6%A1%88%E6%A8%A1%E6%93%AC%E4%B8%80%E6%AC%A1-build"><span class="toc-number">17.</span> <span class="toc-text">舊版專案模擬一次 build</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">18.</span> <span class="toc-text">啟動入口與網站宿主是兩個不同問題</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AA%B0%E6%8F%90%E4%BE%9B%E5%95%9F%E5%8B%95%E5%85%A5%E5%8F%A3%E3%80%81%E8%AA%B0%E6%89%BF%E8%BC%89%E7%B6%B2%E7%AB%99"><span class="toc-number">19.</span> <span class="toc-text">誰提供啟動入口、誰承載網站</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IIS-Express-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F%E5%AE%83%E6%98%AF%E4%B8%80%E5%80%8B-App-%E5%97%8E"><span class="toc-number">20.</span> <span class="toc-text">IIS Express 是什麼？它是一個 App 嗎</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%93%AC%E6%96%B0%E7%89%88%E5%B0%88%E6%A1%88"><span class="toc-number">21.</span> <span class="toc-text">模擬新版專案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%93%AC%E8%88%8A%E7%89%88%E5%B0%88%E6%A1%88"><span class="toc-number">22.</span> <span class="toc-text">模擬舊版專案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">23.</span> <span class="toc-text">測試範圍由執行位置、目標與篩選條件共同決定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">24.</span> <span class="toc-text">Publish 整理可交付內容，部署與開始服務仍是後續階段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E7%89%88%E5%B0%88%E6%A1%88%E5%BE%9E-Pipeline-%E7%99%BC%E5%8B%95%E5%88%B0%E5%AE%B9%E5%99%A8%E5%95%9F%E5%8B%95"><span class="toc-number">25.</span> <span class="toc-text">新版專案從 Pipeline 發動到容器啟動</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%88%8A%E7%89%88%E5%B0%88%E6%A1%88%E5%BE%9E-Jenkins-%E7%99%BC%E5%8B%95%E5%88%B0-IIS-%E7%B6%B2%E7%AB%99"><span class="toc-number">26.</span> <span class="toc-text">舊版專案從 Jenkins 發動到 IIS 網站</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">27.</span> <span class="toc-text">先辨認工作目的，再選擇對應指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">28.</span> <span class="toc-text">傳統 ASP.NET 專案先確認工具鏈，再呼叫 MSBuild</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88-pure/" title=".NET 的建置與發佈"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt=".NET 的建置與發佈"/></a><div class="content"><a class="title" href="/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88-pure/" title=".NET 的建置與發佈">.NET 的建置與發佈</a><time datetime="2026-11-05T09:20:00.000Z" title="Created 2026-11-05 17:20:00">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88/" title=".NET 的建置與發佈"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt=".NET 的建置與發佈"/></a><div class="content"><a class="title" href="/Mind/2026/11/05/dotnet-NET-%E7%9A%84%E5%BB%BA%E7%BD%AE%E8%88%87%E7%99%BC%E4%BD%88/" title=".NET 的建置與發佈">.NET 的建置與發佈</a><time datetime="2026-11-05T09:20:00.000Z" title="Created 2026-11-05 17:20:00">2026-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/11/01/K8S-remained-fail-pods/" title="remained-fail-pods"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="remained-fail-pods"/></a><div class="content"><a class="title" href="/Mind/2026/11/01/K8S-remained-fail-pods/" title="remained-fail-pods">remained-fail-pods</a><time datetime="2026-11-01T02:10:00.000Z" title="Created 2026-11-01 10:10:00">2026-11-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/10/29/Git-sync-dev-to-feat/" title="sync-dev-to-feat"><img src="https://pub-d7e550ef212547d888a6e01348459946.r2.dev/style/git.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="sync-dev-to-feat"/></a><div class="content"><a class="title" href="/Mind/2026/10/29/Git-sync-dev-to-feat/" title="sync-dev-to-feat">sync-dev-to-feat</a><time datetime="2026-10-29T00:23:00.000Z" title="Created 2026-10-29 08:23:00">2026-10-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Mind/2026/10/22/Network-Safty-translation-network/" title="Translation API 網路與授權排查"><img src="https://raw.githubusercontent.com/CHI-KEKE/pics/refs/heads/main/Devops/k8s/k8s2.png" onerror="this.onerror=null;this.src='/Mind/img/404.jpg'" alt="Translation API 網路與授權排查"/></a><div class="content"><a class="title" href="/Mind/2026/10/22/Network-Safty-translation-network/" title="Translation API 網路與授權排查">Translation API 網路與授權排查</a><time datetime="2026-10-22T00:37:00.000Z" title="Created 2026-10-22 08:37:00">2026-10-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://pub-d7e550ef212547d888a6e01348459946.r2.dev/ethic/dotnet/landing.png);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Yo-Lin</span></div><div class="footer_custom_text">What you'll find out there is boundless freedom !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/Mind/js/utils.js?v=5.5.5-b1"></script><script src="/Mind/js/main.js?v=5.5.5-b1"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
